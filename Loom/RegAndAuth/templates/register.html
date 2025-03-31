@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+</head>
+<body>
+    <div>
+        <h1>Регистрация</h1>
+
+        <form>
+            <div>
+                <label for="username">Имя Пользователя</label>
+                <input type="text" id="username" placeholder="Введите имя" required>
+            </div>
+
+            <div>
+                <label for="password">Пароль</label>
+                <input type="password" id="password" placeholder="Введите свой пароль" required>
+            </div>
+
+            <div>
+                <label for="confirm-password">Подтвердите пароль</label>
+                <input type="password" id="confirm-password" placeholder="Введите свой пароль" readonly>
+            </div>
+
+            <div>
+                <label for="phone">Номер телефона</label>
+                <input type="tel" id="phone" placeholder="Введите номер" readonly>
+            </div>
+
+            <div>
+                <label for="role">Роль в семье</label>
+                <select id="role" required>
+                    <option value="" disabled selected>Выберите роль</option>
+                    <option value="parent">Родитель</option>
+                    <option value="child">Ребенок</option>
+                </select>
+            </div>
+
+            <button type="submit">Зарегестрироваться</button>
+        </form>
+
+        <div>
+            <span>Есть аккаунт?</span>
+            <a href="login.html">Войти</a>
+        </div>
+    </div>
+</body>
+</html>
