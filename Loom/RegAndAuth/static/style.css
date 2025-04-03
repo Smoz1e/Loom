@@ -1,0 +1,471 @@
+* {
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    src: url('../Fonts/Unbounded/static/Unbounded-Regular.ttf');
+    font-family: "Unbounded";
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Medium.ttf');
+    font-family: "Montserrat";
+    font-weight: 500;
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Bold.ttf');
+    font-family: "Montserrat";
+    font-weight: 600;
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Regular.ttf');
+    font-family: "Montserrat";
+    font-weight: 400;
+}
+
+@font-face {
+    src: url('../Fonts/Lato/Lato-Regular.ttf');
+    font-family: "Lato";
+}
+
+@font-face {
+    src: url('../Fonts/Poppins/Poppins-Regular.ttf');
+    font-family: "Poppins";
+}
+
+body {
+    font-family: "Montserrat", "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Фоновая картинка */
+.background-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('../Design/Log in/Log in(bg).svg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+/* --------------Панель авторизации---------------- */
+.auth-panel-login {
+    width: 540px;
+    height: 452px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 48px 72px;
+    box-shadow: 20px 40px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.auth-panel-login h1 {
+    font-family: "Unbounded";
+    margin: 0;
+    font-size: 28px;
+    font-weight: 400;
+    text-align: center;
+    color: rgba(53, 139, 87, 1);
+}
+
+/* Форма */
+.auth-form-login {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.input-group1-login {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group2-login {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.input-group1-login label {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1); 
+}
+
+.input-group2-login label {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1); 
+}
+
+.input-group1-login input,
+.input-group2-login input {
+    font-family: "Lato";
+    color: rgba(112, 112, 123, 1);
+    padding: 12px 16px;
+    border: 1px solid rgba(112, 112, 123, 1);
+    border-radius: 8px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    outline: none;
+    width: 396px;
+    height: 48px;
+}
+
+/* Отступ для глазика */
+.input-group2-login input {
+    padding-right: 48px;
+}
+
+/* Стили при вводе текста */
+.input-group1-login input:not(:placeholder-shown),
+.input-group2-login input:not(:placeholder-shown) {
+    font-family: "Poppins";
+    color: rgba(59, 125, 61, 1);
+    border: 3px solid rgba(44, 125, 76, 1);
+}
+
+/* Стили при фокусе */
+.input-group1-login input:focus,
+.input-group2-login input:focus {
+    font-family: "Poppins";
+    color: rgba(59, 125, 61, 1);
+    border: 3px solid rgba(44, 125, 76, 1);
+    background: white;
+}
+
+/* Кнопка */
+.auth-button-login {
+    font-family: "Montserrat";
+    font-weight: 600;
+    padding: 16px;
+    background-color: rgba(53, 139, 87, 1);
+    color: rgba(252, 252, 253, 1);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-button-login:hover {
+    background-color: rgba(33, 90, 55, 1);
+}
+
+/* Ссылка на регистрацию */
+.auth-link-login {
+    font-family: "Montserrat";
+    font-weight: 400;
+    text-align: center;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1);
+}
+
+.auth-link-login a {
+    font-family: "Montserrat";
+    font-weight: 400;
+    color: rgba(38, 109, 66, 1);
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.auth-link-login a:hover {
+    text-decoration: underline;
+}
+
+/* Стили для контейнера пароля */
+.password-wrapper-login {
+    position: relative;
+}
+
+.toggle-password-login {
+    position: absolute;
+    right: 16px;
+    top: 39px;
+    transform: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.eye-icon-login {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.toggle-password-login:hover .eye-icon {
+    opacity: 1;
+}
+
+/* --------------Панель регистрации---------------- */
+.auth-panel-register {
+    width: 540px;
+    height: 805px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 48px 72px;
+    box-shadow: 20px 40px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.auth-panel-register h1 {
+    font-family: "Unbounded";
+    margin: 0;
+    font-size: 28px;
+    font-weight: 400;
+    text-align: center;
+    color: rgba(53, 139, 87, 1);
+}
+
+/* Форма */
+.auth-form-register {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group1-register {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group2-register {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.input-group3-register {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.input-group4-register {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group5-register {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group1-register label {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1); 
+}
+
+.input-group2-register label {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1); 
+}
+
+.input-group3-register label {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1); 
+}
+
+.input-group4-register label {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1); 
+}
+
+.input-group5-register label {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1); 
+}
+
+.input-group1-register input,
+.input-group2-register input,
+.input-group3-register input,
+.input-group4-register input,
+.input-group5-register input {
+    font-family: "Lato";
+    color: rgba(112, 112, 123, 1);
+    padding: 12px 16px;
+    border: 1px solid rgba(112, 112, 123, 1);
+    border-radius: 8px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    outline: none;
+    width: 396px;
+    height: 40px;
+}
+
+/* Стили при вводе текста */
+.input-group1-register input:not(:placeholder-shown),
+.input-group2-register input:not(:placeholder-shown),
+.input-group3-register input:not(:placeholder-shown),
+.input-group4-register input:not(:placeholder-shown),
+.input-group5-register input:not(:placeholder-shown) {
+    font-family: "Poppins";
+    color: rgba(59, 125, 61, 1);
+    border: 3px solid rgba(44, 125, 76, 1);
+}
+
+/* Стили при фокусе */
+.input-group1-register input:focus,
+.input-group2-register input:focus,
+.input-group3-register input:focus,
+.input-group4-register input:focus,
+.input-group5-register input:focus {
+    font-family: "Poppins";
+    color: rgba(59, 125, 61, 1);
+    border: 3px solid rgba(44, 125, 76, 1);
+    background: white;
+}
+
+/* Стили для контейнера выпадающего списка */
+.input-group5-register {
+    position: relative;
+    margin-bottom: 100px;
+}
+
+/* Стили для поля с выпадающим списком */
+.input-group5-register select {
+    font-family: "Lato";
+    color: rgba(112, 112, 123, 1);
+    padding: 12px 16px;
+    border: 1px solid rgba(112, 112, 123, 1);
+    border-radius: 8px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 1);
+    outline: none;
+    width: 396px;
+    height: 48.09px;
+    appearance: none;
+    background-image: url('../Loom/RegAndAuth/Design/Register/down.svg');
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 8px rgba(142, 141, 208, 0.2);
+}
+
+/* --------Здесь проблема----------- */
+
+/* Опции для выпадающего списка */
+.input-group5-register select:invalid {
+    color: rgba(112, 112, 123, 1);
+}
+
+/* Стили для выбранного значения */
+.input-group5-register select:not(:invalid) {
+    font-family: "Poppins";
+    color: rgba(59, 125, 61, 1);
+}
+
+/* Стили при наведении */
+.input-group5-register select:hover {
+    background-color: rgba(248, 248, 250, 1);
+}
+
+/* Стили при фокусе */
+.input-group5-register select:focus {
+    font-family: "Poppins";
+    color: rgba(59, 125, 61, 1);
+    border: 3px solid rgba(44, 125, 76, 1);
+    background-color: white;
+}
+
+/* Стили для выпадающего списка */
+.input-group5-register select option {
+    padding: 12px 16px;
+    background-color: white;
+    font-family: "Lato";
+    font-size: 16px;
+    color: rgba(112, 112, 123, 1);
+}
+
+/* -------------------------------- */
+
+/* Кнопка */
+.auth-button-register {
+    font-family: "Montserrat";
+    font-weight: 600;
+    padding: 16px;
+    background-color: rgba(53, 139, 87, 1);
+    color: rgba(252, 252, 253, 1);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-button-register:hover {
+    background-color: rgba(33, 90, 55, 1);
+}
+
+/* Ссылка на авторизацию */
+.auth-link-register {
+    font-family: "Montserrat";
+    font-weight: 400;
+    text-align: center;
+    font-size: 16px;
+    color: rgba(53, 139, 87, 1);
+}
+
+.auth-link-register a {
+    font-family: "Montserrat";
+    font-weight: 400;
+    color: rgba(38, 109, 66, 1);
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.auth-link-register a:hover {
+    text-decoration: underline;
+}

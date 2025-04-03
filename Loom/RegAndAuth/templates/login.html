@@ -4,26 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up</title>
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <div>
+    <div class="background-image"></div>
+
+    <div class="auth-panel-login">
         <h1>Войдите в систему</h1>
 
-        <form>
-            <div>
+        <form class="auth-form-login">
+            <div class="input-group1-login">
                 <label for="phone">Номер телефона</label>
                 <input type="tel" id="phone" placeholder="+79920020497" required>
             </div>
 
-            <div>
+            <div class="input-group2-login">
                 <label for="password">Пароль</label>
                 <input type="password" id="password" placeholder="Введите свой пароль" required>
+                <button type="button" class="toggle-password-login">
+                    <img src="../Design/Log in/eye.svg" alt="Показать пароль" class="eye-icon">
+                </button>
             </div>
 
-            <button type="submit">Войти</button>
+            <button type="submit" class="auth-button-login">Войти</button>
         </form>
 
-        <div>
+        <div class="auth-link-login">
             <span>Нет аккаунта?</span>
             <a href="register.html">Зарегестрироваться</a>
         </div>

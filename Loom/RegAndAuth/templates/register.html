@@ -4,33 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <div>
+    <div class="background-image"></div>
+
+    <div class="auth-panel-register">
         <h1>Регистрация</h1>
 
-        <form>
-            <div>
-                <label for="username">Имя Пользователя</label>
+        <form class="auth-form-register">
+            <div class="input-group1-register">
+                <label for="username">Имя пользователя</label>
                 <input type="text" id="username" placeholder="Введите имя" required>
             </div>
 
-            <div>
+            <div class="input-group2-register">
                 <label for="password">Пароль</label>
                 <input type="password" id="password" placeholder="Введите свой пароль" required>
             </div>
 
-            <div>
+            <div class="input-group3-register">
                 <label for="confirm-password">Подтвердите пароль</label>
-                <input type="password" id="confirm-password" placeholder="Введите свой пароль" readonly>
+                <input type="password" id="confirm-password" placeholder="Введите свой пароль" required>
             </div>
 
-            <div>
+            <div class="input-group4-register">
                 <label for="phone">Номер телефона</label>
-                <input type="tel" id="phone" placeholder="Введите номер" readonly>
+                <input type="tel" id="phone" placeholder="Введите номер" required>
             </div>
 
-            <div>
+            <div class="input-group5-register">
                 <label for="role">Роль в семье</label>
                 <select id="role" required>
                     <option value="" disabled selected>Выберите роль</option>
@@ -39,10 +42,10 @@
                 </select>
             </div>
 
-            <button type="submit">Зарегестрироваться</button>
+            <button type="submit" class="auth-button-register">Зарегестрироваться</button>
         </form>
 
-        <div>
+        <div class="auth-link-register">
             <span>Есть аккаунт?</span>
             <a href="login.html">Войти</a>
         </div>
