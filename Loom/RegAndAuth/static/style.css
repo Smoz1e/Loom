@@ -5,35 +5,35 @@
 }
 
 @font-face {
-    src: url('../Fonts/Unbounded/static/Unbounded-Regular.ttf');
+    src: url('Fonts/Unbounded/static/Unbounded-Regular.ttf');
     font-family: "Unbounded";
 }
 
 @font-face {
-    src: url('../Fonts/Montserrat/static/Montserrat-Medium.ttf');
+    src: url('Fonts/Montserrat/static/Montserrat-Medium.ttf');
     font-family: "Montserrat";
     font-weight: 500;
 }
 
 @font-face {
-    src: url('../Fonts/Montserrat/static/Montserrat-Bold.ttf');
+    src: url('Fonts/Montserrat/static/Montserrat-Bold.ttf');
     font-family: "Montserrat";
     font-weight: 600;
 }
 
 @font-face {
-    src: url('../Fonts/Montserrat/static/Montserrat-Regular.ttf');
+    src: url('Fonts/Montserrat/static/Montserrat-Regular.ttf');
     font-family: "Montserrat";
     font-weight: 400;
 }
 
 @font-face {
-    src: url('../Fonts/Lato/Lato-Regular.ttf');
+    src: url('Fonts/Lato/Lato-Regular.ttf');
     font-family: "Lato";
 }
 
 @font-face {
-    src: url('../Fonts/Poppins/Poppins-Regular.ttf');
+    src: url('Fonts/Poppins/Poppins-Regular.ttf');
     font-family: "Poppins";
 }
 
@@ -54,10 +54,33 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: url('../Design/Log in/Log in(bg).svg');
+    background-image: url('Design/Login/LogIn.svg');
     background-size: cover;
     background-position: center;
     z-index: -1;
+}
+
+.corner-image {
+    position: fixed;  /* Раскомментируйте это! */
+    width: 140px !important;
+    height: auto !important;
+    display: block;
+}
+
+.bottom-left {
+    bottom: 10px;
+    left: 10px;
+    transform-origin: left bottom;  /* Для масштабирования от угла */
+}
+
+.top-right {
+    top: 10px;
+    right: 10px;
+    transform-origin: right top;  /* Для масштабирования от угла */
+}
+
+.corner-image {
+    transform: scale(3);  /* Увеличит стрелку в 3 раза */
 }
 
 /* --------------Панель авторизации---------------- */
@@ -134,7 +157,7 @@ body {
 
 /* Отступ для глазика */
 .input-group2-login input {
-    padding-right: 48px;
+    padding-right: 5px;
 }
 
 /* Стили при вводе текста */
@@ -195,40 +218,48 @@ body {
 }
 
 /* Стили для контейнера пароля */
-.password-wrapper-login {
+/* .input-group2-login.password-wrapper-login {
     position: relative;
-}
+    width: 100%;  
+} */
 
-.toggle-password-login {
+/* Кнопка показа/скрытия пароля */
+/* .toggle-password-login {
     position: absolute;
     right: 16px;
-    top: 39px;
-    transform: none;
+    top: 50%;
+    transform: translateY(-50%); 
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
     width: 24px;
     height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
+} */
 
-.eye-icon-login {
+/* .eye-icon-login {
     width: 100%;
     height: 100%;
     object-fit: contain;
     opacity: 0.7;
     transition: opacity 0.2s;
-}
+} */
 
-.toggle-password-login:hover .eye-icon {
+/* .toggle-password-login:hover .eye-icon-login {
     opacity: 1;
-}
+} */
+
 
 /* --------------Панель регистрации---------------- */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 60px 0; /* Отступы сверху и снизу */
+    box-sizing: border-box;
+}
+
 .auth-panel-register {
     width: 540px;
     height: 805px;
@@ -240,9 +271,10 @@ body {
     flex-direction: column;
     gap: 32px;
     position: relative;
-    margin: 0 auto;
+    /* Убрал margin, так как теперь отступы контролируются контейнером */
 }
 
+/* Остальные стили остаются без изменений */
 .auth-panel-register h1 {
     font-family: "Unbounded";
     margin: 0;
@@ -385,7 +417,7 @@ body {
     width: 396px;
     height: 48.09px;
     appearance: none;
-    background-image: url('../Loom/RegAndAuth/Design/Register/down.svg');
+    background-image: url('Design/Register/down.svg');
     background-repeat: no-repeat;
     background-position: right 16px center;
     cursor: pointer;

@@ -1,12 +1,16 @@
+{%load static%}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{% static "style.css"%}">
 </head>
 <body>
+
+    <img src="{% static 'Design/Register/Arrow2.svg' %}" class="corner-image top-right" alt="Arrow">
+
     <div class="background-image"></div>
 
     <div class="auth-panel-login">
@@ -18,12 +22,12 @@
                 <input type="tel" id="phone" placeholder="+79920020497" required>
             </div>
 
-            <div class="input-group2-login">
+            <div class="input-group2-login password-wrapper-login">
                 <label for="password">Пароль</label>
                 <input type="password" id="password" placeholder="Введите свой пароль" required>
-                <button type="button" class="toggle-password-login">
-                    <img src="../Design/Log in/eye.svg" alt="Показать пароль" class="eye-icon">
-                </button>
+                {% comment %} <button type="button" class="toggle-password-login">
+                    <img src="{% static 'Design/Login/eye.svg' %}" class="eye-icon-login">
+                </button> {% endcomment %}
             </div>
 
             <button type="submit" class="auth-button-login">Войти</button>
@@ -34,5 +38,6 @@
             <a href="register.html">Зарегестрироваться</a>
         </div>
     </div>
+    <img src="{% static 'Design/Register/Arrow1.svg' %}" class="corner-image bottom-left" alt="Arrow">
 </body>
 </html>
