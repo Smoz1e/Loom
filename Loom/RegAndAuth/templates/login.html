@@ -16,18 +16,16 @@
     <div class="auth-panel-login">
         <h1>Войдите в систему</h1>
 
-        <form class="auth-form-login">
+        <form class="auth-form-login" method="POST">
+            {% csrf_token %}
             <div class="input-group1-login">
                 <label for="phone">Номер телефона</label>
-                <input type="tel" id="phone" placeholder="+79920020497" required>
+                <input type="tel" id="phone" name="phone" placeholder="+79920020497" required>
             </div>
 
             <div class="input-group2-login password-wrapper-login">
                 <label for="password">Пароль</label>
-                <input type="password" id="password" placeholder="Введите свой пароль" required>
-                {% comment %} <button type="button" class="toggle-password-login">
-                    <img src="{% static 'Design/Login/eye.svg' %}" class="eye-icon-login">
-                </button> {% endcomment %}
+                <input type="password" id="password" name="password" placeholder="Введите свой пароль" required>
             </div>
 
             <button type="submit" class="auth-button-login">Войти</button>
@@ -35,7 +33,7 @@
 
         <div class="auth-link-login">
             <span>Нет аккаунта?</span>
-            <a href="register.html">Зарегестрироваться</a>
+            <a href="{% url 'register' %}">Зарегистрироваться</a>
         </div>
     </div>
     <img src="{% static 'Design/Register/Arrow1.svg' %}" class="corner-image bottom-left" alt="Arrow">

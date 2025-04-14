@@ -38,7 +38,7 @@
 }
 
 body {
-    font-family: "Montserrat", "Arial", sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -65,6 +65,61 @@ body {
     width: 140px !important;
     height: auto !important;
     display: block;
+}
+
+/* Общие стили для стрелок */
+.corner-image {
+    position: absolute;
+    width: 140px;
+    height: auto;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.8;
+}
+
+/* Стрелка в верхнем правом углу */
+.top-right {
+    top: 10%;
+    right: 10%;
+    transform-origin: center;
+    transform: rotate(45deg); /* Указывает на блок авторизации */
+}
+
+/* Стрелка в нижнем левом углу */
+.bottom-left {
+    bottom: 10%;
+    left: 10%;
+    transform-origin: center;
+    transform: rotate(-45deg); /* Указывает на блок авторизации */
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 768px) {
+    .top-right {
+        top: 15%;
+        right: 15%;
+        transform: rotate(50deg);
+    }
+
+    .bottom-left {
+        bottom: 15%;
+        left: 15%;
+        transform: rotate(-50deg);
+    }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 480px) {
+    .top-right {
+        top: 20%;
+        right: 20%;
+        transform: rotate(55deg);
+    }
+
+    .bottom-left {
+        bottom: 20%;
+        left: 20%;
+        transform: rotate(-55deg);
+    }
 }
 
 .bottom-left {
@@ -240,3 +295,27 @@ body {
 /* .auth-panel-login:hover ~ .top-right {
     transform: scale(3.2) rotate(7deg);
 } */
+
+/* Для экранов шириной до 768px (планшеты) */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* Для экранов шириной до 480px (мобильные устройства) */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    .menu {
+        display: none; /* Скрыть меню, если оно не нужно */
+    }
+
+    .corner-image {
+        display: none; /* Скрыть стрелки */
+    }
+}

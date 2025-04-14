@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
-    <link rel="stylesheet" href="{% static "register.css"%}">
+    <link rel="stylesheet" href="{% static 'register.css'%}">
 </head>
 <body>
     <img src="{% static 'Design/Register/Arrow2.svg' %}" class="corner-image top-right" alt="Arrow">
@@ -16,42 +16,43 @@
         <div class="auth-panel-register">
             <h1>Регистрация</h1>
 
-            <form class="auth-form-register">
+            <form class="auth-form-register" method="POST">
+                {% csrf_token %}
                 <div class="input-group1-register">
                     <label for="username">Имя пользователя</label>
-                    <input type="text" id="username" placeholder="Введите имя" required>
+                    <input type="text" id="username" name="username" placeholder="Введите имя" required>
                 </div>
 
                 <div class="input-group2-register">
                     <label for="password">Пароль</label>
-                    <input type="password" id="password" placeholder="Введите свой пароль" required>
+                    <input type="password" id="password" name="password" placeholder="Введите свой пароль" required>
                 </div>
 
                 <div class="input-group3-register">
                     <label for="confirm-password">Подтвердите пароль</label>
-                    <input type="password" id="confirm-password" placeholder="Введите свой пароль" required>
+                    <input type="password" id="confirm-password" name="confirm_password" placeholder="Введите свой пароль" required>
                 </div>
 
                 <div class="input-group4-register">
                     <label for="phone">Номер телефона</label>
-                    <input type="tel" id="phone" placeholder="Введите номер" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Введите номер" required>
                 </div>
 
                 <div class="input-group5-register">
                     <label for="role">Роль в семье</label>
-                    <select id="role" required>
+                    <select id="role" name="role" required>
                         <option value="" disabled selected>Выберите роль</option>
                         <option value="parent">Родитель</option>
                         <option value="child">Ребенок</option>
                     </select>
                 </div>
 
-                <button type="submit" class="auth-button-register">Зарегестрироваться</button>
+                <button type="submit" class="auth-button-register">Зарегистрироваться</button>
             </form>
 
             <div class="auth-link-register">
                 <span>Есть аккаунт?</span>
-                <a href="login.html">Войти</a>
+                <a href="{% url 'login' %}">Войти</a>
             </div>
         </div>
     </div>
