@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="../Loom/style.css">
+</head>
+<body class="profile-page">
+    <header class="header">
+        <nav class="main-nav">
+            <div class="nav-links">
+                <a href="personal-calendar.html" class="nav-link">Личный календарь</a>
+                <a href="family-calendar.html" class="nav-link">Семейный календарь</a>
+            </div>
+            
+            <div class="notification-icon"></div>
+            
+            <div class="user-profile">
+                <button class="logout-btn">
+                    <span class="logout-text">Выйти</span>
+                    <span class="logout-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section id="profile" class="profile-section">
+            <h1 class="section-title">Профиль Пользователя</h1>
+            <hr class="section-divider">
+
+            <div class="user-photo-container">
+                <div class="user-photo-placeholder"></div>
+            </div>
+    
+            <div class="photo-actions">
+                <button type="button" class="action-button upload-btn">Загрузить фото</button>
+                <button type="button" class="action-button delete-btn">Удалить</button>
+            </div>
+    
+        <hr class="section-line">
+    
+            <div class="personal-info">
+                <div class="name-row">
+                    <div class="name-group">
+                        <label class="field-label">Имя</label>
+                        <input type="text" class="info-input first-name">
+                    </div>
+                    <div class="name-group">
+                        <label class="field-label">Фамилия</label>
+                        <input type="text" class="info-input last-name">
+                    </div>
+                </div>
+                <div class="name-group">
+                    <label class="field-label">Отчество (при наличии)</label>
+                    <input type="text" class="info-input middle-name">
+                </div>
+            </div>
+    
+        <hr class="section-line">
+            <div class="contact-info">
+                <div class="contact-group">
+                    <label class="field-label">Email</label>
+                    <div class="email-icon"></div>
+                    <input type="email" class="info-input email">
+                </div>
+                <div class="contact-group">
+                    <label class="field-label">Номер телефона</label>
+                    <div class="phone-icon"></div>
+                    <input type="tel" class="info-input phone">
+                </div>
+            </div>
+        </section>
+        
+        <hr class="section-line">
+
+        <section id="family" class="family-section">
+            <div class="family-info">
+                <div class="family-role">
+                    <label class="field-label">Семья</label>
+                    <input type="text" class="info-input family">
+                </div>
+                <div class="family-role">
+                    <label class="field-label">Роль в семье</label>
+                    <input type="text" class="info-input role">
+                </div>
+            </div>
+            <div class="family-role">
+                <button type="button" class="copy-code-btn">Копировать код семьи</button>
+            </div>
+
+        <hr class="section-line">
+
+            <div class="password-info">
+                <div class="password-change">
+                    <div class="input-group">
+                        <label class="field-label">Текущий пароль</label>
+                        <input type="password" class="password-input first">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="field-label">Новый пароль</label>
+                        <input type="password" class="password-input last">
+                    </div>
+                </div>
+                <div class="input-group full-width">
+                    <label class="field-label">Подтвердить новый пароль</label>
+                    <input type="password" class="password-input middle">
+                </div>
+            </div>
+        
+            <div class="family-actions">
+                <button type="button" class="danger-btn">Покинуть семью</button>
+                <button type="button" class="primary-btn">Создать новую семью</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#" class="footer-link">Контакты</a>
+            <a href="#" class="footer-link">О нас</a>
+            <a href="#" class="footer-link">Предложения</a>
+            <a href="#" class="footer-link">Личный кабинет</a>
+        </div>
+        
+        <div class="footer-bottom">
+            <span class="footer-copyright">© 2025 Loom</span>
+            <a href="#" class="footer-policy">Политика конфиденциальности</a>
+        </div>
+        <div class="social-icons">
+            <a href="#" class="social-icon vk-icon"></a>
+            <a href="#" class="social-icon tg-icon"></a>
+        </div>
+    </footer>
+</body>
+</html>
