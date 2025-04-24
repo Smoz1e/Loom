@@ -12,6 +12,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='parent')
     bio = models.TextField(blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)  # Поле для аватарки
 
     def __str__(self):
         return self.user.username

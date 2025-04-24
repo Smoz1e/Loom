@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .models import Profile
 
+
 def Register(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -41,7 +42,7 @@ def Login(request):
             user = authenticate(request, username=profile.user.username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("dashboard")
+                return redirect("profile")  # Перенаправление на личный кабинет
             else:
                 messages.error(request, "Неверный номер телефона или пароль!")
         except Profile.DoesNotExist:
@@ -54,4 +55,4 @@ def Login(request):
 def Dashboard(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, "dashboard.html")
+    return render(request, "")

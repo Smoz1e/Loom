@@ -1,10 +1,11 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link rel="stylesheet" href="../Loom/style.css">
+    <link rel="stylesheet" href="{% static 'profile.css'%}">
 </head>
 <body class="profile-page">
     <header class="header">
@@ -17,7 +18,7 @@
             <div class="notification-icon"></div>
             
             <div class="user-profile">
-                <button class="logout-btn">
+                <button class="logout-btn" onclick="location.href='{% url 'login' %}'">
                     <span class="logout-text">Выйти</span>
                     <span class="logout-icon"></span>
                 </button>
@@ -31,31 +32,48 @@
             <hr class="section-divider">
 
             <div class="user-photo-container">
-                <div class="user-photo-placeholder"></div>
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="Аватарка пользователя" class="user-avatar">
+                {% else %}
+                    <div class="user-photo-placeholder"></div>
+                {% endif %}
             </div>
-    
+
             <div class="photo-actions">
-                <button type="button" class="action-button upload-btn">Загрузить фото</button>
-                <button type="button" class="action-button delete-btn">Удалить</button>
+                <form id="avatar-form" action="{% url 'upload_avatar' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="avatar-upload" class="action-button upload-btn">Загрузить фото</label>
+                    <input type="file" id="avatar-upload" name="avatar" accept="image/*" required hidden>
+                </form>
+                {% if user.profile.avatar %}
+                    <form action="{% url 'delete_avatar' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="action-button delete-btn">Удалить</button>
+                    </form>
+                {% endif %}
             </div>
     
         <hr class="section-line">
     
             <div class="personal-info">
-                <div class="name-row">
-                    <div class="name-group">
-                        <label class="field-label">Имя</label>
-                        <input type="text" class="info-input first-name">
+                <form action="{% url 'update_profile' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="name-row">
+                        <div class="name-group">
+                            <label class="field-label">Имя</label>
+                            <input type="text" class="info-input first-name" name="first_name" value="{{ request.user.first_name }}">
+                        </div>
+                        <div class="name-group">
+                            <label class="field-label">Фамилия</label>
+                            <input type="text" class="info-input last-name" name="last_name" value="{{ request.user.last_name }}">
+                        </div>
                     </div>
                     <div class="name-group">
-                        <label class="field-label">Фамилия</label>
-                        <input type="text" class="info-input last-name">
+                        <label class="field-label">Отчество (при наличии)</label>
+                        <input type="text" class="info-input middle-name" name="middle_name" value="{{ profile.bio }}">
                     </div>
-                </div>
-                <div class="name-group">
-                    <label class="field-label">Отчество (при наличии)</label>
-                    <input type="text" class="info-input middle-name">
-                </div>
+                    <button type="submit" class="primary-btn">Сохранить изменения</button>
+                </form>
             </div>
     
         <hr class="section-line">
@@ -68,7 +86,7 @@
                 <div class="contact-group">
                     <label class="field-label">Номер телефона</label>
                     <div class="phone-icon"></div>
-                    <input type="tel" class="info-input phone">
+                    <input type="tel" class="info-input phone" value="{{ profile.phone }}" readonly>
                 </div>
             </div>
         </section>
@@ -83,7 +101,7 @@
                 </div>
                 <div class="family-role">
                     <label class="field-label">Роль в семье</label>
-                    <input type="text" class="info-input role">
+                    <input type="text" class="info-input role" value="{{ profile.role }}" readonly>
                 </div>
             </div>
             <div class="family-role">
@@ -134,5 +152,11 @@
             <a href="#" class="social-icon tg-icon"></a>
         </div>
     </footer>
+
+    <script>
+        document.getElementById('avatar-upload').addEventListener('change', function () {
+            document.getElementById('avatar-form').submit();
+        });
+    </script>
 </body>
 </html>
