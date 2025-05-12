@@ -1,0 +1,1300 @@
+* {
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    src: url('../Fonts/Unbounded/static/Unbounded-Regular.ttf');
+    font-family: "Unbounded";
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Medium.ttf');
+    font-family: "Montserrat";
+    font-weight: 500;
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Bold.ttf');
+    font-family: "Montserrat";
+    font-weight: 600;
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Regular.ttf');
+    font-family: "Montserrat";
+    font-weight: 400;
+}
+
+@font-face {
+    src: url('../Fonts/Lato/Lato-Regular.ttf');
+    font-family: "Lato";
+}
+
+@font-face {
+    src: url('../Fonts/Poppins/Poppins-Regular.ttf');
+    font-family: "Poppins";
+}
+
+body.calendar-page {
+    font-family: "Montserrat", sans-serif;
+    display: block;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding: 0;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 1);
+    background-image: url('../Design/Calendars/bg.png');
+    background-attachment: scroll;
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
+    background-blend-mode: multiply;
+    overflow-x: hidden; /* Без горизонтального скролла */
+}
+
+/* ---------- Навигация ---------- */
+
+.navigation-container {
+    width: 1092px;
+    height: 64px;
+    padding: 16px 36px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    position: relative;
+    margin: -4px auto 0;
+    z-index: 100;
+}
+
+.calendar-switcher {
+    width: 634px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 20px; 
+}
+
+/* Общие стили для всех элементов */
+.calendar-switcher > * {
+    flex-shrink: 0; 
+    white-space: nowrap; 
+}
+
+/* Стили для иконок */
+.calendar-icon {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+/* Стили для ссылок */
+.calendar-link {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 14px;
+    text-transform: capitalize;
+    text-decoration: none;
+    color: #3D3D3D;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    background-color: transparent;
+
+}
+
+/* Индивидуальные иконки */
+.icon-personal {
+    background-image: url('../Design/Calendars/personal-calendar.svg');
+}
+
+.icon-family {
+    background-image: url('../Design/Calendars/family-calendar.svg');
+}
+
+.icon-shared {
+    background-image: url('../Design/Calendars/shared-calendar.svg');
+}
+
+.calendar-link.active {
+    background: #047857;
+    color: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 8px 16px;
+    border-radius: 10px;
+}
+
+/* Эффект наведения неактивных календарей */
+.calendar-link:not(.active):hover {
+    color: rgba(53, 139, 87, 1);
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Навигация по дате */
+.date-navigation {
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    height: 28px;
+}
+
+.nav-button {
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+    border: none;
+    background: #F4F4F5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 0;
+}
+
+/* Левая кнопка */
+.nav-button.prev-day {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    margin-right: 1px; 
+    background-image: url('../Design/Calendars/black-arrow-left.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 10px;
+}
+
+/* Правая кнопка */
+.nav-button.next-day {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin-left: 1px; 
+    background-image: url('../Design/Calendars/black-arrow-right.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 10px; 
+}
+
+.nav-button::before,
+.nav-button.prev-day::before {
+    content: none;
+}
+
+.current-date {
+    font-family: "Montserrat";
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    color: rgba(24, 24, 27, 1);
+    padding: 0 16px;
+    white-space: nowrap;
+    background: #F4F4F5;
+    height: 28px;
+    display: flex;
+    align-items: center;
+}
+
+
+/* Кнопка профиля */
+
+.button-profile {
+    grid-column: 3;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-left: auto;
+}
+
+.profile-button {
+    width: 128px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 0 16px;
+    background: #6FAF7D;
+    box-shadow: 0px 5px 15px rgba(37, 44, 97, 0.15), 
+                0px 2px 4px rgba(136, 144, 194, 0.2);
+    border: none;
+    cursor: pointer;
+}
+
+.profile-button-link {
+    text-decoration: none;
+    display: inline-block;
+}
+
+
+.profile-button:hover {
+    background: rgba(53, 139, 87, 1);
+}
+
+.profile-button-text {
+    font-family: "Montserrat";
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: white;
+    white-space: nowrap;
+}
+
+.profile-button-icon {
+    width: 16px;
+    height: 16px;
+    background-image: url('../Design/Calendars/white-arrow-right.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Кнопка меню */
+.sidebar-toggle {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 15px;
+    left: 1250px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 16px;
+    z-index: 100;
+}
+
+.sidebar-toggle::before {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 24px;
+    background-image: url('../Design/Calendars/menu.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ----------- Основной контейнер календаря ------------ */
+
+.main-calendar-container {
+    width: 1108px;
+    height: 1288px;
+    margin: 0 auto 60px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    box-sizing: border-box;
+}
+
+/* Контейнер строки дней недели */
+.week-days-container {
+    width: 1108px;
+    height: 64px;
+    display: flex;
+    gap: 12px;
+}
+
+/* Контейнер только для дней недели */
+.days-container {
+    width: 1012px;
+    height: 64px;
+    display: flex;
+}
+
+/* Контейнер строки с временем */
+.time-row-container {
+    width: 1108px;
+    height: 72px;
+    display: flex;
+    gap: 12px;
+}
+
+/* Контейнер ячеек времени */
+.time-cells-container {
+    width: 1012px;
+    height: 72px;
+    display: flex;
+}
+
+/* Заголовки дней недели */
+.day-header {
+    width: 144.57px;
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px 8px 16px;
+    background: rgba(250, 250, 250, 1);
+    box-shadow: 0px -1px 0px 0px rgba(224, 224, 224, 1) inset;
+}
+
+.day-header:not(:last-child) {
+    box-shadow: -1px -1px 0px 0px rgba(224, 224, 224, 1) inset;
+}
+
+/* Стили для вторника-субботы */
+.day-header:not(:first-child):not(:last-child) {
+    background: rgba(255, 255, 255, 1);
+}
+
+/* Стили для пятницы */
+.day-header.blue-today {
+    background: rgba(239, 246, 255, 1) !important;
+    box-shadow: 0px -1px 0px 0px rgba(247, 247, 247, 1) inset !important;
+}
+
+.calendar-cell.blue-today {
+    background: rgba(239, 246, 255, 1) !important;
+    box-shadow: 0px -1px 0px 0px rgba(247, 247, 247, 1) inset !important;
+}
+
+.day-header.blue-today,
+.calendar-cell.blue-today {
+    border-right: 1px solid #E4E4E7;
+}
+
+.day-header.blue-today .day-name,
+.day-header.blue-today .day-number {
+    color: inherit;
+}
+
+.day-name {
+    width: 128.57px;
+    height: 12px;
+    font-family: Montserrat;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 12px;
+    color: rgba(113, 113, 122, 1);
+    display: inline-flex;
+    align-items: center;
+}
+
+.day-number {
+    width: 128.57px;
+    height: 32px;
+    font-family: Montserrat;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+/* Ячейки с временем */
+.time-header {
+    width: 48px;
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 12px;
+    color: #71717A;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+/* Ячейки календаря */
+.calendar-cell {
+    position: relative;
+    width: 144.57px;
+    height: 72px;
+    background: #FAFAFA;
+    border-bottom: 1px solid #E4E4E7;
+    border-right: 1px solid #E4E4E7;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+.calendar-cell:nth-child(7n) {
+    border-right: none;
+}
+
+
+.calendar-cell:not(:first-child):not(:last-child) {
+    background: rgba(255, 255, 255, 1);
+}
+
+/* UTC ячейка */
+.utc-cell {
+    width: 48px;
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 12px;
+    color: #71717A;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+
+
+/* ------- Стили для контейнера задачи на 1 ячейку ----------- */
+.task-container-cases,
+.task-container-cases-1,
+.task-container-cases-2 {
+    position: absolute;
+    height: 68px;
+    top: 0px; 
+    left: 0px; 
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+
+/* Ширина для разных типов задач */
+.task-container-cases {
+    width: 143px;
+}
+.task-container-cases-1 {
+    width: 69px;
+}
+.task-container-cases-2 {
+    width: 69px;
+    left: 71px;
+}
+
+.task-container-cases:hover,
+.task-container-cases-1:hover,
+.task-container-cases-2:hover {
+    opacity: 0.8; 
+}
+
+/* Цветная полоска слева */
+.task-color-strip {
+    width: 3px;
+    height: 68px;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Основное содержимое задачи */
+.main-contents-cases {
+    width: 140px;
+    height: 68px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.2s ease;
+}
+
+/* Время задачи */
+.task-calendar-time {
+    width: 128px;
+    height: 16px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    transition: opacity 0.2s ease;
+}
+
+/* Имя задающего */
+.task-calendar-name {
+    width: 128px;
+    height: 16px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    transition: opacity 0.2s ease;
+}
+
+/* Название задачи */
+.task-description {
+    width: 128px;
+    height: 16px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    transition: opacity 0.2s ease;
+    word-break: break-word;
+    overflow-wrap: break-word; 
+}
+
+.task-description.with-name {
+    width: 128px;
+    height: 16px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    transition: opacity 0.2s ease;
+    word-break: break-word;
+    overflow-wrap: break-word; 
+}
+
+/* Название каждой задачи из 2*/
+.task-description-2 {
+    width: 55px;
+    height: 16px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    transition: opacity 0.2s ease;
+    word-break: break-word;
+    overflow-wrap: break-word; 
+}
+
+.task-description-2.with-name {
+    width: 53px;
+    height: 64px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    transition: opacity 0.2s ease;
+    word-break: break-word;
+    overflow-wrap: break-word; 
+}
+
+.calendar-cell {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Стиль для длинных задач !!!!!НЕ РАБОТАЕТ!!!!! */
+.task-container-cases.long-task {
+    position: absolute;
+    width: 143px;
+    height: 140px; 
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.task-container-cases.long-task .task-color-strip {
+    height: 100%;
+}
+
+.task-container-cases.long-task .main-contents-cases {
+    height: 100%;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ------ Цвета задач -------- */
+
+/* Стили для фиолетовой задачи */
+.task-container-cases.purple-task,
+.task-container-cases-1.purple-task,
+.task-container-cases-2.purple-task {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.task-container-cases.purple-task .task-color-strip,
+.task-container-cases-1.purple-task .task-color-strip,
+.task-container-cases-2.purple-task .task-color-strip {
+    background: rgba(139, 92, 246, 1);
+}
+
+.task-container-cases.purple-task .task-calendar-time,
+.task-container-cases.purple-task .task-calendar-name,
+.task-container-cases.purple-task .task-description-2,
+.task-container-cases.purple-task .task-description, 
+.task-container-cases-1.purple-task .task-calendar-time,
+.task-container-cases-1.purple-task .task-calendar-name,
+.task-container-cases-1.purple-task .task-description-2,
+.task-container-cases-1.purple-task .task-description, 
+.task-container-cases-2.purple-task .task-calendar-time,
+.task-container-cases-2.purple-task .task-calendar-name,
+.task-container-cases-2.purple-task .task-description-2,
+.task-container-cases-2.purple-task .task-description {
+    color: rgba(109, 40, 217, 1);
+}
+
+/* Стили для синей задачи */
+.task-container-cases.blue-task,
+.task-container-cases-1.blue-task,
+.task-container-cases-2.blue-task {
+    background: rgba(14, 165, 233, 0.1);
+}
+
+.task-container-cases.blue-task .task-color-strip,
+.task-container-cases-1.blue-task .task-color-strip,
+.task-container-cases-2.blue-task .task-color-strip {
+    background: rgba(14, 165, 233, 1);
+}
+
+.task-container-cases.blue-task .task-calendar-time,
+.task-container-cases.blue-task .task-calendar-name,
+.task-container-cases.blue-task .task-description-2,
+.task-container-cases.blue-task .task-description,
+.task-container-cases-1.blue-task .task-calendar-time,
+.task-container-cases-1.blue-task .task-calendar-name,
+.task-container-cases-1.blue-task .task-description-2,
+.task-container-cases-1.blue-task .task-description,
+.task-container-cases-2.blue-task .task-calendar-time,
+.task-container-cases-2.blue-task .task-calendar-name,
+.task-container-cases-2.blue-task .task-description-2,
+.task-container-cases-2.blue-task .task-description {
+    color: rgba(3, 105, 161, 1);
+}
+
+/* Стили для красной задачи */
+.task-container-cases.red-task,
+.task-container-cases-1.red-task,
+.task-container-cases-2.red-task  {
+    background: rgba(255, 228, 230, 1);
+}
+
+.task-container-cases.red-task .task-color-strip,
+.task-container-cases-1.red-task .task-color-strip,
+.task-container-cases-2.red-task .task-color-strip {
+    background: rgba(244, 63, 94, 1);
+}
+
+.task-container-cases.red-task .task-calendar-time,
+.task-container-cases.red-task .task-calendar-name,
+.task-container-cases.red-task .task-description-2,
+.task-container-cases.red-task .task-description,
+.task-container-cases-1.red-task .task-calendar-time,
+.task-container-cases-1.red-task .task-calendar-name,
+.task-container-cases-1.red-task .task-description-2,
+.task-container-cases-1.red-task .task-description,
+.task-container-cases-2.red-task .task-calendar-time,
+.task-container-cases-2.red-task .task-calendar-name,
+.task-container-cases-2.red-task .task-description-2,
+.task-container-cases-2.red-task .task-description {
+    color: rgba(190, 18, 60, 1);
+}
+
+/* Стили для зеленой задачи */
+.task-container-cases.green-task,
+.task-container-cases-1.green-task,
+.task-container-cases-2.green-task  {
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.task-container-cases.green-task .task-color-strip,
+.task-container-cases-1.green-task .task-color-strip,
+.task-container-cases-2.green-task .task-color-strip {
+    background: rgba(16, 185, 129, 1);
+}
+
+.task-container-cases.green-task .task-calendar-time,
+.task-container-cases.green-task .task-calendar-name,
+.task-container-cases.green-task .task-description-2,
+.task-container-cases.green-task .task-description,
+.task-container-cases-1.green-task .task-calendar-time,
+.task-container-cases-1.green-task .task-calendar-name,
+.task-container-cases-1.green-task .task-description-2,
+.task-container-cases-1.green-task .task-description,
+.task-container-cases-2.green-task .task-calendar-time,
+.task-container-cases-2.green-task .task-calendar-name,
+.task-container-cases-2.green-task .task-description-2,
+.task-container-cases-2.green-task .task-description {
+    color: rgba(4, 120, 87, 1);
+}
+
+/* Стили для желтой задачи  ОТСУТСТВУЕТ В МАКЕТЕ, для примера тот же голубой */
+.task-container-cases.yellow-task,
+.task-container-cases-1.yellow-task,
+.task-container-cases-2.yellow-task  {
+    background: rgba(14, 165, 233, 0.1);
+}
+
+.task-container-cases.yellow-task .task-color-strip,
+.task-container-cases-1.yellow-task .task-color-strip,
+.task-container-cases-2.yellow-task .task-color-strip {
+    background: rgba(3, 105, 161, 1);
+}
+
+.task-container-cases.yellow-task .task-calendar-time,
+.task-container-cases.yellow-task .task-calendar-name,
+.task-container-cases.yellow-task .task-description-2,
+.task-container-cases.yellow-task .task-description,
+.task-container-cases-1.yellow-task .task-calendar-time,
+.task-container-cases-1.yellow-task .task-calendar-name,
+.task-container-cases-1.yellow-task .task-description-2,
+.task-container-cases-1.yellow-task .task-description,
+.task-container-cases-2.yellow-task .task-calendar-time,
+.task-container-cases-2.yellow-task .task-calendar-name,
+.task-container-cases-2.yellow-task .task-description-2,
+.task-container-cases-2.yellow-task .task-description {
+    color: rgba(3, 105, 161, 1);
+}
+
+/* Стили для оранжевой задачи */
+.task-container-cases.orange-task,
+.task-container-cases-1.orange-task,
+.task-container-cases-2.orange-task {
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.task-container-cases.orange-task .task-color-strip,
+.task-container-cases-1.orange-task .task-color-strip,
+.task-container-cases-2.orange-task .task-color-strip {
+    background: rgba(245, 158, 11, 1);
+}
+
+.task-container-cases.orange-task .task-calendar-time,
+.task-container-cases.orange-task .task-calendar-name,
+.task-container-cases.orange-task .task-description-2,
+.task-container-cases.orange-task .task-description,
+.task-container-cases-1.orange-task .task-calendar-time,
+.task-container-cases-1.orange-task .task-calendar-name,
+.task-container-cases-1.orange-task .task-description-2,
+.task-container-cases-1.orange-task .task-description,
+.task-container-cases-2.orange-task .task-calendar-time,
+.task-container-cases-2.orange-task .task-calendar-name,
+.task-container-cases-2.orange-task .task-description-2,
+.task-container-cases-2.orange-task .task-description {
+    color: rgba(180, 83, 9, 1);
+}
+
+
+/* Основные изменения для правильного сдвига контента */
+body.calendar-page {
+    overflow-x: hidden; 
+    position: relative;
+}
+
+/* Обертка для всего контента, кроме боковой панели */
+.content-wrapper {
+    flex: 1;
+    min-width: 0;
+    transition: transform 0.3s ease;
+}
+
+body.calendar-page.sidebar-active .content-wrapper {
+    transform: translateX(-143px);
+}
+
+.main-container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Скрытие кнопки при активной панели */
+body.sidebar-active .sidebar-toggle {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+
+/* -------------- Боковое меню ----------------- */
+
+.sidebar {
+    position: fixed;
+    top: 0px;
+    right: -289px;
+    width: 289px;
+    height: 100%;
+    background: rgba(251, 247, 244, 1);
+    transition: right 0.3s ease;
+    z-index: 99;
+    padding: 16px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-left: 3px solid rgba(208, 208, 208, 1);
+    overflow-y: auto;
+}
+
+.sidebar.active {
+    right: 0;
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+}
+
+/* Кнопка закрытия */
+.sidebar-close-button {
+    width: 24px;
+    height: 24px;
+    align-self: flex-start;
+    background: url('../Design/Calendars/menu.svg') no-repeat center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+    transform: rotate(90deg);
+}
+
+/* Навигация по месяцам */
+.month-navigation {
+    width: 269px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.month-year {
+    display: flex;
+    gap: 8px;
+}
+
+.month {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 40px;
+    color: rgba(92, 60, 26, 1);
+}
+
+.year {
+    font-family: "Montserrat";
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 40px;
+    color: rgba(190, 88, 82, 1);
+}
+
+.month-buttons {
+    width: 48px;
+    height: 24px;
+    display: flex;
+    gap: 8px;
+}
+
+.month-button {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.prev-month {
+    background: url('../Design/Calendars/chevron-left.svg') no-repeat center;
+    background-size: contain;
+}
+
+.next-month {
+    background: url('../Design/Calendars/chevron-right.svg') no-repeat center;
+    background-size: contain;
+}
+
+/* Мини-календарь */
+.mini-calendar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.mini-week-days {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+}
+
+.mini-day-name {
+    font-family: "Montserrat";
+    font-weight: 600;
+    font-size: 10px;
+    color: rgba(113, 113, 122, 1);
+    padding: 4px 0;
+    width: 30.29;
+    height: 16;
+    line-height: 16px;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.mini-dates {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 28px;
+    gap: 0;
+}
+
+.mini-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Montserrat";
+    font-weight: 600;
+    font-size: 11px;
+    cursor: pointer;
+    line-height: 16px;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+    color: rgba(92, 60, 26, 1);
+    position: relative;
+    flex-direction: column;
+    padding: 4px 0;
+    height: 28px; 
+}
+
+.mini-date.inactive {
+    color: rgba(113, 113, 122, 1);
+}
+
+.mini-date:hover:not(.inactive) {
+    color: rgba(174, 147, 119, 1);
+}
+
+/* Мини-календарь - базовые стили */
+
+.date-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding-top: 2px; 
+}
+
+.date-number {
+    display: block;
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 2px; 
+}
+
+.date-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    min-height: 4px; 
+}
+
+.indicator {
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+}
+
+/* Цвета индикаторов */
+.indicator-blue {
+    background-color: rgba(59, 130, 246, 1); /* синий */
+}
+.indicator-purple {
+    background-color: rgba(168, 85, 247, 1); /* фиолетовый */
+}
+.indicator-teal {
+    background-color: rgba(45, 212, 191, 1); /* бирюзовый */
+}
+
+/* Размеры контейнеров для индикаторов */
+.date-indicators.three-indicators {
+    width: 16px;
+}
+.date-indicators.two-indicators {
+    width: 10px;
+}
+.date-indicators.one-indicator {
+    width: 4px;
+}
+
+/* Для неактивных дат */
+.mini-date.inactive .date-number {
+    color: rgba(113, 113, 122, 1);
+}
+
+/* Стиль для текущей даты в мини-календаре */
+.mini-date.current-date {
+    width: 38.28571319580078px;
+    height: 28px;
+    padding: 0 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent !important; 
+    outline: none !important;
+}
+
+.mini-date.current-date .date-content {
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+    border-radius: 100px;
+    background-color: rgba(190, 88, 82, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.mini-date.current-date .date-number {
+    color: rgba(255, 255, 255, 1);
+    font-weight: 600;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.mini-date.current-date .date-indicators {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+}
+
+.mini-date.current-date .indicator {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+}
+
+
+/* --- Контейнер задач --- */
+.tasks-container {
+    width: 268px;
+    height: calc(100% - 300px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-grow: 1;
+    padding: 0 10px;
+}
+
+.tasks-scroll {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Общие стили для заголовков дат */
+.date-header {
+    width: 100%;
+    height: 20px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    font-family: 'Montserrat';
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: 0%;
+    vertical-align: middle;
+}
+
+.date-text {
+    font-weight: 700;
+}
+
+.date-value {
+    font-weight: 400;
+}
+
+/* Специфичные стили для Сегодня и других дней */
+.today-header{
+    color: rgba(92, 60, 26, 1);
+}
+
+.others-header {
+    margin-top: 8px;
+    color: rgba(92, 60, 26, 0.7);
+}
+
+/* Элемент задачи */
+.task-item {
+    width: auto; 
+    max-width: 268px; 
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Индикаторы задач */
+.task-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%; 
+    flex-shrink: 0; 
+}
+
+/* Цвета индикаторов */
+
+.indicator-purple {
+    background-color: rgba(139, 92, 246, 1);
+}
+
+.indicator-blue {
+    background-color: rgba(59, 130, 246, 1);
+}
+
+.indicator-teal {
+    background-color: rgba(45, 212, 191, 1);
+}
+
+.indicator-green {
+    background-color: rgba(16, 185, 129, 1);
+}
+
+.indicator-yellow {
+    background-color: rgba(245, 255, 99, 1);
+}
+
+.indicator-orange {
+    background-color: rgba(245, 158, 11, 1);
+}
+
+.indicator-red {
+    background-color: rgba(244, 63, 94, 1);
+}
+
+/* Контейнер времени */
+.task-time-container {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.time-range {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.start-time, .end-time, .time-separator {
+    font-family: 'Montserrat';
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 16px;
+    color: rgba(161, 161, 170, 1);
+}
+
+
+/* Содержимое задачи */
+.task-content {
+    display: flex;
+    align-items: flex-start; 
+    padding-left: 20px;
+    gap: 2px; 
+    width: 100%;
+    max-width: 100%;
+}
+
+.task-content.for-name {
+    flex-direction: column;
+}
+
+.task-title {
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: rgba(92, 60, 26, 1);
+    display: block;
+}
+
+/* Стили для имени с подчеркиванием */
+.task-title.name-underlined {
+    color: rgba(48, 48, 57, 1);
+    text-decoration: underline;
+    text-underline-offset: 2px; 
+    text-decoration-thickness: 1px; 
+    margin-right: 4px; 
+    display: block;
+}
+
+.task-check {
+    width: 16px;
+    height: 16px;
+    background-image: url('../Design/Calendars/check.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    flex-shrink: 0; 
+    margin-left: 3px; 
+    opacity: 0; 
+    transition: opacity 0.2s ease; 
+}
+
+/* При наведении на задачу - 50% прозрачности */
+.task-item:hover .task-check {
+    opacity: 1;
+}
+
+/* Для выполненной задачи ТОЛЬКО ДЛЯ ЛИЧНОГО КАЛЕНДАРЯ */
+
+.task-item:nth-child(3) .task-indicator,
+.task-item:nth-child(3) .start-time,
+.task-item:nth-child(3) .time-separator,
+.task-item:nth-child(3) .end-time,
+.task-item:nth-child(3) .task-title {
+    opacity: 0.5;
+}
+
+.task-item:nth-child(3) .task-title {
+    color: rgba(161, 161, 170, 1);
+    text-decoration: line-through;
+    position: relative;
+}
+
+/* Галочка для выполненного дела */
+.task-item:nth-child(3) .task-check {
+    opacity: 1 !important;
+    background-image: url('../Design/Calendars/check-done.svg') !important;
+    filter: none !important;
+}
+
+
+/* Кнопка добавления задачи */
+.add-task-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 10px;
+    margin: 2px 0;
+}
+
+.add-task-button {
+    width: 24px;
+    height: 24px;
+    background: url('../Design/Calendars/plus.svg') no-repeat center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-task-button:hover {
+    background-image: url('../Design/Calendars/plus-active.svg');
+
+}
+
+/* Полоса скролла */
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(251, 247, 244, 1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(251, 247, 244, 1);
+}

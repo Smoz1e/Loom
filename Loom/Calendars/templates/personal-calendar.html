@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Calendar</title>
+    <link rel="stylesheet" href="../Loom/Calendars/static/calendars.css">
+</head>
+<body class="calendar-page">
+    <div class="main-container">
+        <div class="content-wrapper">
+            <!-- Контейнер навигации -->
+            <div class="navigation-container">
+                <div class="calendar-switcher">
+                    <div class="calendar-icon icon-personal"></div>
+                    <a href="#" class="calendar-link active">Личный календарь</a>
+                    
+                    <div class="calendar-icon icon-family"></div>
+                    <a href="../Loom/family-calendar.html" class="calendar-link">Семейный календарь</a>
+                    
+                    <div class="calendar-icon icon-shared"></div>
+                    <a href="../Loom/shared-calendar.html" class="calendar-link">Общий календарь</a>
+                </div>
+        
+                <!-- Навигация по дате -->
+                <div class="date-navigation">
+                    <button class="nav-button prev-day"></button>
+                    <span class="current-date">Сегодня</span>
+                    <button class="nav-button next-day"></button>
+                </div>
+                
+                <!-- Правая группа элементов -->
+                <div class="button-profile">
+                    <a href="../Loom/profile.html" class="profile-button-link">
+                        <button class="profile-button">
+                            <span class="profile-button-text">В профиль</span>
+                            <span class="profile-button-icon"></span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <button class="sidebar-toggle" id="sidebarToggle"></button>
+        
+            <!-- Контейнер дней недели -->
+             <div class="main-calendar-container">
+                <div class="week-days-container">
+                    <div class="time-header"></div> <!-- Пустая ячейка слева -->
+                    <div class="days-container">
+                        <div class="day-header">
+                            <span class="day-name">Понедельник</span>
+                            <span class="day-number">21</span>
+                        </div>
+                        <div class="day-header">
+                            <span class="day-name">Вторник</span>
+                            <span class="day-number">22</span>
+                        </div>
+                        <div class="day-header">
+                            <span class="day-name">Среда</span>
+                            <span class="day-number">23</span>
+                        </div>
+                        <div class="day-header">
+                            <span class="day-name">Четверг</span>
+                            <span class="day-number">24</span>
+                        </div>
+                        <div class="day-header blue-today">
+                            <span class="day-name">Пятница</span>
+                            <span class="day-number">25</span>
+                        </div>
+                        <div class="day-header">
+                            <span class="day-name">Суббота</span>
+                            <span class="day-number">26</span>
+                        </div>
+                        <div class="day-header">
+                            <span class="day-name">Воскресенье</span>
+                            <span class="day-number">27</span>
+                        </div>
+                    </div>
+                    <div class="utc-cell">UTC +5</div> <!-- Ячейка справа -->
+                </div>
+                
+                <!-- Строки с временем -->
+                <div class="time-row-container">
+                    <div class="time-header">07:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">07:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">08:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell">
+                            <div class="task-container-cases blue-task">
+                                <div class="task-color-strip"></div>
+                                <div class="main-contents-cases">
+                                    <div class="task-calendar-time">08:00</div>
+                                    <div class="task-description">Позвонить начальнице</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">08:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">09:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">09:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">10:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today">
+                            <!-- Контейнер задачи -->
+                            <div class="task-container-cases purple-task">
+                                <div class="task-color-strip"></div>
+                                <div class="main-contents-cases">
+                                    <div class="task-calendar-time">10:00</div>
+                                    <div class="task-description">Прибрать шкаф</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">10:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">11:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">11:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">12:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">12:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">13:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today">
+                            <div class="task-container-cases blue-task">
+                                <div class="task-color-strip"></div>
+                                <div class="main-contents-cases">
+                                    <div class="task-calendar-time">13:00</div>
+                                    <div class="task-description">Дизайн ревью</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">13:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">14:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell">
+                            <div class="task-container-cases orange-task">
+                                <div class="task-color-strip"></div>
+                                <div class="main-contents-cases">
+                                    <div class="task-calendar-time">14:00</div>
+                                    <div class="task-description">Встретиться с парнем</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell">
+                            <div class="task-container-cases orange-task">
+                                <div class="task-color-strip"></div>
+                                <div class="main-contents-cases">
+                                    <div class="task-calendar-time">14:00</div>
+                                    <div class="task-description">Погулять с Дашей</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">14:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">15:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell">
+                            
+                        </div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">15:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">16:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell">
+                            <div class="task-container-cases red-task">
+                                <div class="task-color-strip"></div>
+                                <div class="main-contents-cases">
+                                    <div class="task-calendar-time">16:00</div>
+                                    <div class="task-description">Приехать в ЗЯ и купить пенку</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell">
+                            <div class="task-container-cases green-task">
+                                <div class="task-color-strip"></div>
+                                <div class="main-contents-cases">
+                                    <div class="task-calendar-time">16:00</div>
+                                    <div class="task-description">Поужинать с братом в кафе</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">16:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">17:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">17:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">18:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">18:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">19:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">19:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">20:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">20:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">21:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">21:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">22:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">22:00</div>
+                </div>
+            
+                <div class="time-row-container">
+                    <div class="time-header">23:00</div>
+                    <div class="time-cells-container">
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell blue-today"></div>
+                        <div class="calendar-cell"></div>
+                        <div class="calendar-cell"></div>
+                    </div>
+                    <div class="utc-cell">23:00</div>
+                </div>
+             </div>
+        </div>
+    
+        <!-- Боковое меню -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <!-- Кнопка закрытия меню -->
+                <button class="sidebar-close-button" id="sidebarClose"></button>
+                
+                <!-- Контейнер месяца и навигации -->
+                <div class="month-navigation">
+                    <div class="month-year">
+                        <span class="month">Февраль</span>
+                        <span class="year">2021</span>
+                    </div>
+                    <div class="month-buttons">
+                        <button class="month-button prev-month"></button>
+                        <button class="month-button next-month"></button>
+                    </div>
+                </div>
+                
+                <!-- Мини-календарь -->
+                <div class="mini-calendar">
+                    <!-- Дни недели -->
+                    <div class="mini-week-days">
+                        <div class="mini-day-name">ПН</div>
+                        <div class="mini-day-name">ВТ</div>
+                        <div class="mini-day-name">СР</div>
+                        <div class="mini-day-name">ЧТ</div>
+                        <div class="mini-day-name">ПТ</div>
+                        <div class="mini-day-name">СБ</div>
+                        <div class="mini-day-name">ВС</div>
+                    </div>
+                    
+                    <!-- Даты -->
+                    <div class="mini-dates">
+                        <!-- Первая строка -->
+                        <div class="mini-date inactive">
+                            <span>31</span>
+                            <div class="date-indicators"></div>
+                        </div>
+                        <div class="mini-date">
+                            <span>1</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>2</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>3</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>4</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>5</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>6</span>
+                            <div class="date-indicators"></div>
+                        </div>
+                        
+                        <!-- Вторая строка -->
+                        <div class="mini-date">
+                            <span>7</span>
+                            <div class="date-indicators"></div>
+                        </div>
+                        <div class="mini-date">
+                            <span>8</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>9</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>10</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>11</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>12</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>13</span>
+                            <div class="date-indicators"></div>
+                        </div>
+                        
+                        <!-- Третья строка -->
+                        <div class="mini-date">
+                            <span>14</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>15</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-purple"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>16</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>17</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>18</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>19</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>20</span>
+                            <div class="date-indicators"></div>
+                        </div>
+                        
+                        <!-- Четвертая строка -->
+                        <div class="mini-date">
+                            <span>21</span>
+                            <div class="date-indicators"></div>
+                        </div>
+                        <div class="mini-date">
+                            <span>22</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>23</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>24</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date current-date">
+                            <div class="date-content">
+                                <span class="date-number">25</span>
+                                <div class="date-indicators">
+                                    <span class="indicator indicator-blue"></span>
+                                    <span class="indicator indicator-purple"></span>
+                                    <span class="indicator indicator-teal"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>26</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date">
+                            <span>27</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Пятая строка -->
+                        <div class="mini-date">
+                            <span>28</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>1</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>2</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-purple"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>3</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>4</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>5</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>6</span>
+                            <div class="date-indicators"></div>
+                        </div>
+    
+                        <!-- Шестая строка -->
+                        <div class="mini-date inactive">
+                            <span>7</span>
+                            <div class="date-indicators"></div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>8</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>9</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>10</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>11</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                                <span class="indicator indicator-teal"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>12</span>
+                            <div class="date-indicators">
+                                <span class="indicator indicator-blue"></span>
+                                <span class="indicator indicator-purple"></span>
+                            </div>
+                        </div>
+                        <div class="mini-date inactive">
+                            <span>13</span>
+                            <div class="date-indicators"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Кнопка добавления -->
+                <div class="add-task-button-container">
+                    <button class="add-task-button" id="addTaskButton"></button>
+                </div>
+
+                <!-- Список дел -->
+                <div class="tasks-container">
+                    <div class="tasks-scroll">
+                        <!-- Заголовок "Сегодня" -->
+                        <div class="date-header today-header">
+                            <span class="date-text">СЕГОДНЯ</span>
+                            <span class="date-value">25/2/2021</span>
+                        </div>
+                        
+                        <!-- Первое дело -->
+                        <div class="task-item">
+                            <div class="task-time-container">
+                                <div class="task-indicator indicator-purple"></div>
+                                <div class="time-range">
+                                    <span class="start-time">10:00</span>
+                                    <span class="time-separator">–</span>
+                                    <span class="end-time">11:00</span>
+                                </div>
+                            </div>
+                            <div class="task-content">
+                                <span class="task-title">Прибрать шкаф</span>
+                                <div class="task-check"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Второе дело -->
+                        <div class="task-item">
+                            <div class="task-time-container">
+                                <div class="task-indicator indicator-blue"></div>
+                                <div class="time-range">
+                                    <span class="start-time">13:00</span>
+                                    <span class="time-separator">–</span>
+                                    <span class="end-time">14:00</span>
+                                </div>
+                            </div>
+                            <div class="task-content">
+                                <span class="task-title">Дизайн-ревью</span>
+                                <div class="task-check"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Заголовок "Завтра" -->
+                        <div class="date-header others-header">
+                            <span class="date-text">ЗАВТРА</span>
+                            <span class="date-value">26/2/2021</span>
+                        </div>
+                        
+                        <!-- Третье дело -->
+                        <div class="task-item">
+                            <div class="task-time-container">
+                                <div class="task-indicator indicator-orange"></div>
+                                <div class="time-range">
+                                    <span class="start-time">14:00</span>
+                                    <span class="time-separator">–</span>
+                                    <span class="end-time">15:00</span>
+                                </div>
+                            </div>
+                            <div class="task-content">
+                                <span class="task-title">Погулять с Дашей</span>
+                                <div class="task-check"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Четвертое дело -->
+                        <div class="task-item">
+                            <div class="task-time-container">
+                                <div class="task-indicator indicator-green"></div>
+                                <div class="time-range">
+                                    <span class="start-time">16:00</span>
+                                    <span class="time-separator">–</span>
+                                    <span class="end-time">17:00</span>
+                                </div>
+                            </div>
+                            <div class="task-content">
+                                <span class="task-title">Поужинать с братом в кафе</span>
+                                <div class="task-check"></div>
+                            </div>
+                        </div>
+
+                        <!-- Заголовок "Воскресенье" -->
+                        <div class="date-header others-header">
+                            <span class="date-text">ВОСКРЕСЕНЬЕ</span>
+                            <span class="date-value">27/2/2021</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // document.getElementById('sidebarToggle').addEventListener('click', function() {
+        //     const sidebar = document.getElementById('sidebar');
+        //     document.body.classList.toggle('sidebar-active');
+        //     sidebar.classList.toggle('active');
+        // });
+        function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    document.body.classList.toggle('sidebar-active');
+    sidebar.classList.toggle('active');
+}
+
+// Обработчики событий
+document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+document.getElementById('sidebarClose').addEventListener('click', toggleSidebar);
+
+// Закрытие при клике вне панели
+document.addEventListener('click', (e) => {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar.classList.contains('active') && 
+        !e.target.closest('#sidebar') && 
+        !e.target.closest('#sidebarToggle')) {
+        toggleSidebar();
+    }
+});
+
+    </script>
+</body>
+</html>
