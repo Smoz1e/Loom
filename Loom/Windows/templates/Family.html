@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семья</title>
+    <link rel="stylesheet" href="family-window.css">
+</head>
+<body>
+    <button id="openModalBtn">Открыть семью</button>
+
+    <div id="familyModal" class="modal">
+        <div class="modal-content">
+            <h2 class="members-title">Участники семьи</h2>
+            <ul class="user-list" id="userList">
+                <!-- Список пользователей будет добавлен скриптом -->
+            </ul>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="cancel-btn">Отменить</button>
+                <button class="modal-btn save" id="save-btn">
+                    <span class="save-btn-text">Сохранить</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Пример данных
+        const users = [
+            { id: 1, name: 'Иван Иванов' },
+            { id: 2, name: 'Мария Петрова' },
+            { id: 3, name: 'Алексей Смирнов' }
+        ];
+
+        const openModalBtn = document.getElementById('openModalBtn');
+        const familyModal = document.getElementById('familyModal');
+        const userList = document.getElementById('userList');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const saveBtn = document.getElementById('save-btn');
+
+        function renderUsers() {
+            userList.innerHTML = '';
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.className = 'user-item';
+                li.innerHTML = `
+                    <div class="user-indicator"></div>
+                    <span class="user-name">${user.name}</span>
+                    <button class="remove-btn" data-id="${user.id}"></button>
+                `;
+                userList.appendChild(li);
+            });
+        }
+
+        userList.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-btn')) {
+                const userId = +e.target.getAttribute('data-id');
+                const idx = users.findIndex(u => u.id === userId);
+                if (idx !== -1) {
+                    users.splice(idx, 1);
+                    renderUsers();
+                }
+            }
+        });
+
+        openModalBtn.onclick = function() {
+            familyModal.style.display = 'flex';
+            renderUsers();
+        };
+
+        cancelBtn.onclick = function() {
+            familyModal.style.display = 'none';
+        };
+
+        saveBtn.onclick = function() {
+            familyModal.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            if (event.target === familyModal) {
+                familyModal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
