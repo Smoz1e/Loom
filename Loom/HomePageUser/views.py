@@ -43,3 +43,8 @@ def update_profile(request):
 
         messages.success(request, 'Профиль успешно обновлен!')
         return redirect('profile')
+
+@login_required
+def personal_calendar(request):
+    profile = Profile.objects.get(user=request.user)
+    return render(request, 'personal-calendar.html', {'profile': profile})

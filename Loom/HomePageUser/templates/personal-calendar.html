@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Calendar</title>
-    <link rel="stylesheet" href="../Loom/Calendars/static/calendars.css">
+    <link rel="stylesheet" href="{% static 'calendars.css' %}">
 </head>
 <body class="calendar-page">
     <div class="main-container">
@@ -31,7 +32,7 @@
                 
                 <!-- Правая группа элементов -->
                 <div class="button-profile">
-                    <a href="../Loom/profile.html" class="profile-button-link">
+                    <a href="{% url 'profile' %}" class="profile-button-link">
                         <button class="profile-button">
                             <span class="profile-button-text">В профиль</span>
                             <span class="profile-button-icon"></span>
@@ -808,31 +809,25 @@
     </div>
 
     <script>
-        // document.getElementById('sidebarToggle').addEventListener('click', function() {
-        //     const sidebar = document.getElementById('sidebar');
-        //     document.body.classList.toggle('sidebar-active');
-        //     sidebar.classList.toggle('active');
-        // });
         function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    document.body.classList.toggle('sidebar-active');
-    sidebar.classList.toggle('active');
-}
+            const sidebar = document.getElementById('sidebar');
+            document.body.classList.toggle('sidebar-active');
+            sidebar.classList.toggle('active');
+        }
 
-// Обработчики событий
-document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
-document.getElementById('sidebarClose').addEventListener('click', toggleSidebar);
+        // Обработчики событий
+        document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+        document.getElementById('sidebarClose').addEventListener('click', toggleSidebar);
 
-// Закрытие при клике вне панели
-document.addEventListener('click', (e) => {
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar.classList.contains('active') && 
-        !e.target.closest('#sidebar') && 
-        !e.target.closest('#sidebarToggle')) {
-        toggleSidebar();
-    }
-});
-
+        // Закрытие при клике вне панели
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('active') && 
+                !e.target.closest('#sidebar') && 
+                !e.target.closest('#sidebarToggle')) {
+                toggleSidebar();
+            }
+        });
     </script>
 </body>
 </html>

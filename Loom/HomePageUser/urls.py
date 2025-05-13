@@ -8,4 +8,5 @@ urlpatterns = [
     path("profile/upload-avatar/", views.upload_avatar, name="upload_avatar"),
     path("profile/delete-avatar/", views.delete_avatar, name="delete_avatar"),
     path("profile/update/", views.update_profile, name="update_profile"),
+    path("personal-calendar.html", views.personal_calendar, name="personal_calendar"),
 ]
