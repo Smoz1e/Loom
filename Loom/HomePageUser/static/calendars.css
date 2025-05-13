@@ -1322,3 +1322,35 @@ body.sidebar-active .sidebar-toggle {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(251, 247, 244, 1);
 }
+
+/* Стили для тегов приоритета */
+.priority-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 4px;
+  margin-bottom: 2px;
+  color: #fff;
+}
+.priority-low {
+  background: #3b82f6;
+}
+.priority-normal {
+  background: #10b981;
+}
+.priority-high {
+  background: #ef4444;
+}
+
+/* Стили для цветных точек тегов приоритета */
+.category-dot.priority-high {
+  background: #ef4444;
+}
+.category-dot.priority-normal {
+  background: #10b981;
+}
+.category-dot.priority-low {
+  background: #3b82f6;
+}

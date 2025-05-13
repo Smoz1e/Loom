@@ -30,7 +30,7 @@
                 <!-- Навигация по дате -->
                 <div class="date-navigation">
                     <a href="?date={{ prev_date|date:'Y-m-d' }}" class="nav-button prev-day"></a>
-                    <span class="current-date">{{ selected_date|date:'d E Y' }}{% if selected_date == today %} (Сегодня){% endif %}</span>
+                    <span class="current-date">{{ selected_date|date:'d E Y' }}{% if selected_date == today %}<br><span class="today-label">Сегодня</span>{% endif %}</span>
                     <a href="?date={{ next_date|date:'Y-m-d' }}" class="nav-button next-day"></a>
                 </div>
                 
@@ -76,6 +76,9 @@
                                             <div class="task-color-strip"></div>
                                             <div class="main-contents-cases">
                                                 <div class="task-calendar-time">{{ task.start_time|time:'H:i' }}-{{ task.end_time|time:'H:i' }}</div>
+                                                <span class="priority-tag priority-{{ task.priority }}">
+                                                    {% if task.priority == 'low' %}Низкий{% elif task.priority == 'normal' %}Обычный{% elif task.priority == 'high' %}Высокий{% endif %}
+                                                </span>
                                                 <div class="task-description">{{ task.title }}</div>
                                                 {% if task.description %}<div class="task-desc">{{ task.description }}</div>{% endif %}
                                             </div>
@@ -136,8 +139,8 @@
                                     <span class="date-number{% if day == selected_date %} selected-number{% endif %}">{{ day.day }}</span>
                                     <div class="date-indicators">
                                         {% with day_tasks=tasks_by_month_date|get_item:day %}
-                                            {% for _ in day_tasks %}
-                                                <span class="indicator indicator-blue"></span>
+                                            {% for task in day_tasks %}
+                                                <span class="indicator priority-{{ task.priority }}" title="{{ task.title }}: {% if task.priority == 'low' %}Низкий{% elif task.priority == 'normal' %}Обычный{% elif task.priority == 'high' %}Высокий{% endif %} приоритет"></span>
                                             {% endfor %}
                                         {% endwith %}
                                     </div>
@@ -187,16 +190,16 @@
                       <div class="time-content">
                           <div class="date-container">
                               <label class="date-label">Дата события</label>
-                              <input type="text" class="date-input" placeholder="ДД.ММ.ГГГГ" maxlength="10" />
+                              <input type="date" class="date-input" id="dateInput" />
                           </div>
                           <div class="time-range-container">
                             <div class="time-input-container">
                                 <label class="time-input-label">Начало</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="00:00" maxlength="5">
+                                <input type="time" class="time-input" id="startTime" value="08:00">
                             </div>
                             <div class="time-input-container">
                                 <label class="time-input-label">Конец</label>
-                                <input type="text" class="time-input" id="endTime" placeholder="00:00" maxlength="5">
+                                <input type="time" class="time-input" id="endTime" value="09:00">
                             </div>
                         </div>
                       </div>
@@ -241,6 +244,21 @@
                         <span class="checkbox-icon"></span>
                         <span>Праздники</span>
                         <span class="category-dot yellow"></span>
+                      </div>
+                      <div class="category-item" data-value="Тег: Важно">
+                        <span class="checkbox-icon"></span>
+                        <span>Тег: Важно</span>
+                        <span class="category-dot priority-high"></span>
+                      </div>
+                      <div class="category-item" data-value="Тег: Обычное">
+                        <span class="checkbox-icon"></span>
+                        <span>Тег: Обычное</span>
+                        <span class="category-dot priority-normal"></span>
+                      </div>
+                      <div class="category-item" data-value="Тег: Низкий приоритет">
+                        <span class="checkbox-icon"></span>
+                        <span>Тег: Низкий приоритет</span>
+                        <span class="category-dot priority-low"></span>
                       </div>
                     </div>
                   </div>
@@ -342,6 +360,21 @@
         const closeBtn = document.getElementById('closeModalBtn');
         const cancelBtn = document.getElementById('cancelBtn');
 
+        // Получаем выбранную дату из Django (selected_date)
+        const selectedDate = "{{ selected_date|date:'Y-m-d' }}";
+
+        function setModalDateToSelected() {
+          const dateInput = document.getElementById('dateInput');
+          if (dateInput) {
+            dateInput.value = selectedDate;
+          }
+        }
+
+        addTaskBtn.onclick = function() {
+          showModal();
+          setModalDateToSelected();
+        };
+
         function showModal() {
           modalOverlay.style.display = 'block';
           setTimeout(() => modalOverlay.classList.add('active'), 10);
@@ -351,7 +384,6 @@
           modalOverlay.classList.remove('active');
           setTimeout(() => modalOverlay.style.display = 'none', 200);
         }
-        addTaskBtn.onclick = showModal;
         closeBtn.onclick = closeModal;
         cancelBtn.onclick = closeModal;
         window.onclick = (e) => {
@@ -359,6 +391,108 @@
             closeModal();
           }
         };
+
+        // --- CATEGORY DROPDOWN LOGIC ---
+        const categoryList = document.getElementById('categoryList');
+        const categoryLabel = document.getElementById('categoryLabel');
+        const selectedCategoryDot = document.getElementById('selectedCategoryDot');
+        const categoryToggle = document.getElementById('categoryToggle');
+        const categoryArrow = document.getElementById('categoryArrow');
+
+        function toggleCategoryList() {
+          const isOpen = categoryList.style.display === 'block';
+          categoryList.style.display = isOpen ? 'none' : 'block';
+          categoryArrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+          categoryArrow.style.transition = 'transform 0.2s ease';
+        }
+
+        categoryToggle.addEventListener('click', function(e) {
+          if (e.target === categoryArrow || e.target.classList.contains('category-arrow')) {
+            toggleCategoryList();
+            e.stopPropagation();
+          } else if (!e.target.closest('.category-item')) {
+            toggleCategoryList();
+          }
+        });
+
+        categoryList.addEventListener('click', function(e) {
+          const item = e.target.closest('.category-item');
+          if (item) {
+            document.querySelectorAll('.category-item').forEach(el => el.classList.remove('selected'));
+            item.classList.add('selected');
+            const categoryName = item.getAttribute('data-value');
+            const dot = item.querySelector('.category-dot');
+            let dotColor = '';
+            if (dot) {
+              dotColor = Array.from(dot.classList).find(cls => cls !== 'category-dot');
+            }
+            categoryLabel.textContent = categoryName;
+            categoryToggle.classList.add('has-selection');
+            selectedCategoryDot.className = 'selected-category-dot ' + (dotColor || '');
+            selectedCategoryDot.style.display = 'inline-block';
+            categoryList.style.display = 'none';
+            categoryArrow.style.transform = 'rotate(0deg)';
+          }
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!categoryToggle.contains(e.target) && !e.target.closest('.category-list')) {
+            categoryList.style.display = 'none';
+            categoryArrow.style.transform = 'rotate(0deg)';
+          }
+        });
+
+        // --- AJAX сохранение задачи из модального окна ---
+        document.querySelector('.modal-btn.save').onclick = async function(e) {
+          e.preventDefault();
+          const modal = document.querySelector('.modal');
+          const title = modal.querySelector('.event-title').value.trim();
+          const description = '';
+          const date = modal.querySelector('#dateInput').value.trim();
+          const start_time = modal.querySelector('#startTime').value.trim();
+          const end_time = modal.querySelector('#endTime').value.trim();
+          const category = document.getElementById('categoryLabel').textContent.trim() === 'Выбрать тему' ? '' : document.getElementById('categoryLabel').textContent.trim();
+          const timezone = document.getElementById('timezoneSelected').textContent.trim() === 'Часовой пояс' ? '' : document.getElementById('timezoneSelected').textContent.trim();
+          const is_private = document.getElementById('privateCheckbox').classList.contains('checked');
+          let repeat_type = '';
+          let repeat_days = '';
+          const selectedRepeat = document.querySelector('.repeat-option.selected');
+          if (selectedRepeat) repeat_type = selectedRepeat.textContent.trim();
+          const selectedDays = Array.from(document.querySelectorAll('.repeat-day.selected')).map(d => d.textContent.trim());
+          if (selectedDays.length) repeat_days = selectedDays.join(',');
+          let participants = '';
+          const partList = document.querySelectorAll('.participants-list .participant-chip');
+          if (partList.length) participants = Array.from(partList).map(p => p.textContent.trim()).join(',');
+          const priority = modal.querySelector('input[name="priority"]:checked')?.value || 'normal';
+
+          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
+          const formData = new FormData();
+          formData.append('title', title);
+          formData.append('description', description);
+          formData.append('date', date);
+          formData.append('start_time', start_time);
+          formData.append('end_time', end_time);
+          formData.append('category', category);
+          formData.append('timezone', timezone);
+          formData.append('is_private', is_private);
+          formData.append('repeat_type', repeat_type);
+          formData.append('repeat_days', repeat_days);
+          formData.append('participants', participants);
+          formData.append('priority', priority);
+
+          const response = await fetch(window.location.href, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrftoken, 'X-Requested-With': 'XMLHttpRequest' },
+            body: formData
+          });
+          const data = await response.json();
+          if (data.success) {
+            closeModal();
+            window.location.reload();
+          } else if (data.errors) {
+            alert(data.errors.join('\n'));
+          }
+        }
     </script>
 </body>
 </html>

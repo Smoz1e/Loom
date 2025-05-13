@@ -56,6 +56,73 @@ def update_profile(request):
 @login_required
 def personal_calendar(request):
     profile = Profile.objects.get(user=request.user)
+    if request.method == 'POST':
+        # Получаем данные из POST (AJAX или обычный POST)
+        title = request.POST.get('title', '').strip()
+        description = request.POST.get('description', '').strip()
+        date_str = request.POST.get('date', '')
+        start_time_str = request.POST.get('start_time', '')
+        end_time_str = request.POST.get('end_time', '')
+        category = request.POST.get('category', '').strip()
+        is_private = request.POST.get('is_private', 'false') == 'true'
+        timezone = request.POST.get('timezone', '').strip()
+        repeat_type = request.POST.get('repeat_type', '').strip()
+        repeat_days = request.POST.get('repeat_days', '').strip()
+        participants = request.POST.get('participants', '').strip()
+        priority = request.POST.get('priority', 'normal')
+
+        # Валидация (минимальная)
+        errors = []
+        if not title:
+            errors.append('Название обязательно')
+        if not date_str:
+            errors.append('Дата обязательна')
+        if not start_time_str or not end_time_str:
+            errors.append('Время обязательно')
+        try:
+            # Поддержка формата 'YYYY-MM-DD' (HTML5 <input type="date">)
+            if '-' in date_str:
+                date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            else:
+                date = datetime.strptime(date_str, '%d.%m.%Y').date()
+        except Exception:
+            errors.append('Некорректная дата')
+            date = None
+        try:
+            start_time = datetime.strptime(start_time_str, '%H:%M').time()
+            end_time = datetime.strptime(end_time_str, '%H:%M').time()
+        except Exception:
+            errors.append('Некорректное время')
+            start_time = end_time = None
+        if errors:
+            # Можно вернуть ошибки через JSON или messages
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                from django.http import JsonResponse
+                return JsonResponse({'success': False, 'errors': errors})
+            else:
+                messages.error(request, '\n'.join(errors))
+                return redirect('personal_calendar')
+        # Сохраняем задачу
+        PersonalTask.objects.create(
+            user=request.user,
+            title=title,
+            description=description,
+            date=date,
+            start_time=start_time,
+            end_time=end_time,
+            category=category,
+            is_private=is_private,
+            timezone=timezone,
+            repeat_type=repeat_type,
+            repeat_days=repeat_days,
+            participants=participants,
+            priority=priority
+        )
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            from django.http import JsonResponse
+            return JsonResponse({'success': True})
+        return redirect('personal_calendar')
+
     date_str = request.GET.get('date')
     month_param = request.GET.get('month')
     year_param = request.GET.get('year')
