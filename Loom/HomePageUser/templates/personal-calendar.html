@@ -1,4 +1,5 @@
 {% load static %}
+{% load calendar_extras %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -25,9 +26,9 @@
         
                 <!-- Навигация по дате -->
                 <div class="date-navigation">
-                    <button class="nav-button prev-day"></button>
-                    <span class="current-date">Сегодня</span>
-                    <button class="nav-button next-day"></button>
+                    <a href="?date={{ prev_date|date:'Y-m-d' }}" class="nav-button prev-day"></a>
+                    <span class="current-date">{{ selected_date|date:'d E Y' }}{% if selected_date == today %} (Сегодня){% endif %}</span>
+                    <a href="?date={{ next_date|date:'Y-m-d' }}" class="nav-button next-day"></a>
                 </div>
                 
                 <!-- Правая группа элементов -->
@@ -48,335 +49,45 @@
                 <div class="week-days-container">
                     <div class="time-header"></div> <!-- Пустая ячейка слева -->
                     <div class="days-container">
-                        <div class="day-header">
-                            <span class="day-name">Понедельник</span>
-                            <span class="day-number">21</span>
+                        {% for day in week_dates %}
+                        <div class="day-header{% if day == selected_date %} blue-today{% endif %}">
+                            <span class="day-name">{{ day|date:'l'|capfirst }}</span>
+                            <span class="day-number">{{ day|date:'d.m' }}</span>
                         </div>
-                        <div class="day-header">
-                            <span class="day-name">Вторник</span>
-                            <span class="day-number">22</span>
-                        </div>
-                        <div class="day-header">
-                            <span class="day-name">Среда</span>
-                            <span class="day-number">23</span>
-                        </div>
-                        <div class="day-header">
-                            <span class="day-name">Четверг</span>
-                            <span class="day-number">24</span>
-                        </div>
-                        <div class="day-header blue-today">
-                            <span class="day-name">Пятница</span>
-                            <span class="day-number">25</span>
-                        </div>
-                        <div class="day-header">
-                            <span class="day-name">Суббота</span>
-                            <span class="day-number">26</span>
-                        </div>
-                        <div class="day-header">
-                            <span class="day-name">Воскресенье</span>
-                            <span class="day-number">27</span>
-                        </div>
+                        {% endfor %}
                     </div>
                     <div class="utc-cell">UTC+5</div> <!-- Ячейка справа -->
                 </div>
                 
                 <!-- Строки с временем -->
+                {% for hour in hours %}
                 <div class="time-row-container">
-                    <div class="time-header">07:00</div>
+                    <div class="time-header">{{ hour|stringformat:'02d' }}:00</div>
                     <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">07:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">08:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell">
-                            <div class="task-container-cases blue-task">
-                                <div class="task-color-strip"></div>
-                                <div class="main-contents-cases">
-                                    <div class="task-calendar-time">08:00</div>
-                                    <div class="task-description">Позвонить начальнице</div>
-                                </div>
-                            </div>
+                        {% for day in week_dates %}
+                        <div class="calendar-cell{% if day == selected_date %} blue-today{% endif %}">
+                            {% with day_tasks=tasks_by_date|get_item:day %}
+                                {% for task in day_tasks %}
+                                    {% if task.start_time.hour == hour %}
+                                        <div class="task-container-cases blue-task">
+                                            <div class="task-color-strip"></div>
+                                            <div class="main-contents-cases">
+                                                <div class="task-calendar-time">{{ task.start_time|time:'H:i' }}-{{ task.end_time|time:'H:i' }}</div>
+                                                <div class="task-description">{{ task.title }}</div>
+                                                {% if task.description %}<div class="task-desc">{{ task.description }}</div>{% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% empty %}
+                                    <!-- пусто -->
+                                {% endfor %}
+                            {% endwith %}
                         </div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
+                        {% endfor %}
                     </div>
-                    <div class="utc-cell">08:00</div>
+                    <div class="utc-cell">{{ hour|stringformat:'02d' }}:00</div>
                 </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">09:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">09:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">10:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today">
-                            <!-- Контейнер задачи -->
-                            <div class="task-container-cases purple-task">
-                                <div class="task-color-strip"></div>
-                                <div class="main-contents-cases">
-                                    <div class="task-calendar-time">10:00</div>
-                                    <div class="task-description">Прибрать шкаф</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">10:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">11:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">11:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">12:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">12:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">13:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today">
-                            <div class="task-container-cases blue-task">
-                                <div class="task-color-strip"></div>
-                                <div class="main-contents-cases">
-                                    <div class="task-calendar-time">13:00</div>
-                                    <div class="task-description">Дизайн ревью</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">13:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">14:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell">
-                            <div class="task-container-cases orange-task">
-                                <div class="task-color-strip"></div>
-                                <div class="main-contents-cases">
-                                    <div class="task-calendar-time">14:00</div>
-                                    <div class="task-description">Встретиться с парнем</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell">
-                            <div class="task-container-cases orange-task">
-                                <div class="task-color-strip"></div>
-                                <div class="main-contents-cases">
-                                    <div class="task-calendar-time">14:00</div>
-                                    <div class="task-description">Погулять с Дашей</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">14:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">15:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell">
-                            
-                        </div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">15:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">16:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell">
-                            <div class="task-container-cases red-task">
-                                <div class="task-color-strip"></div>
-                                <div class="main-contents-cases">
-                                    <div class="task-calendar-time">16:00</div>
-                                    <div class="task-description">Приехать в ЗЯ и купить пенку</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell">
-                            <div class="task-container-cases green-task">
-                                <div class="task-color-strip"></div>
-                                <div class="main-contents-cases">
-                                    <div class="task-calendar-time">16:00</div>
-                                    <div class="task-description">Поужинать с братом в кафе</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">16:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">17:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">17:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">18:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">18:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">19:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">19:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">20:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">20:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">21:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">21:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">22:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">22:00</div>
-                </div>
-            
-                <div class="time-row-container">
-                    <div class="time-header">23:00</div>
-                    <div class="time-cells-container">
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell blue-today"></div>
-                        <div class="calendar-cell"></div>
-                        <div class="calendar-cell"></div>
-                    </div>
-                    <div class="utc-cell">23:00</div>
-                </div>
+                {% endfor %}
              </div>
         </div>
     
@@ -721,87 +432,35 @@
                 <!-- Список дел -->
                 <div class="tasks-container">
                     <div class="tasks-scroll">
-                        <!-- Заголовок "Сегодня" -->
                         <div class="date-header today-header">
-                            <span class="date-text">СЕГОДНЯ</span>
-                            <span class="date-value">25/2/2021</span>
+                            <span class="date-text">{{ selected_date|date:'l'|capfirst }}</span>
+                            <span class="date-value">{{ selected_date|date:'d.m.Y' }}</span>
                         </div>
-                        
-                        <!-- Первое дело -->
-                        <div class="task-item">
-                            <div class="task-time-container">
-                                <div class="task-indicator indicator-purple"></div>
-                                <div class="time-range">
-                                    <span class="start-time">10:00</span>
-                                    <span class="time-separator">–</span>
-                                    <span class="end-time">11:00</span>
+                        {% if tasks %}
+                            {% for task in tasks %}
+                            <div class="task-item">
+                                <div class="task-time-container">
+                                    <div class="task-indicator indicator-blue"></div>
+                                    <div class="time-range">
+                                        <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
+                                        <span class="time-separator">–</span>
+                                        <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
+                                    </div>
+                                </div>
+                                <div class="task-content">
+                                    <span class="task-title">{{ task.title }}</span>
+                                    {% if task.description %}<div class="task-desc">{{ task.description }}</div>{% endif %}
+                                    <div class="task-check"></div>
                                 </div>
                             </div>
-                            <div class="task-content">
-                                <span class="task-title">Прибрать шкаф</span>
-                                <div class="task-check"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Второе дело -->
-                        <div class="task-item">
-                            <div class="task-time-container">
-                                <div class="task-indicator indicator-blue"></div>
-                                <div class="time-range">
-                                    <span class="start-time">13:00</span>
-                                    <span class="time-separator">–</span>
-                                    <span class="end-time">14:00</span>
+                            {% endfor %}
+                        {% else %}
+                            <div class="task-item">
+                                <div class="task-content">
+                                    <span class="task-title">Нет задач на этот день</span>
                                 </div>
                             </div>
-                            <div class="task-content">
-                                <span class="task-title">Дизайн-ревью</span>
-                                <div class="task-check"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Заголовок "Завтра" -->
-                        <div class="date-header others-header">
-                            <span class="date-text">ЗАВТРА</span>
-                            <span class="date-value">26/2/2021</span>
-                        </div>
-                        
-                        <!-- Третье дело -->
-                        <div class="task-item">
-                            <div class="task-time-container">
-                                <div class="task-indicator indicator-orange"></div>
-                                <div class="time-range">
-                                    <span class="start-time">14:00</span>
-                                    <span class="time-separator">–</span>
-                                    <span class="end-time">15:00</span>
-                                </div>
-                            </div>
-                            <div class="task-content">
-                                <span class="task-title">Погулять с Дашей</span>
-                                <div class="task-check"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Четвертое дело -->
-                        <div class="task-item">
-                            <div class="task-time-container">
-                                <div class="task-indicator indicator-green"></div>
-                                <div class="time-range">
-                                    <span class="start-time">16:00</span>
-                                    <span class="time-separator">–</span>
-                                    <span class="end-time">17:00</span>
-                                </div>
-                            </div>
-                            <div class="task-content">
-                                <span class="task-title">Поужинать с братом в кафе</span>
-                                <div class="task-check"></div>
-                            </div>
-                        </div>
-
-                        <!-- Заголовок "Воскресенье" -->
-                        <div class="date-header others-header">
-                            <span class="date-text">ВОСКРЕСЕНЬЕ</span>
-                            <span class="date-value">27/2/2021</span>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

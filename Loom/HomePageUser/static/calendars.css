@@ -45,7 +45,7 @@ body.calendar-page {
     padding: 0;
     flex-direction: column;
     background-color: rgba(255, 255, 255, 1);
-    background-image: url('../Design/Calendars/bg.png');
+    background-image: url('Calendars/bg.png');
     background-attachment: scroll;
     background-size: cover;
     background-position: center;
@@ -114,15 +114,15 @@ body.calendar-page {
 
 /* Индивидуальные иконки */
 .icon-personal {
-    background-image: url('../Design/Calendars/personal-calendar.svg');
+    background-image: url('Calendars/personal-calendar.svg');
 }
 
 .icon-family {
-    background-image: url('../Design/Calendars/family-calendar.svg');
+    background-image: url('Calendars/family-calendar.svg');
 }
 
 .icon-shared {
-    background-image: url('../Design/Calendars/shared-calendar.svg');
+    background-image: url('Calendars/shared-calendar.svg');
 }
 
 .calendar-link.active {
@@ -166,7 +166,7 @@ body.calendar-page {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     margin-right: 1px; 
-    background-image: url('../Design/Calendars/black-arrow-left.svg');
+    background-image: url('Calendars/black-arrow-left.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 10px 10px;
@@ -177,7 +177,7 @@ body.calendar-page {
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
     margin-left: 1px; 
-    background-image: url('../Design/Calendars/black-arrow-right.svg');
+    background-image: url('Calendars/black-arrow-right.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 10px 10px; 
@@ -251,7 +251,7 @@ body.calendar-page {
 .profile-button-icon {
     width: 16px;
     height: 16px;
-    background-image: url('../Design/Calendars/white-arrow-right.svg');
+    background-image: url('Calendars/white-arrow-right.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -281,7 +281,7 @@ body.calendar-page {
     display: block;
     width: 24px;
     height: 24px;
-    background-image: url('../Design/Calendars/menu.svg');
+    background-image: url('Calendars/menu.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -828,7 +828,7 @@ body.sidebar-active .sidebar-toggle {
     width: 24px;
     height: 24px;
     align-self: flex-start;
-    background: url('../Design/Calendars/menu.svg') no-repeat center;
+    background: url('Calendars/menu.svg') no-repeat center;
     background-size: contain;
     border: none;
     cursor: pointer;
@@ -882,12 +882,12 @@ body.sidebar-active .sidebar-toggle {
 }
 
 .prev-month {
-    background: url('../Design/Calendars/chevron-left.svg') no-repeat center;
+    background: url('Calendars/chevron-left.svg') no-repeat center;
     background-size: contain;
 }
 
 .next-month {
-    background: url('../Design/Calendars/chevron-right.svg') no-repeat center;
+    background: url('Calendars/chevron-right.svg') no-repeat center;
     background-size: contain;
 }
 
