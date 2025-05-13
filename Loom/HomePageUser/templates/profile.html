@@ -13,6 +13,7 @@
             <div class="nav-links">
                 <a href="{% url 'personal_calendar' %}" class="nav-link">Личный календарь</a>
                 <a href="family-calendar.html" class="nav-link">Семейный календарь</a>
+                <a href="shared-calendar.html" class="nav-link">Общий календарь</a>
             </div>
             
             <div class="notification-icon"></div>
@@ -72,7 +73,7 @@
                         <label class="field-label">Отчество (при наличии)</label>
                         <input type="text" class="info-input middle-name" name="middle_name" value="{{ profile.bio }}">
                     </div>
-                    <button type="submit" class="primary-btn">Сохранить изменения</button>
+                    <button type="button" class="save-changes-btn">Сохранить изменения</button>
                 </form>
             </div>
     
@@ -88,6 +89,7 @@
                     <div class="phone-icon"></div>
                     <input type="tel" class="info-input phone" value="{{ profile.phone }}" readonly>
                 </div>
+                <button type="button" class="save-changes-btn left-aligned">Сохранить изменения</button>
             </div>
         </section>
         
@@ -107,6 +109,10 @@
             <div class="family-role">
                 <button type="button" class="copy-code-btn">Копировать код семьи</button>
             </div>
+            <div class="family-role">
+                <button type="button" class="copy-code-btn">Посмотреть участников семьи</button>
+            </div>
+            <button type="button" class="save-info-btn">Сохранить информацию</button>
 
         <hr class="section-line">
 
@@ -126,6 +132,10 @@
                     <label class="field-label">Подтвердить новый пароль</label>
                     <input type="password" class="password-input middle">
                 </div>
+                <div class="family-role">
+                    <button type="button" class="copy-code-btn">Посмотреть участников семьи</button>
+                </div>
+                <button type="button" class="save-info-btn">Сохранить информацию</button>
             </div>
         
             <div class="family-actions">
@@ -135,7 +145,7 @@
         </section>
     </main>
 
-    <footer class="footer">
+    <!-- <footer class="footer">
         <div class="footer-links">
             <a href="#" class="footer-link">Контакты</a>
             <a href="#" class="footer-link">О нас</a>
@@ -151,7 +161,7 @@
             <a href="#" class="social-icon vk-icon"></a>
             <a href="#" class="social-icon tg-icon"></a>
         </div>
-    </footer>
+    </footer> -->
 
     <script>
         document.getElementById('avatar-upload').addEventListener('change', function () {
