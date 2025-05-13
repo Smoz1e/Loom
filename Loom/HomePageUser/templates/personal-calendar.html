@@ -6,7 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Calendar</title>
+    
     <link rel="stylesheet" href="{% static 'calendars.css' %}">
+    <link rel="stylesheet" href="{% static 'TaskAndEdit.css' %}">
+    
 </head>
 <body class="calendar-page">
     <div class="main-container">
@@ -27,10 +30,7 @@
                 <!-- Навигация по дате -->
                 <div class="date-navigation">
                     <a href="?date={{ prev_date|date:'Y-m-d' }}" class="nav-button prev-day"></a>
-                    <span class="current-date">
-                        {{ selected_date|date:'d E Y' }}
-                        {% if selected_date == today %}<br><span class="today-label">Сегодня</span>{% endif %}
-                    </span>
+                    <span class="current-date">{{ selected_date|date:'d E Y' }}{% if selected_date == today %} (Сегодня){% endif %}</span>
                     <a href="?date={{ next_date|date:'Y-m-d' }}" class="nav-button next-day"></a>
                 </div>
                 
@@ -153,39 +153,163 @@
                     <button class="add-task-button" id="addTaskButton"></button>
                 </div>
 
-                <!-- Список дел -->
-                <div class="tasks-container">
-                    <div class="tasks-scroll">
-                        <div class="date-header today-header">
-                            <span class="date-text">{{ selected_date|date:'l'|capfirst }}</span>
-                            <span class="date-value">{{ selected_date|date:'d.m.Y' }}</span>
+                <!-- Модальное окно добавления задачи -->
+                <div class="modal-overlay" id="modalOverlay" style="display:none;">
+                  <div class="modal">
+                    <button class="close-btn" id="closeModalBtn" title="Закрыть"></button>
+                    <h2>Добавьте новое событие</h2>
+                    <input type="text" class="event-title" placeholder="Название" />
+
+                    <div class="modal-card time-container">
+                      <div class="time-header">
+                          <div class="time-label-container">
+                              <span class="time-icon"></span>
+                              <span class="time-label-text">Дата & Время</span>
+                          </div>
+                          <div class="timezone-custom-select">
+                            <div class="timezone-selected" id="timezoneSelected">Часовой пояс</div>
+                            <div class="timezone-options" id="timezoneOptions">
+                              <div class="timezone-option" data-value="UTC+2">UTC+2</div>
+                              <div class="timezone-option" data-value="UTC+3">UTC+3</div>
+                              <div class="timezone-option" data-value="UTC+4">UTC+4</div>
+                              <div class="timezone-option" data-value="UTC+5">UTC+5</div>
+                              <div class="timezone-option" data-value="UTC+6">UTC+6</div>
+                              <div class="timezone-option" data-value="UTC+7">UTC+7</div>
+                              <div class="timezone-option" data-value="UTC+8">UTC+8</div>
+                              <div class="timezone-option" data-value="UTC+9">UTC+9</div>
+                              <div class="timezone-option" data-value="UTC+10">UTC+10</div>
+                              <div class="timezone-option" data-value="UTC+11">UTC+11</div>
+                              <div class="timezone-option" data-value="UTC+12">UTC+12</div>
+                            </div>
+                          </div>
+                      </div>
+                      <hr class="time-divider">
+                      <div class="time-content">
+                          <div class="date-container">
+                              <label class="date-label">Дата события</label>
+                              <input type="text" class="date-input" placeholder="ДД.ММ.ГГГГ" maxlength="10" />
+                          </div>
+                          <div class="time-range-container">
+                            <div class="time-input-container">
+                                <label class="time-input-label">Начало</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="00:00" maxlength="5">
+                            </div>
+                            <div class="time-input-container">
+                                <label class="time-input-label">Конец</label>
+                                <input type="text" class="time-input" id="endTime" placeholder="00:00" maxlength="5">
+                            </div>
                         </div>
-                        {% if tasks %}
-                            {% for task in tasks %}
-                            <div class="task-item">
-                                <div class="task-time-container">
-                                    <div class="task-indicator indicator-blue"></div>
-                                    <div class="time-range">
-                                        <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
-                                        <span class="time-separator">–</span>
-                                        <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
-                                    </div>
-                                </div>
-                                <div class="task-content">
-                                    <span class="task-title">{{ task.title }}</span>
-                                    {% if task.description %}<div class="task-desc">{{ task.description }}</div>{% endif %}
-                                    <div class="task-check"></div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="task-item">
-                                <div class="task-content">
-                                    <span class="task-title">Нет задач на этот день</span>
-                                </div>
-                            </div>
-                        {% endif %}
+                      </div>
+                  </div>
+
+                  <div class="modal-card">
+                    <button class="category-toggle" id="categoryToggle" type="button">
+                      <div class="category-content">
+                        <span class="category-icon"></span>
+                        <span class="category-label" id="categoryLabel">Выбрать тему</span>
+                        <span class="selected-category-dot" id="selectedCategoryDot"></span>
+                      </div>
+                      <span class="category-arrow" id="categoryArrow"></span>
+                    </button>
+                    <div class="category-list" id="categoryList">
+                      <div class="category-item" data-value="Работа/Учёба">
+                        <span class="checkbox-icon"></span>
+                        <span>Работа/Учёба</span>
+                        <span class="category-dot blue"></span>
+                      </div>
+                      <div class="category-item" data-value="Бытовые дела">
+                        <span class="checkbox-icon"></span>
+                        <span>Бытовые дела</span>
+                        <span class="category-dot purple"></span>
+                      </div>
+                      <div class="category-item" data-value="Время, проведённое с семьёй">
+                        <span class="checkbox-icon"></span>
+                        <span>Время, проведённое с семьёй</span>
+                        <span class="category-dot green"></span>
+                      </div>
+                      <div class="category-item" data-value="Время, проведённое с друзьями">
+                        <span class="checkbox-icon"></span>
+                        <span>Время, проведённое с друзьями</span>
+                        <span class="category-dot orange"></span>
+                      </div>
+                      <div class="category-item" data-value="Личные дела">
+                        <span class="checkbox-icon"></span>
+                        <span>Личные дела</span>
+                        <span class="category-dot red"></span>
+                      </div>
+                      <div class="category-item" data-value="Праздники">
+                        <span class="checkbox-icon"></span>
+                        <span>Праздники</span>
+                        <span class="category-dot yellow"></span>
+                      </div>
                     </div>
+                  </div>
+
+                  <div class="modal-card participants-section">
+                    <div class="participants-header">
+                      <button class="add-participant-btn" id="addParticipantBtn" type="button">
+                        <span class="participants-icon"></span>
+                        <span class="participants-label" id="participantsLabel">Добавить участников</span>
+                      </button>
+                    </div>
+                    <div class="participants-list" id="participantsList"></div>
+                  </div>
+
+                  <div class="private-section">
+                    <div class="private-container">
+                      <span class="private-icon"></span>
+                      <span class="private-label">Сделать событие приватным</span>
+                      <button class="private-checkbox" id="privateCheckbox"></button>
+                    </div>
+                  </div>
+
+                  <div class="repeat-section">
+                    <div class="repeat-header">
+                      <div class="repeat-icon-container">
+                        <span class="repeat-icon"></span>
+                        <span class="repeat-label">Повторяющийся</span>
+                      </div>
+                    </div>
+                    <hr class="repeat-divider">
+                    <div class="repeat-days-container">
+                      <span class="repeat-on-label">На</span>
+                      <div class="repeat-days" id="repeatDays">
+                        <div class="repeat-day">Пн</div>
+                        <div class="repeat-day">Вт</div>
+                        <div class="repeat-day">Ср</div>
+                        <div class="repeat-day">Чт</div>
+                        <div class="repeat-day">Пт</div>
+                        <div class="repeat-day saturday">Сб</div>
+                        <div class="repeat-day sunday">Вс</div>
+                      </div>
+                    </div>
+                    <div class="repeat-options-container">
+                      <span class="repeat-on-label">На</span>
+                      <div class="repeat-options-container" id="repeatOptions">
+                        <div class="repeat-option">Ежедневно</div>
+                        <div class="repeat-option">Ежемесячно</div>
+                        <div class="repeat-option">Ежегодно</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-actions">
+                    <button class="modal-btn cancel" id="cancelBtn">Отменить</button>
+                    <button class="modal-btn save">
+                      <span class="save-btn-text">Сохранить</span>
+                    </button>
+                  </div>
+                </div>
+                <!-- Конец модального окна -->
+
+                <!-- Уведомления -->
+                <div class="privacy-notification" id="privacyNotification">
+                  <div class="privacy-notification-text">
+                    Вы сделали событие приватным, другие члены семьи не увидят его в семейном календаре
+                  </div>
+                </div>
+                <div class="participant-notification" id="participantNotification">
+                  <div class="participant-notification-text">Ждите ответ от пользователя(-ей)</div>
                 </div>
             </div>
         </div>
@@ -211,6 +335,30 @@
                 toggleSidebar();
             }
         });
+
+        // Открытие/закрытие модального окна добавления задачи
+        const addTaskBtn = document.getElementById('addTaskButton');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        function showModal() {
+          modalOverlay.style.display = 'block';
+          setTimeout(() => modalOverlay.classList.add('active'), 10);
+          resetFormStyles && resetFormStyles();
+        }
+        function closeModal() {
+          modalOverlay.classList.remove('active');
+          setTimeout(() => modalOverlay.style.display = 'none', 200);
+        }
+        addTaskBtn.onclick = showModal;
+        closeBtn.onclick = closeModal;
+        cancelBtn.onclick = closeModal;
+        window.onclick = (e) => {
+          if (e.target === modalOverlay) {
+            closeModal();
+          }
+        };
     </script>
 </body>
 </html>
