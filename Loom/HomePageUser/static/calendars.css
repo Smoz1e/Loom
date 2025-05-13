@@ -147,6 +147,23 @@ body.calendar-page {
     height: 28px;
 }
 
+.date-navigation .current-date {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 1.1;
+    min-width: 120px;
+}
+
+.date-navigation .today-label {
+    display: block;
+    font-size: 13px;
+    color: #be5852;
+    margin-top: 2px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
 .nav-button {
     width: 28px;
     height: 28px;
@@ -969,7 +986,14 @@ body.sidebar-active .sidebar-toggle {
     display: block;
     text-align: center;
     line-height: 1;
-    margin-bottom: 2px; 
+    margin-bottom: 2px;
+    color: #23272F;
+    font-weight: 500;
+}
+
+.selected-number {
+    color: #fff !important;
+    font-weight: 600;
 }
 
 .date-indicators {
@@ -1218,7 +1242,7 @@ body.sidebar-active .sidebar-toggle {
 .task-check {
     width: 16px;
     height: 16px;
-    background-image: url('../Design/Calendars/check.svg');
+    background-image: url('Calendars/check.svg');
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
@@ -1252,7 +1276,7 @@ body.sidebar-active .sidebar-toggle {
 /* Галочка для выполненного дела */
 .task-item:nth-child(3) .task-check {
     opacity: 1 !important;
-    background-image: url('../Design/Calendars/check-done.svg') !important;
+    background-image: url('Calendars/check-done.svg') !important;
     filter: none !important;
 }
 
@@ -1269,7 +1293,7 @@ body.sidebar-active .sidebar-toggle {
 .add-task-button {
     width: 24px;
     height: 24px;
-    background: url('../Design/Calendars/plus.svg') no-repeat center;
+    background: url('Calendars/plus.svg') no-repeat center;
     background-size: contain;
     border: none;
     cursor: pointer;
@@ -1277,7 +1301,7 @@ body.sidebar-active .sidebar-toggle {
 }
 
 .add-task-button:hover {
-    background-image: url('../Design/Calendars/plus-active.svg');
+    background-image: url('Calendars/plus-active.svg');
 
 }
 

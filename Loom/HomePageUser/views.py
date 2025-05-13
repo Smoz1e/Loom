@@ -7,6 +7,11 @@ from collections import defaultdict
 from .models import PersonalTask
 import calendar
 
+RU_MONTHS = {
+    1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь',
+    7: 'Июль', 8: 'Август', 9: 'Сентябрь', 10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
+}
+
 @login_required
 def HomePageUser(request):
     profile = Profile.objects.get(user=request.user)
@@ -52,6 +57,9 @@ def update_profile(request):
 def personal_calendar(request):
     profile = Profile.objects.get(user=request.user)
     date_str = request.GET.get('date')
+    month_param = request.GET.get('month')
+    year_param = request.GET.get('year')
+    # Определяем выбранную дату для основной сетки
     if date_str:
         try:
             selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
@@ -60,35 +68,54 @@ def personal_calendar(request):
     else:
         selected_date = datetime.today().date()
 
-    # Определяем начало недели (понедельник)
+    # Для мини-календаря: если передан месяц/год — используем их, иначе берём из выбранной даты
+    if month_param and year_param:
+        try:
+            month = int(month_param)
+            year = int(year_param)
+        except ValueError:
+            month = selected_date.month
+            year = selected_date.year
+    else:
+        month = selected_date.month
+        year = selected_date.year
+
+    # Для основной сетки — неделя вокруг selected_date
     start_of_week = selected_date - timedelta(days=selected_date.weekday())
     week_dates = [start_of_week + timedelta(days=i) for i in range(7)]
-
-    # Для навигации по дням
     prev_date = selected_date - timedelta(days=1)
     next_date = selected_date + timedelta(days=1)
-
-    # Все задачи пользователя за неделю
     week_tasks = PersonalTask.objects.filter(user=request.user, date__in=week_dates).order_by('start_time')
-    # Группируем задачи по дате
     tasks_by_date = defaultdict(list)
     for task in week_tasks:
         tasks_by_date[task.date].append(task)
 
     # --- Мини-календарь ---
-    year = selected_date.year
-    month = selected_date.month
     first_day_of_month = datetime(year, month, 1).date()
     last_day_of_month = datetime(year, month, calendar.monthrange(year, month)[1]).date()
-    # Список всех дней месяца
     month_days = [first_day_of_month + timedelta(days=i) for i in range((last_day_of_month - first_day_of_month).days + 1)]
-    # Для сетки: сколько дней в неделе до первого дня месяца (чтобы правильно выровнять)
     first_weekday = first_day_of_month.weekday()  # 0=Пн
-    # Задачи пользователя за месяц
     month_tasks = PersonalTask.objects.filter(user=request.user, date__gte=first_day_of_month, date__lte=last_day_of_month)
     tasks_by_month_date = defaultdict(list)
     for task in month_tasks:
         tasks_by_month_date[task.date].append(task)
+
+    # Для стрелок: предыдущий и следующий месяц
+    if month == 1:
+        prev_month = 12
+        prev_year = year - 1
+    else:
+        prev_month = month - 1
+        prev_year = year
+    if month == 12:
+        next_month = 1
+        next_year = year + 1
+    else:
+        next_month = month + 1
+        next_year = year
+
+    # Для красивого названия месяца
+    month_name = RU_MONTHS.get(month, str(month))
 
     hours = range(7, 24)
     context = {
@@ -106,5 +133,10 @@ def personal_calendar(request):
         'tasks_by_month_date': tasks_by_month_date,
         'month': month,
         'year': year,
+        'month_name': month_name,
+        'prev_month': prev_month,
+        'prev_year': prev_year,
+        'next_month': next_month,
+        'next_year': next_year,
     }
     return render(request, 'personal-calendar.html', context)
