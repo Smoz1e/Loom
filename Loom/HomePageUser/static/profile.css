@@ -227,7 +227,7 @@ body.profile-page {
 
 /* Блок персональных данных */
 .personal-info {
-    margin: 142px auto 10px; 
+    margin: 142px auto 0px; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -396,7 +396,6 @@ body.profile-page {
     white-space: nowrap;
 }
 
-.copy-code-btn:focus,
 .copy-code-btn:active,
 .copy-code-btn:hover {
     color: rgba(174, 147, 119, 1);
@@ -577,10 +576,11 @@ body.profile-page {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 29px;
-    width: 554px;
+    gap: 14px;
+    width: 757px;
     height: 26px;
     top: 13px;
+    white-space: nowrap; /* Запрет переноса текста */
 }
 
 .nav-link {
@@ -620,6 +620,11 @@ body.profile-page {
 .nav-link[href="family-calendar.html"]::before {
     background-image: url('ProfileUser/calendar-people.svg');
 }
+
+.nav-link[href="shared-calendar.html"]::before {
+    background-image: url('ProfileUser/shared-calendar.svg');
+}
+
 
 /* Кнопка выхода */
 .user-profile {
@@ -682,8 +687,132 @@ body.profile-page {
     cursor: pointer;
 }
 
+
+
+/* Новый враппер для контактной информации */
+.contact-info-wrapper {
+    margin-left: 0px;
+    margin-top: 114px;
+    margin-bottom: 0px;
+}
+
+/* Изменила стили contact-info */
+.contact-info {
+    display: flex;
+    gap: 44px;
+    margin-bottom: 6px;
+}
+
+.contact-info-wrapper .save-changes-btn {
+    margin-left: 50; 
+    margin-top: 0;
+    margin-bottom: 0px;
+}
+
+/* Стили для кнопки Сохранить изменения */
+.save-changes-btn {
+    width: 258px;
+    height: 48px;
+    background: rgba(53, 139, 87, 0.66);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    cursor: pointer;
+    box-shadow: 
+        0px 5px 15px 0px rgba(37, 44, 97, 0.15),
+        0px 2px 4px 0px rgba(136, 144, 194, 0.2);
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 50px;
+    display: block;
+    margin-right: auto;
+}
+
+.save-changes-btn:hover {
+    background: rgba(33, 90, 55, 1);
+}
+
+
+/* Стили для кнопки Изменить пароль */
+.password-btn {
+    width: 258px;
+    height: 48px;
+    background: rgba(53, 139, 87, 0.66);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    cursor: pointer;
+    box-shadow: 
+        0px 5px 15px 0px rgba(37, 44, 97, 0.15),
+        0px 2px 4px 0px rgba(136, 144, 194, 0.2);
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+    display: block;
+    margin-right: auto;
+}
+
+.password-btn:hover {
+    background: rgba(33, 90, 55, 1);
+}
+
+/* Стили для кнопки Сохранить информацию */
+.save-info-btn {
+    width: 258px;
+    height: 48px;
+    background: rgba(53, 139, 87, 0.66);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    cursor: pointer;
+    box-shadow: 
+        0px 5px 15px 0px rgba(37, 44, 97, 0.15),
+        0px 2px 4px 0px rgba(136, 144, 194, 0.2);
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+    display: block;
+    margin-right: auto;
+}
+
+.save-info-btn:hover {
+    background: rgba(33, 90, 55, 1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* ==============ПОДВАЛ=============== */
-.footer {
+/* .footer {
     width: 100%;
     height: 179px;
     background: rgba(236, 236, 242, 1);
@@ -695,12 +824,12 @@ body.profile-page {
     justify-content: center;
     padding: 0 106px;
     box-sizing: border-box;
-    position: relative; /* вместо fixed */
-    margin-top: auto; /* для прижатия к низу */
-}
+    position: relative;
+    margin-top: auto; 
+} */
 
 /* Разделительная линия */
-.footer::before {
+/* .footer::before {
     content: "";
     position: absolute;
     top: 0;
@@ -708,10 +837,10 @@ body.profile-page {
     width: 100%;
     height: 3px;
     background: rgba(208, 208, 208, 1);
-}
+} */
 
 /* Логотип Loom */
-.footer::after {
+/* .footer::after {
     content: "Loom";
     position: absolute;
     width: 96px;
@@ -723,10 +852,10 @@ body.profile-page {
     font-size: 28px;
     line-height: 100%;
     color: rgba(53, 139, 87, 1);
-}
+} */
 
 /* Ссылки в подвале */
-.footer-links {
+/* .footer-links {
     position: absolute;
     width: 488px;
     height: 20px;
@@ -734,9 +863,9 @@ body.profile-page {
     left: 413px;
     display: flex;
     gap: 34px;
-}
+} */
 
-.footer-link {
+/* .footer-link {
     font-family: "Montserrat", sans-serif;
     font-weight: 400;
     font-size: 16px;
@@ -744,23 +873,23 @@ body.profile-page {
     color: rgba(61, 61, 61, 1);
     text-decoration: none;
     white-space: nowrap;
-}
+} */
 
 /* Конкретные ширины для ссылок */
-.footer-link:nth-child(1) { width: 78px; }   /* Контакты */
-.footer-link:nth-child(2) { width: 47px; }   /* О нас */
-.footer-link:nth-child(3) { width: 121px; }  /* Предложения */
-.footer-link:nth-child(4) { width: 140px; }  /* Личный кабинет */
+/* .footer-link:nth-child(1) { width: 78px; }   Контакты
+.footer-link:nth-child(2) { width: 47px; }   О нас
+.footer-link:nth-child(3) { width: 121px; }  Предложения
+.footer-link:nth-child(4) { width: 140px; }  Личный кабинет */
 
 /* Нижняя часть подвала */
-.footer-bottom {
+/* .footer-bottom {
     position: absolute;
     right: 106px;
     top: 56px;
     display: flex;
-    flex-direction: column-reverse; /* Важно: обратный порядок */
+    flex-direction: column-reverse; 
     align-items: flex-end;
-    gap: 8px; /* Расстояние между элементами */
+    gap: 8px;
 }
 
 
@@ -797,10 +926,10 @@ body.profile-page {
     line-height: 130%;
     color: rgba(138, 138, 150, 1);
     white-space: nowrap;
-}
+} */
 
 /* Иконки соцсетей в подвале */
-.social-icons {
+/* .social-icons {
     position: absolute;
     top: 40px; 
     left: 106px;
@@ -820,15 +949,15 @@ body.profile-page {
 
 .social-icon:hover {
     opacity: 0.8;
-}
+} */
 
 /* Иконка VK */
-.vk-icon {
+/* .vk-icon {
     background-image: url('ProfileUser/vk.svg')
-}
+} */
 
 /* Иконка Telegram */
-.tg-icon{
+/* .tg-icon{
     background-image: url('ProfileUser/telegram.svg')
-}
+} */
 
