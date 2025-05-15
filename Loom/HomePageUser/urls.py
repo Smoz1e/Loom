@@ -9,4 +9,5 @@ urlpatterns = [
     path("profile/delete-avatar/", views.delete_avatar, name="delete_avatar"),
     path("profile/update/", views.update_profile, name="update_profile"),
     path("personal-calendar.html", views.personal_calendar, name="personal_calendar"),
+    path("profile/create-family/", views.create_family, name="create_family"),
 ]

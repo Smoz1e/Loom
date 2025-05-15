@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from RegAndAuth.models import Profile
+from RegAndAuth.models import Profile, Family, FamilyMember
 from datetime import datetime, timedelta
 from collections import defaultdict
 from .models import PersonalTask
 import calendar
+import random
+import string
 
 RU_MONTHS = {
     1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь',
@@ -207,3 +209,45 @@ def personal_calendar(request):
         'next_year': next_year,
     }
     return render(request, 'personal-calendar.html', context)
+
+def generate_family_code(length=8):
+    chars = string.ascii_uppercase + string.digits
+    return ''.join(random.choices(chars, k=length))
+
+@login_required
+def create_family(request):
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        if profile.family:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                from django.http import JsonResponse
+                return JsonResponse({'success': False, 'error': 'У вас уже есть семья. Нельзя создать вторую.'})
+            messages.error(request, 'У вас уже есть семья. Нельзя создать вторую.')
+            return redirect('profile')
+        family_name = request.POST.get('family_name', '').strip()
+        if not family_name:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                from django.http import JsonResponse
+                return JsonResponse({'success': False, 'error': 'Введите название семьи!'})
+            messages.error(request, 'Введите название семьи!')
+            return redirect('profile')
+        # Генерируем уникальный код
+        for _ in range(10):
+            code = generate_family_code()
+            if not Family.objects.filter(code=code).exists():
+                break
+        else:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                from django.http import JsonResponse
+                return JsonResponse({'success': False, 'error': 'Не удалось создать уникальный код семьи. Попробуйте еще раз.'})
+            messages.error(request, 'Не удалось создать уникальный код семьи. Попробуйте еще раз.')
+            return redirect('profile')
+        family = Family.objects.create(name=family_name, code=code)
+        profile.family = family
+        profile.save()
+        FamilyMember.objects.create(family=family, profile=profile, is_admin=True)
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            from django.http import JsonResponse
+            return JsonResponse({'success': True, 'family_name': family.name, 'family_code': family.code})
+        messages.success(request, f'Семья "{family_name}" создана! Код: {code}')
+    return redirect('profile')

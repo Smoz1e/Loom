@@ -97,17 +97,25 @@
 
         <section id="family" class="family-section">
             <div class="family-info">
+                <form id="create-family-form" action="{% url 'create_family' %}" method="POST" style="display: flex; align-items: center; gap: 16px;">
+                    {% csrf_token %}
+                    <div class="family-role">
+                        <label class="field-label">Семья</label>
+                        <input type="text" class="info-input family" name="family_name" placeholder="Введите название семьи" value="{% if profile.family %}{{ profile.family.name }}{% endif %}" required>
+                    </div>
+                    <button type="submit" class="primary-btn" style="margin-top: 32px;">Создать семью</button>
+                </form>
                 <div class="family-role">
-                    <label class="field-label">Семья</label>
-                    <input type="text" class="info-input family">
+                    <label class="field-label">Код семьи</label>
+                    <input type="text" id="family-code" class="info-input family" value="{% if profile.family %}{{ profile.family.code }}{% endif %}" readonly placeholder="Сначала создайте семью">
+                </div>
+                <div class="family-role">
+                    <button type="button" class="copy-code-btn" onclick="copyFamilyCode()">Копировать код семьи</button>
                 </div>
                 <div class="family-role">
                     <label class="field-label">Роль в семье</label>
                     <input type="text" class="info-input role" value="{{ profile.role }}" readonly>
                 </div>
-            </div>
-            <div class="family-role">
-                <button type="button" class="copy-code-btn">Копировать код семьи</button>
             </div>
             <div class="family-role">
                 <button type="button" class="copy-code-btn">Посмотреть участников семьи</button>
@@ -166,6 +174,39 @@
     <script>
         document.getElementById('avatar-upload').addEventListener('change', function () {
             document.getElementById('avatar-form').submit();
+        });
+
+        function copyFamilyCode() {
+            var codeInput = document.getElementById('family-code');
+            if (codeInput && codeInput.value) {
+                codeInput.select();
+                codeInput.setSelectionRange(0, 99999); // Для мобильных устройств
+                document.execCommand('copy');
+                alert('Код семьи скопирован: ' + codeInput.value);
+            } else {
+                alert('Сначала создайте семью!');
+            }
+        }
+
+        document.getElementById('create-family-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelector('input[name="family_name"]').value = data.family_name;
+                    document.getElementById('family-code').value = data.family_code;
+                    alert('Семья создана! Код: ' + data.family_code);
+                } else {
+                    alert(data.error || 'Ошибка создания семьи');
+                }
+            });
         });
     </script>
 </body>
