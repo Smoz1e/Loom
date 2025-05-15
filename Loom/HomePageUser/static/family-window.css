@@ -44,105 +44,277 @@
 }
 
 /* ================= Уведомления (модальное окно) ================= */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  overflow: auto;
-  background: rgba(0,0,0,0.15);
+/* Основные стили модального окна */
+.modal-notifications {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    
 }
-.modal-content {
-  background: #fff;
-  margin: 8% auto;
-  padding: 24px 20px 18px 20px;
-  border-radius: 14px;
-  width: 370px;
-  position: relative;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.10);
-  font-family: 'Comfortaa', Arial, sans-serif;
+
+.modal-content-notifications {
+    position: absolute;
+    width: 454px;
+    height: 836px;
+    top: 92px;
+    left: 948px;
+    background: rgba(244, 244, 244, 1);
+    border-radius: 15px;
+    box-shadow: 6px 6px 20px 0px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
 }
-.close {
-  color: #aaa;
-  position: absolute;
-  right: 14px; top: 14px;
-  font-size: 26px;
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-.notif-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #4f8cff;
-}
+
 .notif-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 10px 0;
-  max-height: 260px;
-  overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: calc(836px - 100px);
+    overflow-y: auto;
 }
+
+/* Стили для элементов уведомлений */
 .notif-item {
-  background: #f5f7ff;
-  border-radius: 8px;
-  padding: 12px 10px 10px 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 1px 4px rgba(79,140,255,0.04);
+    width: 360px;
+    height: 161px;
+    margin: 0 auto 15px auto;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(234, 236, 240, 1);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 4px 4px 0px rgba(228, 229, 231, 0.75);
+    display: flex;
+    gap: 12px;
+}
+
+.notif-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    color: rgba(111, 175, 125, 1);
+    background-size: center;
+    padding: 0px 0px;
+}
+
+.notif-content {
+    width: 292px;
+    height: 129px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.notif-content-mini {
+    width: 292px;
+    height: 84px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.notif-header {
+    width: 292px;
+    height: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notif-type {
+    font-family: 'Montserrat';
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(22, 22, 25, 1);
+}
+
+.notif-close {
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #aaa;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.notif-text {
+    width: 292px;
+    height: 60px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(101, 109, 118, 1);
+}
+
+.notif-actions {
+  width: 177;
+  height: 21;
+  gap: 0px;
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  padding: 0px 0px;
+
 }
-.notif-user {
-  font-weight: 700;
-  color: #2196f3;
-  margin-right: 4px;
+
+.notif-btn {
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: left;
+    padding: 0px 0px;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 4px; 
+    text-decoration-thickness: 1px; 
 }
-.notif-task {
-  color: #333;
-  font-weight: 500;
+
+.notif-btn.accept {
+    width: 74px;
+    height: 21px;
+    background: transparent;
+    color: rgba(111, 175, 125, 1);
 }
-.notif-time {
-  font-size: 0.92em;
-  color: #888;
-  margin-top: 2px;
+
+.notif-btn.decline {
+    width: 91px;
+    height: 21px;
+    background: transparent;
+    color: rgba(225, 138, 133, 1);
 }
-.notif-accept-btn {
-  background: none;
-  border: none;
-  color: #219653;
-  font-weight: 700;
-  font-size: 1em;
-  cursor: pointer;
-  transition: color 0.15s;
-  margin-right: 8px;
+
+.notif-btn.view {
+    width: 189px;
+    height: 20px;
+    background: transparent;
+    color: rgba(101, 109, 118, 1);
+    text-decoration: underline;
+    text-underline-offset: 4px; 
+    text-decoration-thickness: 1px;
 }
-.notif-accept-btn:hover {
-  color: #27ae60;
-  text-decoration: underline;
+
+.modal-actions-notifications {
+    text-align: center;
+    margin-top: 20px;
 }
-.notif-decline-btn {
-  background: none;
-  border: none;
-  color: #e74c3c;
-  font-weight: 700;
-  font-size: 1em;
-  cursor: pointer;
-  transition: color 0.15s;
+
+.modal-close-btn-notifications {
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #4f8cff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
 }
-.notif-decline-btn:hover {
-  color: #c0392b;
-  text-decoration: underline;
+
+/* Добавляем новые стили для уведомления с комментарием */
+.comment-notif {
+    width: 279px;
+    height: 121px;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(234, 236, 240, 1);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 4px 4px 0px rgba(228, 229, 231, 0.75);
+    display: flex;
+    margin-top: 0px;
+    margin-bottom: 15px;
 }
+
+.comment-content {
+    width: 247px;
+    height: 89px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-header {
+    width: 247px;
+    height: 20px;
+}
+
+.comment-title {
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(101, 109, 118, 1);
+}
+
+.comment-input-container {
+    width: 100%;
+}
+
+.comment-input {
+    width: 100%;
+    height: 25px;
+    border: 1px solid rgba(197, 197, 197, 1);
+    font-family: 'Montserrat';
+    font-size: 14px;
+    padding: 0px 8px;
+    border-radius: 1px;
+    outline: none;
+    resize: none;
+}
+
+.comment-actions {
+    width: 187px;
+    height: 21px;
+    display: flex;
+    gap: 0px;
+}
+
+.comment-btn {
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+.comment-btn.send {
+    width: 91px;
+    height: 20px;
+    background: transparent;
+    color: rgba(111, 175, 125, 1);
+    text-decoration: underline;
+    text-underline-offset: 4px; 
+    text-decoration-thickness: 1px; 
+}
+
+.comment-btn.cancel {
+    width: 84px;
+    height: 21px;
+    background: transparent;
+    color: rgba(101, 109, 118, 1);
+    text-decoration: underline;
+    text-underline-offset: 4px; 
+    text-decoration-thickness: 1px; 
+}
+
+
 @media (max-width: 480px) {
   .modal-content {
     width: 96vw;
     padding: 10px 2vw 10px 2vw;
   }
 }
-/* ================= /Уведомления ================= */
+/* ================= Список участников семьи ================= */
 
 /* Стили для модального окна */
 .modal {
