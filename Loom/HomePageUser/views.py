@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from RegAndAuth.models import Profile, Family, FamilyMember
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -17,7 +19,14 @@ RU_MONTHS = {
 @login_required
 def HomePageUser(request):
     profile = Profile.objects.get(user=request.user)
-    return render(request, 'profile.html', {'profile': profile})
+    is_admin = False
+    if profile.family:
+        from RegAndAuth.models import FamilyMember
+        try:
+            is_admin = FamilyMember.objects.get(family=profile.family, profile=profile).is_admin
+        except FamilyMember.DoesNotExist:
+            is_admin = False
+    return render(request, 'profile.html', {'profile': profile, 'is_admin': is_admin})
 
 @login_required
 def upload_avatar(request):
@@ -99,7 +108,6 @@ def personal_calendar(request):
         if errors:
             # Можно вернуть ошибки через JSON или messages
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                from django.http import JsonResponse
                 return JsonResponse({'success': False, 'errors': errors})
             else:
                 messages.error(request, '\n'.join(errors))
@@ -121,7 +129,6 @@ def personal_calendar(request):
             priority=priority
         )
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            from django.http import JsonResponse
             return JsonResponse({'success': True})
         return redirect('personal_calendar')
 
@@ -220,14 +227,12 @@ def create_family(request):
         profile = Profile.objects.get(user=request.user)
         if profile.family:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                from django.http import JsonResponse
                 return JsonResponse({'success': False, 'error': 'У вас уже есть семья. Нельзя создать вторую.'})
             messages.error(request, 'У вас уже есть семья. Нельзя создать вторую.')
             return redirect('profile')
         family_name = request.POST.get('family_name', '').strip()
         if not family_name:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                from django.http import JsonResponse
                 return JsonResponse({'success': False, 'error': 'Введите название семьи!'})
             messages.error(request, 'Введите название семьи!')
             return redirect('profile')
@@ -238,7 +243,6 @@ def create_family(request):
                 break
         else:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                from django.http import JsonResponse
                 return JsonResponse({'success': False, 'error': 'Не удалось создать уникальный код семьи. Попробуйте еще раз.'})
             messages.error(request, 'Не удалось создать уникальный код семьи. Попробуйте еще раз.')
             return redirect('profile')
@@ -247,7 +251,85 @@ def create_family(request):
         profile.save()
         FamilyMember.objects.create(family=family, profile=profile, is_admin=True)
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            from django.http import JsonResponse
             return JsonResponse({'success': True, 'family_name': family.name, 'family_code': family.code})
         messages.success(request, f'Семья "{family_name}" создана! Код: {code}')
     return redirect('profile')
+
+@login_required
+def join_family(request):
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        if profile.family:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': 'Вы уже состоите в семье. Сначала покиньте текущую.'})
+            from django.contrib import messages
+            messages.error(request, 'Вы уже состоите в семье. Сначала покиньте текущую.')
+            return redirect('profile')
+        code = request.POST.get('join_family_code', '').strip().upper()
+        from RegAndAuth.models import Family
+        try:
+            family = Family.objects.get(code=code)
+        except Family.DoesNotExist:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': 'Семья с таким кодом не найдена.'})
+            from django.contrib import messages
+            messages.error(request, 'Семья с таким кодом не найдена.')
+            return redirect('profile')
+        profile.family = family
+        profile.save()
+        from RegAndAuth.models import FamilyMember
+        FamilyMember.objects.create(family=family, profile=profile, is_admin=False)
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': True, 'family_name': family.name, 'family_code': family.code})
+        from django.contrib import messages
+        messages.success(request, f'Вы присоединились к семье: {family.name}')
+    return redirect('profile')
+
+@login_required
+@require_POST
+def remove_family_member(request):
+    import json
+    profile = Profile.objects.get(user=request.user)
+    if not profile.family:
+        return JsonResponse({'success': False, 'error': 'Нет семьи'})
+    try:
+        data = json.loads(request.body)
+        user_id = int(data.get('user_id'))
+    except Exception:
+        return JsonResponse({'success': False, 'error': 'Некорректные данные'})
+    # Проверка: только админ может удалять
+    is_admin = FamilyMember.objects.filter(family=profile.family, profile=profile, is_admin=True).exists()
+    if not is_admin:
+        return JsonResponse({'success': False, 'error': 'Только администратор семьи может удалять участников'})
+    # Нельзя удалить себя
+    if user_id == request.user.id:
+        return JsonResponse({'success': False, 'error': 'Нельзя удалить себя'})
+    # Удаляем участника
+    try:
+        member = FamilyMember.objects.get(family=profile.family, profile__user__id=user_id)
+        member.profile.family = None
+        member.profile.save()
+        member.delete()
+        return JsonResponse({'success': True})
+    except FamilyMember.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Пользователь не найден в семье'})
+
+@login_required
+def family_members_ajax(request):
+    profile = Profile.objects.get(user=request.user)
+    if not profile.family:
+        return JsonResponse({'success': True, 'members': []})
+    members = profile.family.members.select_related('profile__user').all()
+    def get_avatar_url(p):
+        if p.avatar:
+            return p.avatar.url
+        return None
+    members_data = [
+        {
+            'id': m.profile.user.id,
+            'name': f"{m.profile.user.first_name} {m.profile.user.last_name}".strip() or m.profile.user.username,
+            'avatar': get_avatar_url(m.profile)
+        }
+        for m in members
+    ]
+    return JsonResponse({'success': True, 'members': members_data})

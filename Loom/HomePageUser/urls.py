@@ -10,4 +10,7 @@ urlpatterns = [
     path("profile/update/", views.update_profile, name="update_profile"),
     path("personal-calendar.html", views.personal_calendar, name="personal_calendar"),
     path("profile/create-family/", views.create_family, name="create_family"),
+    path("profile/join-family/", views.join_family, name="join_family"),
+    path("profile/family-members/", views.family_members_ajax, name="family_members_ajax"),
+    path("profile/remove-family-member/", views.remove_family_member, name="remove_family_member"),
 ]

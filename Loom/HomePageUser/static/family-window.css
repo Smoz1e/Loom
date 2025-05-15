@@ -1,0 +1,203 @@
+/* {
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+} */
+
+@font-face {
+    src: url('../Fonts/Unbounded/static/Unbounded-Regular.ttf');
+    font-family: "Unbounded";
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Medium.ttf');
+    font-family: "Montserrat";
+    font-weight: 500;
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Bold.ttf');
+    font-family: "Montserrat";
+    font-weight: 600;
+}
+
+@font-face {
+    src: url('../Fonts/Montserrat/static/Montserrat-Regular.ttf');
+    font-family: "Montserrat";
+    font-weight: 400;
+}
+
+@font-face {
+    src: url('../Fonts/Lato/Lato-Regular.ttf');
+    font-family: "Lato";
+}
+
+@font-face {
+    src: url('../Fonts/Poppins/Poppins-Regular.ttf');
+    font-family: "Poppins";
+}
+
+@font-face {
+    src: url('../Fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf');
+    font-family: "Nunito Sans";
+    font-weight: 400;
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    width: 558px;
+    height: 270px;
+    border-radius: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 1);
+    border: 0.5px solid rgba(197, 197, 197, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.members-title {
+    width: 518px;
+    height: 22px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    color: rgba(95, 95, 95, 1);
+    margin: 0;
+}
+
+.user-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.user-item {
+    width: 518px;
+    height: 40px;
+    border-radius: 8px;
+    border: 0.5px solid rgba(197, 197, 197, 0.5);
+    background: rgba(255, 255, 255, 1);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 20px;
+}
+
+.user-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 100px;
+    background: rgba(217, 217, 217, 1);
+}
+
+.user-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 100%;
+    color: rgba(60, 60, 88, 1);
+    flex-grow: 1;
+}
+
+.remove-btn {
+    min-width: 90px;
+    height: 32px;
+    background: rgba(225, 138, 133, 1);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 18px;
+}
+
+.remove-btn:hover {
+    background: #ba1717;
+    color: #fff;
+}
+
+/* Контейнер кнопок */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 225px;
+    height: 24px;
+    gap: 24px;
+    margin-top: 2px;
+    margin-left: auto; 
+    margin-bottom: 0px;
+  }
+  
+  /* Базовые стили кнопок */
+  .modal-btn {
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 0;
+    background: none;
+  }
+  
+  /* Кнопка "Отменить" */
+  .modal-btn.cancel {
+    width: 85px;
+    height: 16px;
+    color: rgba(126, 126, 126, 1);
+  }
+  
+  /* Кнопка "Сохранить" */
+  .modal-btn.save {
+    width: 116px;
+    height: 24px;
+    border-radius: 14px;
+    background: rgba(53, 139, 87, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  /* Текст в кнопке "Сохранить" */
+  .save-btn-text {
+    width: 91px;
+    height: 16px;
+    color: rgba(236, 236, 236, 1);
+    text-align: center;
+  }
+
+  /* Состояния кнопки "Сохранить" */
+  .modal-btn.save:hover {
+    background: rgba(33, 90, 55, 1);
+    transition:  0.2s ease;
+  }
