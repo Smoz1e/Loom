@@ -1,4 +1,5 @@
 {% load static %}
+{% load calendar_extras %}
 {% now "j F Y" as today_date %}
 <!DOCTYPE html>
 <html lang="en">
@@ -85,12 +86,12 @@
                 <!-- Контейнер месяца и навигации -->
                 <div class="month-navigation">
                     <div class="month-year">
-                        <span class="month">Февраль</span>
-                        <span class="year">2021</span>
+                        <span class="month">{{ month_name }}</span>
+                        <span class="year">{{ year }}</span>
                     </div>
                     <div class="month-buttons">
-                        <button class="month-button prev-month"></button>
-                        <button class="month-button next-month"></button>
+                        <a href="?month={{ prev_month }}&year={{ prev_year }}{% if current_date %}&date={{ current_date|date:'Y-m-d' }}{% endif %}" class="month-button prev-month"></a>
+                        <a href="?month={{ next_month }}&year={{ next_year }}{% if current_date %}&date={{ current_date|date:'Y-m-d' }}{% endif %}" class="month-button next-month"></a>
                     </div>
                 </div>
                 
@@ -109,145 +110,23 @@
                     
                     <!-- Даты -->
                     <div class="mini-dates">
-                        <!-- Первая строка -->
-                        <div class="mini-date inactive">
-                            <span>31</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>1</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>2</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>3</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>4</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>5</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>6</span>
-                        </div>
-                        
-                        <!-- Вторая строка -->
-                        <div class="mini-date">
-                            <span>7</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>8</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>9</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>10</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>11</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>12</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>13</span>
-                        </div>
-                        
-                        <!-- Третья строка -->
-                        <div class="mini-date">
-                            <span>14</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>15</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>16</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>17</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>18</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>19</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>20</span>
-                        </div>
-                        
-                        <!-- Четвертая строка -->
-                        <div class="mini-date">
-                            <span>21</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>22</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>23</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>24</span>
-                        </div>
-                        <div class="mini-date current-date">
-                            <div class="date-content">
-                                <span class="date-number">25</span>
+                        {% for _ in 0|until:first_weekday %}
+                            <div class="mini-date inactive"><span></span><div class="date-indicators"></div></div>
+                        {% endfor %}
+                        {% for day in month_days %}
+                            <div class="mini-date{% if day == current_date %} current-date{% endif %}">
+                                <a href="?date={{ day|date:'Y-m-d' }}" class="date-content">
+                                    <span class="date-number{% if day == current_date %} selected-number{% endif %}">{{ day.day }}</span>
+                                    <div class="date-indicators">
+                                        {% with day_tasks=tasks_by_month_date|get_item:day %}
+                                            {% for task in day_tasks %}
+                                                <span class="indicator priority-{{ task.priority }}" title="{{ task.title }}: {% if task.priority == 'low' %}Низкий{% elif task.priority == 'normal' %}Обычный{% elif task.priority == 'high' %}Высокий{% endif %} приоритет"></span>
+                                            {% endfor %}
+                                        {% endwith %}
+                                    </div>
+                                </a>
                             </div>
-                        </div>
-                        <div class="mini-date">
-                            <span>26</span>
-                        </div>
-                        <div class="mini-date">
-                            <span>27</span>
-                        </div>
-                        
-                        <!-- Пятая строка -->
-                        <div class="mini-date">
-                            <span>28</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>1</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>2</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>3</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>4</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>5</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>6</span>
-                        </div>
-    
-                        <!-- Шестая строка -->
-                        <div class="mini-date inactive">
-                            <span>7</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>8</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>9</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>10</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>11</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>12</span>
-                        </div>
-                        <div class="mini-date inactive">
-                            <span>13</span>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
                 
