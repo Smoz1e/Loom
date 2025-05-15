@@ -61,7 +61,7 @@ body.profile-page {
 /* Основной фон */
 body.profile-page {
     background-color: rgba(251, 247, 244, 1);
-    background-image: url('Profile user/ellipse.png');
+    background-image: url('ProfileUser/ellipse.png');
     background-attachment: scroll;
     background-size: cover;
     background-position: center;

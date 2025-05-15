@@ -1354,3 +1354,24 @@ body.sidebar-active .sidebar-toggle {
 .category-dot.priority-low {
   background: #3b82f6;
 }
+
+/* Стили для тегов категорий */
+.category-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 4px;
+  margin-bottom: 2px;
+  color: #fff;
+}
+.category-tag.работа-учёба, .category-dot.blue { background: #3b82f6; }
+.category-tag.бытовые-дела, .category-dot.purple { background: #a855f7; }
+.category-tag.время-проведённое-с-семьёй, .category-dot.green { background: #10b981; }
+.category-tag.время-проведённое-с-друзьями, .category-dot.orange { background: #f59e0b; }
+.category-tag.личные-дела, .category-dot.red { background: #ef4444; }
+.category-tag.праздники, .category-dot.yellow { background: #faff63; color: #333; }
+.category-tag.тег-важно, .category-dot.priority-high { background: #ef4444; }
+.category-tag.тег-обычное, .category-dot.priority-normal { background: #10b981; }
+.category-tag.тег-низкий-приоритет, .category-dot.priority-low { background: #3b82f6; }

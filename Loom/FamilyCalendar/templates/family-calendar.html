@@ -204,7 +204,7 @@
                   </div>
 
                   <div class="modal-card">
-                    <button class="category-toggle" id="categoryToggle" type="button">
+                    <button class="category-toggle" id="categoryToggle" type="button" tabindex="0">
                       <div class="category-content">
                         <span class="category-icon"></span>
                         <span class="category-label" id="categoryLabel">Выбрать тему</span>
@@ -212,7 +212,7 @@
                       </div>
                       <span class="category-arrow" id="categoryArrow"></span>
                     </button>
-                    <div class="category-list" id="categoryList">
+                    <div class="category-list" id="categoryList" style="display:none;">
                       <div class="category-item" data-value="Работа/Учёба">
                         <span class="checkbox-icon"></span>
                         <span>Работа/Учёба</span>
@@ -263,12 +263,22 @@
 
                   <div class="modal-card participants-section">
                     <div class="participants-header">
-                      <button class="add-participant-btn" id="addParticipantBtn" type="button">
+                      <button class="add-participant-btn" id="addParticipantBtn" type="button" tabindex="0">
                         <span class="participants-icon"></span>
                         <span class="participants-label" id="participantsLabel">Добавить участников</span>
+                        <span class="participants-arrow" id="participantsArrow"></span>
                       </button>
                     </div>
-                    <div class="participants-list" id="participantsList"></div>
+                    <div class="participants-list-dropdown" id="participantsListDropdown" style="display:none;">
+                      {% for member in family.members.all %}
+                        {% if member.profile.user.id != request.user.id %}
+                        <div class="participant-chip" data-username="{{ member.profile.user.username }}" data-userid="{{ member.profile.user.id }}">
+                          <input type="checkbox" class="participant-checkbox" id="participant-{{ member.profile.user.id }}" value="{{ member.profile.user.username }}">
+                          <label for="participant-{{ member.profile.user.id }}">{{ member.profile.user.get_full_name|default:member.profile.user.username }}</label>
+                        </div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
                   </div>
 
                   <div class="private-section">
@@ -379,6 +389,73 @@
           }
         };
 
+        // --- Participants dropdown logic ---
+        const addParticipantBtn = document.getElementById('addParticipantBtn');
+        const participantsListDropdown = document.getElementById('participantsListDropdown');
+        const participantsArrow = document.getElementById('participantsArrow');
+        addParticipantBtn.addEventListener('click', function(e) {
+          const isOpen = participantsListDropdown.style.display === 'block';
+          participantsListDropdown.style.display = isOpen ? 'none' : 'block';
+          participantsArrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+          participantsArrow.style.transition = 'transform 0.2s ease';
+        });
+        document.addEventListener('click', function(e) {
+          if (!addParticipantBtn.contains(e.target) && !e.target.closest('.participants-list-dropdown')) {
+            participantsListDropdown.style.display = 'none';
+            participantsArrow.style.transform = 'rotate(0deg)';
+          }
+        });
+
+        // --- CATEGORY DROPDOWN LOGIC ---
+        const categoryList = document.getElementById('categoryList');
+        const categoryLabel = document.getElementById('categoryLabel');
+        const selectedCategoryDot = document.getElementById('selectedCategoryDot');
+        const categoryToggle = document.getElementById('categoryToggle');
+        const categoryArrow = document.getElementById('categoryArrow');
+
+        function toggleCategoryList() {
+          const isOpen = categoryList.style.display === 'block';
+          categoryList.style.display = isOpen ? 'none' : 'block';
+          categoryArrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+          categoryArrow.style.transition = 'transform 0.2s ease';
+        }
+
+        categoryToggle.addEventListener('click', function(e) {
+          if (e.target === categoryArrow || e.target.classList.contains('category-arrow')) {
+            toggleCategoryList();
+            e.stopPropagation();
+          } else if (!e.target.closest('.category-item')) {
+            toggleCategoryList();
+          }
+        });
+
+        categoryList.addEventListener('click', function(e) {
+          const item = e.target.closest('.category-item');
+          if (item) {
+            document.querySelectorAll('.category-item').forEach(el => el.classList.remove('selected'));
+            item.classList.add('selected');
+            const categoryName = item.getAttribute('data-value');
+            const dot = item.querySelector('.category-dot');
+            let dotColor = '';
+            if (dot) {
+              dotColor = Array.from(dot.classList).find(cls => cls !== 'category-dot');
+            }
+            categoryLabel.textContent = categoryName;
+            categoryToggle.classList.add('has-selection');
+            selectedCategoryDot.className = 'selected-category-dot ' + (dotColor || '');
+            selectedCategoryDot.style.display = 'inline-block';
+            categoryList.style.display = 'none';
+            categoryArrow.style.transform = 'rotate(0deg)';
+          }
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!categoryToggle.contains(e.target) && !e.target.closest('.category-list')) {
+            categoryList.style.display = 'none';
+            categoryArrow.style.transform = 'rotate(0deg)';
+          }
+        });
+
         // --- AJAX сохранение семейной задачи из модального окна ---
         document.querySelector('.modal-btn.save').onclick = async function(e) {
           e.preventDefault();
@@ -397,9 +474,10 @@
           if (selectedRepeat) repeat_type = selectedRepeat.textContent.trim();
           const selectedDays = Array.from(document.querySelectorAll('.repeat-day.selected')).map(d => d.textContent.trim());
           if (selectedDays.length) repeat_days = selectedDays.join(',');
+          // Собираем выбранных участников
           let participants = '';
-          const partList = document.querySelectorAll('.participants-list .participant-chip');
-          if (partList.length) participants = Array.from(partList).map(p => p.textContent.trim()).join(',');
+          const checkedParticipants = document.querySelectorAll('.participants-list .participant-checkbox:checked');
+          if (checkedParticipants.length) participants = Array.from(checkedParticipants).map(p => p.value).join(',');
           const priority = 'normal'; // Можно доработать если нужно
 
           const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
