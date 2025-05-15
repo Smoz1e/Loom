@@ -176,6 +176,58 @@
         </div>
     </div>
 
+    <div id="notifModal" class="modal">
+        <div class="modal-content">
+            <button class="close" id="closeNotifBtn">&times;</button>
+            <div class="notif-title">Уведомления о задачах</div>
+            <ul class="notif-list" id="notifList">
+                <!-- Здесь будут уведомления -->
+                <li class="notif-item">
+                    <div style="flex:1;">
+                        <div style="font-weight:700;color:#219653;display:flex;align-items:center;gap:6px;">
+                            <span style="font-size:1.2em;">&#9432;</span> Новая задача
+                        </div>
+                        <div style="margin:6px 0 10px 0;">
+                            Пользователь <b>Елена</b> назначил(-а) Вам событие "Помыть посуду" 28.04.25 в 13:00
+                        </div>
+                        <div style="display:flex;gap:18px;">
+                            <button class="notif-accept-btn">Принять</button>
+                            <button class="notif-decline-btn">Отклонить</button>
+                        </div>
+                    </div>
+                    <button class="close" style="position:static;margin-left:8px;align-self:flex-start;" title="Закрыть">&times;</button>
+                </li>
+                <li class="notif-item">
+                    <div style="flex:1;">
+                        <div style="font-weight:700;color:#219653;display:flex;align-items:center;gap:6px;">
+                            <span style="font-size:1.2em;">&#9432;</span> Ответ
+                        </div>
+                        <div style="margin:6px 0 10px 0;">
+                            Пользователь <b>Мария</b> отклонил(-а) событие от 24.04.25 "Помыть посуду" с комментарием...
+                        </div>
+                        <a href="#" style="color:#4f8cff;font-weight:600;text-decoration:none;">Редактировать задачу</a>
+                    </div>
+                    <button class="close" style="position:static;margin-left:8px;align-self:flex-start;" title="Закрыть">&times;</button>
+                </li>
+                <li class="notif-item">
+                    <div style="flex:1;">
+                        <div style="font-weight:700;color:#219653;display:flex;align-items:center;gap:6px;">
+                            <span style="font-size:1.2em;">&#9432;</span> Предупреждение
+                        </div>
+                        <div style="margin:6px 0 10px 0;">
+                            Пользователь <b>Мария</b> изменил(-а) событие с Вами от 24.04.25 "Помыть посуду"
+                        </div>
+                        <a href="#" style="color:#4f8cff;font-weight:600;text-decoration:none;">Смотреть задачу</a>
+                    </div>
+                    <button class="close" style="position:static;margin-left:8px;align-self:flex-start;" title="Закрыть">&times;</button>
+                </li>
+            </ul>
+            <div class="modal-actions">
+                <button class="modal-btn" id="closeNotifBtn2">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
     <!-- <footer class="footer">
         <div class="footer-links">
             <a href="#" class="footer-link">Контакты</a>
@@ -350,6 +402,22 @@
                 familyModal.style.display = 'none';
             }
         };
+
+        // Открытие модального окна уведомлений по клику на колокольчик
+        const notifModal = document.getElementById('notifModal');
+        const closeNotifBtn = document.getElementById('closeNotifBtn');
+        const closeNotifBtn2 = document.getElementById('closeNotifBtn2');
+        const notificationIcon = document.querySelector('.notification-icon');
+        if (notificationIcon) {
+            notificationIcon.addEventListener('click', function() {
+                notifModal.style.display = 'block';
+            });
+        }
+        if (closeNotifBtn) closeNotifBtn.onclick = function() { notifModal.style.display = 'none'; };
+        if (closeNotifBtn2) closeNotifBtn2.onclick = function() { notifModal.style.display = 'none'; };
+        window.addEventListener('click', function(event) {
+            if (event.target === notifModal) notifModal.style.display = 'none';
+        });
     </script>
 </body>
 </html>
