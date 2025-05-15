@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from datetime import timedelta
 import calendar
 from RegAndAuth.models import Profile
@@ -13,6 +14,49 @@ def family_calendar(request):
     profile = Profile.objects.get(user=request.user)
     if not profile.family:
         return redirect('profile')
+    # --- AJAX POST обработка создания семейной задачи ---
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        title = request.POST.get('title', '').strip()
+        description = request.POST.get('description', '').strip()
+        date = request.POST.get('date')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        category = request.POST.get('category', '')
+        timezone_val = request.POST.get('timezone', '')
+        is_private = request.POST.get('is_private') == 'true'
+        repeat_type = request.POST.get('repeat_type', '')
+        repeat_days = request.POST.get('repeat_days', '')
+        participants = request.POST.get('participants', '')
+        priority = request.POST.get('priority', 'normal')
+        errors = []
+        if not title:
+            errors.append('Название обязательно')
+        if not date:
+            errors.append('Дата обязательна')
+        if not start_time or not end_time:
+            errors.append('Время обязательно')
+        if errors:
+            return JsonResponse({'success': False, 'errors': errors})
+        try:
+            task = FamilyTask.objects.create(
+                family=profile.family,
+                title=title,
+                description=description,
+                date=date,
+                start_time=start_time,
+                end_time=end_time,
+                category=category,
+                timezone=timezone_val,
+                is_private=is_private,
+                repeat_type=repeat_type,
+                repeat_days=repeat_days,
+                participants=participants,
+                priority=priority,
+                created_by=request.user
+            )
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'errors': [str(e)]})
     today = timezone.localdate()
     date_str = request.GET.get('date')
     month_param = request.GET.get('month')
@@ -51,6 +95,11 @@ def family_calendar(request):
     tasks_by_month_date = defaultdict(list)
     for task in month_tasks:
         tasks_by_month_date[task.date].append(task)
+    # --- Основной календарь: задачи по дням недели ---
+    week_tasks = FamilyTask.objects.filter(family=profile.family, date__in=week_dates).order_by('start_time')
+    tasks_by_date = defaultdict(list)
+    for task in week_tasks:
+        tasks_by_date[task.date].append(task)
     # Для стрелок: предыдущий и следующий месяц
     if month == 1:
         prev_month = 12
@@ -81,6 +130,7 @@ def family_calendar(request):
         'month_days': month_days,
         'first_weekday': first_weekday,
         'tasks_by_month_date': tasks_by_month_date,
+        'tasks_by_date': tasks_by_date,
         'month': month,
         'year': year,
         'month_name': month_name,
