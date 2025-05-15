@@ -176,12 +176,124 @@
         </div>
     </div>
 
-    <div id="notifModal" class="modal">
+
+
+    <div id="notifModal" class="modal-notifications">
+    <div class="modal-content-notifications">
+        <ul class="notif-list" id="notifList">
+            <!-- Уведомление 1: Новая задача -->
+            <li class="notif-item">
+                <div class="notif-icon">&#9432;</div>
+                <div class="notif-content">
+                    <div class="notif-content-mini">
+                        <div class="notif-header">
+                            <span class="notif-type">Новая задача</span>
+                            <button class="notif-close">&times;</button>
+                        </div>
+                        <div class="notif-text">
+                            Пользователь Елена назначил(-а) Вам событие "Помыть посуду" 28.04.25 в 13:00
+                        </div>
+                    </div>
+                    <div class="notif-actions">
+                        <button class="notif-btn accept">Принять</button>
+                        <button class="notif-btn decline">Отклонить</button>
+                    </div>
+                </div>
+            </li>
+            
+            <!-- Уведомление 2: Комментарий -->
+            <li class="notif-item comment-notif">
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-title">Напишите комментарий</span>
+                    </div>
+                    <div class="comment-input-container">
+                        <textarea class="comment-input" placeholder=""></textarea>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="comment-btn send">Отправить</button>
+                        <button class="comment-btn cancel">Отменить</button>
+                    </div>
+                </div>
+            </li>
+            
+            <!-- Уведомление 3: Ответ (отклонение) -->
+            <li class="notif-item">
+                <div class="notif-icon">&#9432;</div>
+                <div class="notif-content">
+                    <div class="notif-content-mini">
+                        <div class="notif-header">
+                            <span class="notif-type">Ответ</span>
+                            <button class="notif-close">&times;</button>
+                        </div>
+                        <div class="notif-text">
+                            Пользователь Мария отклонил(-а) событие от 24.04.25 “Помыть посуду” с комментарием:....
+                        </div>
+                    </div>
+                    <div class="notif-actions">
+                        <button class="notif-btn view">Редактировать задачу</button>
+                    </div>
+                </div>
+            </li>
+            
+            <!-- Уведомление 4: Предупреждение -->
+            <li class="notif-item">
+                <div class="notif-icon">&#9432;</div>
+                <div class="notif-content">
+                    <div class="notif-content-mini">
+                        <div class="notif-header">
+                            <span class="notif-type">Предупреждение</span>
+                            <button class="notif-close">&times;</button>
+                        </div>
+                        <div class="notif-text">
+                            Пользователь Мария изменил(-а) событие с Вами от 24.04.25 “Помыть посуду”
+                        </div>
+                    </div>
+                    <div class="notif-actions">
+                        <button class="notif-btn view">Смотреть задачу</button>
+                    </div>
+                </div>
+            </li>
+            
+            <!-- Уведомление 5: Ответ (принятие) -->
+            <li class="notif-item">
+                <div class="notif-icon">&#9432;</div>
+                <div class="notif-content">
+                    <div class="notif-content-mini">
+                        <div class="notif-header">
+                            <span class="notif-type">Ответ</span>
+                            <button class="notif-close">&times;</button>
+                        </div>
+                        <div class="notif-text">
+                            Пользователь Мария принял(-а) событие от 24.04.25 “Помыть посуду” с комментарием:....
+                        </div>
+                    </div>
+                    <div class="notif-actions">
+                        <button class="notif-btn view">Смотреть задачу</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="modal-actions-notifications">
+            <button class="modal-close-btn-notifications">Закрыть</button>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <!-- <div id="notifModal" class="modal">
         <div class="modal-content">
             <button class="close" id="closeNotifBtn">&times;</button>
             <div class="notif-title">Уведомления о задачах</div>
             <ul class="notif-list" id="notifList">
-                <!-- Здесь будут уведомления -->
+                Здесь будут уведомления
                 <li class="notif-item">
                     <div style="flex:1;">
                         <div style="font-weight:700;color:#219653;display:flex;align-items:center;gap:6px;">
@@ -226,7 +338,7 @@
                 <button class="modal-btn" id="closeNotifBtn2">Закрыть</button>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- <footer class="footer">
         <div class="footer-links">
