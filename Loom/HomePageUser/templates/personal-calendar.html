@@ -72,12 +72,12 @@
                             {% with day_tasks=tasks_by_date|get_item:day %}
                                 {% for task in day_tasks %}
                                     {% if task.start_time.hour == hour %}
-                                        <div class="task-container-cases blue-task">
-                                            <div class="task-color-strip"></div>
+                                        <div class="task-container-cases {{ task.category|category_to_color_class }}">
+                                            <div class="task-color-strip {{ task.category|category_to_color_class }}"></div>
                                             <div class="main-contents-cases">
                                                 <div class="task-calendar-time">{{ task.start_time|time:'H:i' }}-{{ task.end_time|time:'H:i' }}</div>
-                                                <span class="priority-tag priority-{{ task.priority }}">
-                                                    {% if task.priority == 'low' %}Низкий{% elif task.priority == 'normal' %}Обычный{% elif task.priority == 'high' %}Высокий{% endif %}
+                                                <span class="priority-tag priority-{{ task.priority }} {{ task.category|category_to_color_class }}">
+                                                    {{ task.category }}
                                                 </span>
                                                 <div class="task-description">{{ task.title }}</div>
                                                 {% if task.description %}<div class="task-desc">{{ task.description }}</div>{% endif %}
@@ -218,33 +218,34 @@
                       <div class="category-item" data-value="Работа/Учёба">
                         <span class="checkbox-icon"></span>
                         <span>Работа/Учёба</span>
-                        <span class="category-dot blue"></span>
+                        <span class="category-dot blue" style="background: #2196f3;"></span>
                       </div>
                       <div class="category-item" data-value="Бытовые дела">
                         <span class="checkbox-icon"></span>
                         <span>Бытовые дела</span>
-                        <span class="category-dot purple"></span>
+                        <span class="category-dot purple" style="background: #8e24aa;"></span>
                       </div>
                       <div class="category-item" data-value="Время, проведённое с семьёй">
                         <span class="checkbox-icon"></span>
                         <span>Время, проведённое с семьёй</span>
-                        <span class="category-dot green"></span>
+                        <span class="category-dot green" style="background: #43a047;"></span>
                       </div>
                       <div class="category-item" data-value="Время, проведённое с друзьями">
                         <span class="checkbox-icon"></span>
                         <span>Время, проведённое с друзьями</span>
-                        <span class="category-dot orange"></span>
+                        <span class="category-dot orange" style="background: #ff9800;"></span>
                       </div>
                       <div class="category-item" data-value="Личные дела">
                         <span class="checkbox-icon"></span>
                         <span>Личные дела</span>
-                        <span class="category-dot red"></span>
+                        <span class="category-dot red" style="background: #f43f5e;"></span>
                       </div>
                       <div class="category-item" data-value="Праздники">
                         <span class="checkbox-icon"></span>
                         <span>Праздники</span>
-                        <span class="category-dot yellow"></span>
+                        <span class="category-dot yellow" style="background: #ffd600;"></span>
                       </div>
+                      <!--
                       <div class="category-item" data-value="Тег: Важно">
                         <span class="checkbox-icon"></span>
                         <span>Тег: Важно</span>
@@ -260,6 +261,7 @@
                         <span>Тег: Низкий приоритет</span>
                         <span class="category-dot priority-low"></span>
                       </div>
+                      -->
                     </div>
                   </div>
 
