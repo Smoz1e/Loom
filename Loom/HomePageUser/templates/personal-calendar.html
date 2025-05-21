@@ -156,6 +156,73 @@
                     <button class="add-task-button" id="addTaskButton"></button>
                 </div>
 
+                <!-- Список дел -->
+                <div class="tasks-container">
+                    <div class="tasks-scroll">
+                        {# Сначала задачи на сегодня #}
+                        {% with today_tasks=tasks_by_date|get_item:today %}
+                        {% if today_tasks %}
+                        <div class="date-header today-header">
+                            <span class="date-text">СЕГОДНЯ</span>
+                            <span class="date-value">{{ today|date:'d.m.Y' }}</span>
+                        </div>
+                        {% for task in today_tasks %}
+                        <div class="task-item">
+                            <div class="task-time-container">
+                                {# Вспомогательный фильтр для цвета кружка #}
+                                {% with color_class=task.category|category_to_color_class %}
+                                <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
+                                {% endwith %}
+                                <div class="time-range">
+                                    <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
+                                    <span class="time-separator">–</span>
+                                    <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
+                                </div>
+                            </div>
+                            <div class="task-content for-name">
+                                <span class="task-title">{{ task.title }}</span>
+                                {% if task.description %}<span class="task-title">{{ task.description }}</span>{% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                        {# Остальные дни недели #}
+                        {% for day in week_dates %}
+                            {% if day != today %}
+                                {% with day_tasks=tasks_by_date|get_item:day %}
+                                {% if day_tasks %}
+                                <div class="date-header others-header">
+                                    <span class="date-text">{{ day|date:'l'|capfirst }}</span>
+                                    <span class="date-value">{{ day|date:'d.m.Y' }}</span>
+                                </div>
+                                {% for task in day_tasks %}
+                                <div class="task-item">
+                                    <div class="task-time-container">
+                                        {# Вспомогательный фильтр для цвета кружка #}
+                                        {% with color_class=task.category|category_to_color_class %}
+                                        <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
+                                        {% endwith %}
+                                        <div class="time-range">
+                                            <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
+                                            <span class="time-separator">–</span>
+                                            <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="task-content for-name">
+                                        <span class="task-title">{{ task.title }}</span>
+                                        {% if task.description %}<span class="task-title">{{ task.description }}</span>{% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Конец списка дел -->
+
                 <!-- Модальное окно добавления задачи -->
                 <div class="modal-overlay" id="modalOverlay" style="display:none;">
                   <div class="modal">
