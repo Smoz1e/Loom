@@ -58,7 +58,7 @@
         <hr class="section-line">
     
             <div class="personal-info">
-                <form action="{% url 'update_profile' %}" method="POST">
+                <form action="{% url 'update_profile' %}" method="POST" id="profile-form">
                     {% csrf_token %}
                     <div class="name-row">
                         <div class="name-group">
@@ -67,14 +67,14 @@
                         </div>
                         <div class="name-group">
                             <label class="field-label">Фамилия</label>
-                            <input type="text" class="info-input last-name" name="last_name" value="{{ request.user.last_name }}">
+                            <input type="text" class="info-input last-name" name="last_name" value="{{ request.user.last_name }}" placeholder="Введите вашу фамилию" required>
                         </div>
                     </div>
                     <div class="name-group">
                         <label class="field-label">Отчество (при наличии)</label>
-                        <input type="text" class="info-input middle-name" name="middle_name" value="{{ profile.bio }}">
+                        <input type="text" class="info-input middle-name" name="middle_name" value="{% if profile.bio and profile.bio != 'None' %}{{ profile.bio }}{% endif %}" placeholder="Введите отчество, если есть">
                     </div>
-                    <button type="button" class="save-changes-btn">Сохранить изменения</button>
+                    <button type="submit" class="save-changes-btn" id="save-profile-btn">Сохранить изменения</button>
                 </form>
             </div>
     
@@ -529,6 +529,28 @@
         if (closeNotifBtn2) closeNotifBtn2.onclick = function() { notifModal.style.display = 'none'; };
         window.addEventListener('click', function(event) {
             if (event.target === notifModal) notifModal.style.display = 'none';
+        });
+        document.getElementById('save-profile-btn').addEventListener('click', function() {
+            document.getElementById('profile-form').submit();
+        });
+
+        document.getElementById('profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Можно показать уведомление об успехе
+                } else if (data.errors) {
+                    alert(data.errors.join('\n'));
+                }
+            });
         });
     </script>
 </body>

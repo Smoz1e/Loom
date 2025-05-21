@@ -12,6 +12,8 @@ def Register(request):
         confirm_password = request.POST.get("confirm_password")
         phone = request.POST.get("phone")
         role = request.POST.get("role")
+        first_name = request.POST.get("first_name", "")
+        last_name = request.POST.get("last_name", "")
 
         if password != confirm_password:
             messages.error(request, "Пароли не совпадают!")
@@ -26,6 +28,9 @@ def Register(request):
             return redirect("register")
 
         user = User.objects.create_user(username=username, password=password)
+        # Если имя не указано явно, копируем username в first_name
+        user.first_name = username
+        user.save()
         Profile.objects.create(user=user, phone=phone, role=role)
         messages.success(request, "Регистрация прошла успешно! Войдите в систему.")
         return redirect("login")
