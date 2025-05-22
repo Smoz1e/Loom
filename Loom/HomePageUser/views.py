@@ -7,6 +7,7 @@ from RegAndAuth.models import Profile, Family, FamilyMember
 from datetime import datetime, timedelta
 from collections import defaultdict
 from .models import PersonalTask
+from FamilyCalendar.models import FamilyTask
 import calendar
 import random
 import string
@@ -107,8 +108,22 @@ def personal_calendar(request):
         except Exception:
             errors.append('Некорректное время')
             start_time = end_time = None
+        # Проверка пересечений с личными и семейными задачами (только по start_time)
+        if start_time and date:
+            personal_overlaps = PersonalTask.objects.filter(
+                user=request.user,
+                date=date,
+                start_time=start_time
+            )
+            # Исправлено: family_overlaps ищет задачи для всей семьи, а не только где пользователь в participants
+            family_overlaps = FamilyTask.objects.filter(
+                family=profile.family,
+                date=date,
+                start_time=start_time
+            )
+            if personal_overlaps.exists() or family_overlaps.exists():
+                errors.append('На это время уже есть задача в календаре!')
         if errors:
-            # Можно вернуть ошибки через JSON или messages
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': False, 'errors': errors})
             else:

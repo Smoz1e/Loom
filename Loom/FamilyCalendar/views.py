@@ -10,6 +10,9 @@ from HomePageUser.models import PersonalTask
 import calendar as pycal
 from collections import defaultdict
 
+def is_time_overlap(start1, end1, start2, end2):
+    return max(start1, start2) < min(end1, end2)
+
 @login_required
 def family_calendar(request):
     profile = Profile.objects.get(user=request.user)
@@ -36,6 +39,21 @@ def family_calendar(request):
             errors.append('Дата обязательна')
         if not start_time or not end_time:
             errors.append('Время обязательно')
+        # Проверка пересечений с личными и семейными задачами (только по start_time)
+        if start_time and date:
+            personal_overlaps = PersonalTask.objects.filter(
+                user=request.user,
+                date=date,
+                start_time=start_time
+            )
+            # Исправлено: family_overlaps ищет задачи для всей семьи, а не только где пользователь в participants
+            family_overlaps = FamilyTask.objects.filter(
+                family=profile.family,
+                date=date,
+                start_time=start_time
+            )
+            if personal_overlaps.exists() or family_overlaps.exists():
+                errors.append('На это время уже есть задача в календаре!')
         if errors:
             return JsonResponse({'success': False, 'errors': errors})
         try:
