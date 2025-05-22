@@ -68,7 +68,7 @@
                             {% with day_tasks=tasks_by_date|get_item:day %}
                                 {% for task in day_tasks %}
                                     {% if task.start_time.hour == hour %}
-                                        <div class="task-container-cases {{ task.category|category_to_color_class }}">
+                                        <div class="task-container-cases {{ task.category|category_to_color_class }}{% if task.is_completed %} completed{% endif %}" data-task-id="{{ task.id }}">
                                             <div class="task-color-strip"></div>
                                             <div class="main-contents-cases">
                                                 <div class="task-calendar-time">{{ task.start_time|time:'H:i' }}-{{ task.end_time|time:'H:i' }}</div>
@@ -145,7 +145,7 @@
                             <span class="date-value">{{ today_date }}</span>
                         </div>
                         {% for task in today_tasks %}
-                        <div class="task-item">
+                        <div class="task-item{% if task.is_completed %} completed{% endif %}" data-task-id="{{ task.id }}">
                             <div class="task-time-container">
                                 {% with color_class=task.category|category_to_color_class %}
                                 <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
@@ -155,6 +155,8 @@
                                     <span class="time-separator">–</span>
                                     <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
                                 </div>
+                                <input type="checkbox" class="complete-family-task-checkbox" data-task-id="{{ task.id }}" {% if task.is_completed %}checked{% endif %} title="Отметить как выполненную">
+                                <button class="delete-family-task-btn" data-task-id="{{ task.id }}" title="Удалить задачу">✕</button>
                             </div>
                             <div class="task-content for-name">
                                 <span class="task-title">{{ task.title }}</span>
@@ -173,7 +175,7 @@
                                     <span class="date-value">{{ day|date:'d.m.Y' }}</span>
                                 </div>
                                 {% for task in day_tasks %}
-                                <div class="task-item">
+                                <div class="task-item{% if task.is_completed %} completed{% endif %}" data-task-id="{{ task.id }}">
                                     <div class="task-time-container">
                                         {% with color_class=task.category|category_to_color_class %}
                                         <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
@@ -183,6 +185,8 @@
                                             <span class="time-separator">–</span>
                                             <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
                                         </div>
+                                        <input type="checkbox" class="complete-family-task-checkbox" data-task-id="{{ task.id }}" {% if task.is_completed %}checked{% endif %} title="Отметить как выполненную">
+                                        <button class="delete-family-task-btn" data-task-id="{{ task.id }}" title="Удалить задачу">✕</button>
                                     </div>
                                     <div class="task-content for-name">
                                         <span class="task-title">{{ task.title }}</span>
@@ -373,6 +377,9 @@
             </div>
         </div>
     </div>
+    <form method="post" style="display:none;">
+      {% csrf_token %}
+    </form>
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -550,6 +557,61 @@
             alert(data.errors.join('\n'));
           }
         }
+
+        // --- AJAX: удаление семейной задачи ---
+        document.querySelectorAll('.delete-family-task-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const taskId = this.getAttribute('data-task-id');
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
+                if (!confirm('Удалить задачу?')) return;
+                const response = await fetch('/api/delete_family_task/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: new URLSearchParams({task_id: taskId})
+                });
+                const data = await response.json();
+                if (data.success) {
+                    // Удаляем все элементы с этим task-id (sidebar, main grid, mini-calendar)
+                    document.querySelectorAll('[data-task-id="' + taskId + '"]').forEach(el => el.remove());
+                    // Удаляем индикаторы в мини-календаре
+                    document.querySelectorAll('.date-indicators .indicator').forEach(indicator => {
+                        if (indicator.getAttribute('title') && indicator.getAttribute('title').includes(taskId)) {
+                            indicator.remove();
+                        }
+                    });
+                } else {
+                    alert('Ошибка удаления задачи');
+                }
+            });
+        });
+
+        // --- AJAX: отметка выполнения семейной задачи ---
+        document.querySelectorAll('.complete-family-task-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', async function() {
+                const taskId = this.getAttribute('data-task-id');
+                const isChecked = this.checked;
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
+                const response = await fetch('/api/mark_family_task_completed/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: new URLSearchParams({task_id: taskId})
+                });
+                const data = await response.json();
+                document.querySelectorAll('[data-task-id="' + taskId + '"]').forEach(el => {
+                    if (data.is_completed) {
+                        el.classList.add('completed');
+                    } else {
+                        el.classList.remove('completed');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

@@ -18,6 +18,7 @@ class FamilyTask(models.Model):
     participants = models.TextField(blank=True)  # список участников (строкой, можно хранить через запятую)
     priority = models.CharField(max_length=10, blank=True, default='normal')
     is_private = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)  # выполнена ли задача
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_family_tasks')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

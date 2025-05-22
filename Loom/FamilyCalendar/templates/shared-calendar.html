@@ -70,7 +70,7 @@
                                                 </span>
                                                 <div class="task-description">{{ item.task.title }}</div>
                                                 {% if item.task.description %}<div class="task-desc">{{ item.task.description }}</div>{% endif %}
-                                                {% if item.type == 'personal' %}<span class="task-type-label">Личное</span>{% else %}<span class="task-type-label">Семейное</span>{% endif %}
+                                                {% if item.type == 'personal' %}{% else %}{% endif %}
                                             </div>
                                         </div>
                                     {% endif %}
