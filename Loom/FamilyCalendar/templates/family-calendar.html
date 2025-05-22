@@ -45,11 +45,10 @@
             </div>
 
             <button class="sidebar-toggle" id="sidebarToggle"></button>
-        
             <!-- Контейнер дней недели -->
              <div class="main-calendar-container">
                 <div class="week-days-container">
-                    <div class="time-header"></div> <!-- Пустая ячейка слева -->
+                    <div class="time-header"></div>
                     <div class="days-container">
                         {% for day in week_dates %}
                         <div class="day-header{% if day == current_date %} blue-today{% endif %}">
@@ -58,10 +57,8 @@
                         </div>
                         {% endfor %}
                     </div>
-                    <div class="utc-cell">UTC+5</div> <!-- Ячейка справа -->
+                    <div class="utc-cell">UTC+5</div>
                 </div>
-                
-                <!-- Строки с временем -->
                 {% for hour in hours %}
                 <div class="time-row-container">
                     <div class="time-header">{{ hour|stringformat:'02d' }}:00</div>
@@ -71,20 +68,16 @@
                             {% with day_tasks=tasks_by_date|get_item:day %}
                                 {% for task in day_tasks %}
                                     {% if task.start_time.hour == hour %}
-                                        <div class="task-container-cases blue-task">
+                                        <div class="task-container-cases {{ task.category|category_to_color_class }}">
                                             <div class="task-color-strip"></div>
                                             <div class="main-contents-cases">
                                                 <div class="task-calendar-time">{{ task.start_time|time:'H:i' }}-{{ task.end_time|time:'H:i' }}</div>
-                                                <span class="priority-tag priority-{{ task.priority }}">
-                                                    {% if task.priority == 'low' %}Низкий{% elif task.priority == 'normal' %}Обычный{% elif task.priority == 'high' %}Высокий{% endif %}
-                                                </span>
                                                 <div class="task-description">{{ task.title }}</div>
                                                 {% if task.description %}<div class="task-desc">{{ task.description }}</div>{% endif %}
                                             </div>
                                         </div>
                                     {% endif %}
                                 {% empty %}
-                                    <!-- пусто -->
                                 {% endfor %}
                             {% endwith %}
                         </div>
@@ -101,19 +94,9 @@
             <div class="sidebar-content">
                 <!-- Кнопка закрытия меню -->
                 <button class="sidebar-close-button" id="sidebarClose"></button>
-                
                 <!-- Контейнер месяца и навигации -->
                 <div class="month-navigation">
-                    <div class="month-year">
-                        <span class="month">{{ month_name }}</span>
-                        <span class="year">{{ year }}</span>
-                    </div>
-                    <div class="month-buttons">
-                        <a href="?month={{ prev_month }}&year={{ prev_year }}{% if current_date %}&date={{ current_date|date:'Y-m-d' }}{% endif %}" class="month-button prev-month"></a>
-                        <a href="?month={{ next_month }}&year={{ next_year }}{% if current_date %}&date={{ current_date|date:'Y-m-d' }}{% endif %}" class="month-button next-month"></a>
-                    </div>
                 </div>
-                
                 <!-- Мини-календарь -->
                 <div class="mini-calendar">
                     <!-- Дни недели -->
@@ -126,7 +109,6 @@
                         <div class="mini-day-name">СБ</div>
                         <div class="mini-day-name">ВС</div>
                     </div>
-                    
                     <!-- Даты -->
                     <div class="mini-dates">
                         {% for _ in 0|until:first_weekday %}
@@ -148,12 +130,73 @@
                         {% endfor %}
                     </div>
                 </div>
-                
+                <!-- конец мини-календаря -->
                 <!-- Кнопка добавления -->
                 <div class="add-task-button-container">
                     <button class="add-task-button" id="addTaskButton"></button>
                 </div>
-
+                <!-- Список дел -->
+                <div class="tasks-container">
+                    <div class="tasks-scroll">
+                        {% with today_tasks=tasks_by_date|get_item:today_date %}
+                        {% if today_tasks %}
+                        <div class="date-header today-header">
+                            <span class="date-text">СЕГОДНЯ</span>
+                            <span class="date-value">{{ today_date }}</span>
+                        </div>
+                        {% for task in today_tasks %}
+                        <div class="task-item">
+                            <div class="task-time-container">
+                                {% with color_class=task.category|category_to_color_class %}
+                                <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
+                                {% endwith %}
+                                <div class="time-range">
+                                    <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
+                                    <span class="time-separator">–</span>
+                                    <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
+                                </div>
+                            </div>
+                            <div class="task-content for-name">
+                                <span class="task-title">{{ task.title }}</span>
+                                {% if task.description %}<span class="task-title">{{ task.description }}</span>{% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                        {% for day in week_dates %}
+                            {% if day != today_date %}
+                                {% with day_tasks=tasks_by_date|get_item:day %}
+                                {% if day_tasks %}
+                                <div class="date-header others-header">
+                                    <span class="date-text">{{ day|date:'l'|capfirst }}</span>
+                                    <span class="date-value">{{ day|date:'d.m.Y' }}</span>
+                                </div>
+                                {% for task in day_tasks %}
+                                <div class="task-item">
+                                    <div class="task-time-container">
+                                        {% with color_class=task.category|category_to_color_class %}
+                                        <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
+                                        {% endwith %}
+                                        <div class="time-range">
+                                            <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
+                                            <span class="time-separator">–</span>
+                                            <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="task-content for-name">
+                                        <span class="task-title">{{ task.title }}</span>
+                                        {% if task.description %}<span class="task-title">{{ task.description }}</span>{% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Конец списка дел -->
                 <!-- Модальное окно добавления задачи -->
                 <div class="modal-overlay" id="modalOverlay" style="display:none;">
                   <div class="modal">
@@ -330,7 +373,6 @@
             </div>
         </div>
     </div>
-
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
