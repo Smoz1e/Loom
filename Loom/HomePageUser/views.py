@@ -56,6 +56,8 @@ def update_profile(request):
         user.first_name = request.POST.get('first_name', user.first_name)
         user.last_name = request.POST.get('last_name', user.last_name)
         profile.bio = request.POST.get('middle_name', profile.bio)
+        # --- Сохраняем email ---
+        user.email = request.POST.get('email', user.email)
 
         # Сохранение изменений
         user.save()

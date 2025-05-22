@@ -246,6 +246,10 @@ body.profile-page {
     position: relative; /* Для позиционирования иконок */
 }
 
+.contact-group .field-label {
+    margin-left: 60px;
+}
+
 .info-input {
     font-family: "Montserrat", sans-serif;
     font-weight: 600;
@@ -270,11 +274,11 @@ body.profile-page {
 /* Иконка email */
 .email-icon {
     position: absolute;
-    width: 23.33px;
-    height: 18.67px;
-    left: 21.33px;
-    top: calc(50% + 16px);
-    transform: translateY(-50%);
+    width: 23px;
+    height: 18px;
+    left: 21px;
+    top: 50%;
+    transform: translateY( 20%);
     background-image: url('ProfileUser/email.svg');
     background-size: contain;
     background-repeat: no-repeat;
@@ -800,164 +804,7 @@ body.profile-page {
     background: rgba(33, 90, 55, 1);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-/* ==============ПОДВАЛ=============== */
-/* .footer {
-    width: 100%;
-    height: 179px;
-    background: rgba(236, 236, 242, 1);
-    bottom: 0;
-    left: 0;
-    top: 128px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 106px;
-    box-sizing: border-box;
-    position: relative;
-    margin-top: auto; 
-} */
-
-/* Разделительная линия */
-/* .footer::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: rgba(208, 208, 208, 1);
-} */
-
-/* Логотип Loom */
-/* .footer::after {
-    content: "Loom";
-    position: absolute;
-    width: 96px;
-    height: 28px;
-    top: 56px;
-    left: 106px;
-    font-family: "Unbounded", sans-serif;
-    font-weight: 400;
-    font-size: 28px;
-    line-height: 100%;
-    color: rgba(53, 139, 87, 1);
-} */
-
-/* Ссылки в подвале */
-/* .footer-links {
-    position: absolute;
-    width: 488px;
-    height: 20px;
-    top: 64px;
-    left: 413px;
-    display: flex;
-    gap: 34px;
-} */
-
-/* .footer-link {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 100%;
-    color: rgba(61, 61, 61, 1);
-    text-decoration: none;
-    white-space: nowrap;
-} */
-
-/* Конкретные ширины для ссылок */
-/* .footer-link:nth-child(1) { width: 78px; }   Контакты
-.footer-link:nth-child(2) { width: 47px; }   О нас
-.footer-link:nth-child(3) { width: 121px; }  Предложения
-.footer-link:nth-child(4) { width: 140px; }  Личный кабинет */
-
-/* Нижняя часть подвала */
-/* .footer-bottom {
-    position: absolute;
-    right: 106px;
-    top: 56px;
-    display: flex;
-    flex-direction: column-reverse; 
-    align-items: flex-end;
-    gap: 8px;
+.info-input.email {
+    padding-left: 60px;
 }
-
-
-.footer-policy {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
-    color: rgba(138, 138, 150, 1);
-    text-decoration: underline;
-    white-space: nowrap;
-}
-
-.footer-policy:focus,
-.footer-policy:active,
-.footer-policy:hover{
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
-    color: rgba(58, 58, 74, 1);
-    text-decoration: underline;
-    white-space: nowrap;
-}
-
-.footer-policy:focus {
-    color: rgba(58, 58, 74, 1);
-}
-
-.footer-copyright {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
-    color: rgba(138, 138, 150, 1);
-    white-space: nowrap;
-} */
-
-/* Иконки соцсетей в подвале */
-/* .social-icons {
-    position: absolute;
-    top: 40px; 
-    left: 106px;
-    margin-top: 60px; 
-    display: flex;
-    gap: 23px; 
-}
-
-.social-icon {
-    width: 26px;
-    height: 26px;
-    display: block;
-    background-size: contain;
-    background-repeat: no-repeat;
-    transition: opacity 0.3s ease;
-}
-
-.social-icon:hover {
-    opacity: 0.8;
-} */
-
-/* Иконка VK */
-/* .vk-icon {
-    background-image: url('ProfileUser/vk.svg')
-} */
-
-/* Иконка Telegram */
-/* .tg-icon{
-    background-image: url('ProfileUser/telegram.svg')
-} */
 

@@ -80,17 +80,22 @@
     
         <hr class="section-line">
             <div class="contact-info">
-                <div class="contact-group">
-                    <label class="field-label">Email</label>
-                    <div class="email-icon"></div>
-                    <input type="email" class="info-input email">
-                </div>
-                <div class="contact-group">
-                    <label class="field-label">Номер телефона</label>
-                    <div class="phone-icon"></div>
-                    <input type="tel" class="info-input phone" value="{{ profile.phone }}" readonly>
-                </div>
-                <button type="button" class="save-changes-btn left-aligned">Сохранить изменения</button>
+                <form id="contact-info-form" action="{% url 'update_profile' %}" method="POST">
+                    {% csrf_token %}
+                    <div style="display: flex; gap: 44px;">
+                        <div class="contact-group">
+                            <label class="field-label">Email</label>
+                            <div class="email-icon"></div>
+                            <input type="email" class="info-input email" name="email" value="{{ request.user.email }}" placeholder="Введите ваш email">
+                        </div>
+                        <div class="contact-group">
+                            <label class="field-label">Номер телефона</label>
+                            <div class="phone-icon"></div>
+                            <input type="tel" class="info-input phone" value="{{ profile.phone }}" readonly>
+                        </div>
+                    </div>
+                    <button type="submit" class="save-changes-btn left-aligned" id="save-contact-btn">Сохранить изменения</button>
+                </form>
             </div>
         </section>
         
@@ -487,7 +492,7 @@
                         body: JSON.stringify({user_id: userId})
                     })
                     .then(response => response.json())
-                    .then(data => {
+                    .then data => {
                         if (data.success) {
                             if (parseInt(userId) === currentUserId) {
                                 // Если удалили себя — обновить страницу или очистить поля
@@ -535,6 +540,25 @@
         });
 
         document.getElementById('profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Можно показать уведомление об успехе
+                } else if (data.errors) {
+                    alert(data.errors.join('\n'));
+                }
+            });
+        });
+
+        document.getElementById('contact-info-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
