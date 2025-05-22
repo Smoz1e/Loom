@@ -447,13 +447,12 @@
                     userList.innerHTML = '<li>Нет участников семьи</li>';
                 } else {
                     const currentUserId = {{ request.user.id }};
-                    const isAdmin = {{ is_admin|yesno:'true,false' }} === 'true';
                     users.forEach(user => {
                         const li = document.createElement('li');
                         li.className = 'user-item';
                         let avatarHtml = user.avatar ? `<img src="${user.avatar}" class="user-indicator" style="object-fit:cover;width:32px;height:32px;border-radius:50%;">` : `<div class="user-indicator"></div>`;
                         let removeBtn = '';
-                        if (isAdmin && user.id !== currentUserId) {
+                        if (IS_ADMIN && user.id !== currentUserId) {
                             removeBtn = `<button class="remove-btn" data-id="${user.id}" title="Исключить">Исключить</button>`;
                         }
                         li.innerHTML = `
@@ -477,61 +476,33 @@
             }
         });
 
-        userList.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                const userId = e.target.getAttribute('data-id');
-                const currentUserId = {{ request.user.id }};
-                if (confirm('Исключить этого участника из семьи?')) {
-                    fetch("{% url 'remove_family_member' %}", {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        },
-                        body: JSON.stringify({user_id: userId})
-                    })
-                    .then(response => response.json())
-                    .then data => {
-                        if (data.success) {
-                            if (parseInt(userId) === currentUserId) {
-                                // Если удалили себя — обновить страницу или очистить поля
-                                location.reload();
-                            } else {
-                                renderUsers();
-                            }
-                        } else {
-                            alert(data.error || 'Ошибка удаления участника');
-                        }
-                    });
-                }
-            }
-        });
-
+        // Закрытие familyModal
         cancelBtn.onclick = function() {
             familyModal.style.display = 'none';
         };
         saveBtn.onclick = function() {
             familyModal.style.display = 'none';
         };
-        window.onclick = function(event) {
+        window.addEventListener('click', function(event) {
             if (event.target === familyModal) {
                 familyModal.style.display = 'none';
             }
-        };
+        });
 
         // Открытие модального окна уведомлений по клику на колокольчик
         const notifModal = document.getElementById('notifModal');
-        const closeNotifBtn = document.getElementById('closeNotifBtn');
-        const closeNotifBtn2 = document.getElementById('closeNotifBtn2');
         const notificationIcon = document.querySelector('.notification-icon');
+        const notifCloseBtns = document.querySelectorAll('.modal-close-btn-notifications, .notif-close, .close');
         if (notificationIcon) {
             notificationIcon.addEventListener('click', function() {
                 notifModal.style.display = 'block';
             });
         }
-        if (closeNotifBtn) closeNotifBtn.onclick = function() { notifModal.style.display = 'none'; };
-        if (closeNotifBtn2) closeNotifBtn2.onclick = function() { notifModal.style.display = 'none'; };
+        notifCloseBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                notifModal.style.display = 'none';
+            });
+        });
         window.addEventListener('click', function(event) {
             if (event.target === notifModal) notifModal.style.display = 'none';
         });
