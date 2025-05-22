@@ -72,7 +72,7 @@
                             {% with day_tasks=tasks_by_date|get_item:day %}
                                 {% for task in day_tasks %}
                                     {% if task.start_time.hour == hour %}
-                                        <div class="task-container-cases {{ task.category|category_to_color_class }}" data-task-id="{{ task.id }}">
+                                        <div class="task-container-cases {{ task.category|category_to_color_class }}{% if task.is_completed %} completed{% endif %}" data-task-id="{{ task.id }}">
                                             <div class="task-color-strip {{ task.category|category_to_color_class }}"></div>
                                             <div class="main-contents-cases">
                                                 <div class="task-calendar-time">{{ task.start_time|time:'H:i' }}-{{ task.end_time|time:'H:i' }}</div>
@@ -159,7 +159,6 @@
                 <!-- Список дел -->
                 <div class="tasks-container">
                     <div class="tasks-scroll">
-                        {# Сначала задачи на сегодня #}
                         {% with today_tasks=tasks_by_date|get_item:today %}
                         {% if today_tasks %}
                         <div class="date-header today-header">
@@ -167,7 +166,7 @@
                             <span class="date-value">{{ today|date:'d.m.Y' }}</span>
                         </div>
                         {% for task in today_tasks %}
-                        <div class="task-item">
+                        <div class="task-item{% if task.is_completed %} completed{% endif %}">
                             <div class="task-time-container">
                                 {% with color_class=task.category|category_to_color_class %}
                                 <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
@@ -175,6 +174,7 @@
                                 <div class="time-range">
                                     <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
                                 </div>
+                                <input type="checkbox" class="complete-task-checkbox" data-task-id="{{ task.id }}" {% if task.is_completed %}checked{% endif %} title="Отметить как выполненную">
                                 <button class="delete-task-btn" data-task-id="{{ task.id }}" title="Удалить задачу">✕</button>
                             </div>
                             <div class="task-content for-name">
@@ -185,7 +185,6 @@
                         {% endfor %}
                         {% endif %}
                         {% endwith %}
-                        {# Остальные дни недели #}
                         {% for day in week_dates %}
                             {% if day != today %}
                                 {% with day_tasks=tasks_by_date|get_item:day %}
@@ -195,7 +194,7 @@
                                     <span class="date-value">{{ day|date:'d.m.Y' }}</span>
                                 </div>
                                 {% for task in day_tasks %}
-                                <div class="task-item">
+                                <div class="task-item{% if task.is_completed %} completed{% endif %}">
                                     <div class="task-time-container">
                                         {% with color_class=task.category|category_to_color_class %}
                                         <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
@@ -203,6 +202,7 @@
                                         <div class="time-range">
                                             <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
                                         </div>
+                                        <input type="checkbox" class="complete-task-checkbox" data-task-id="{{ task.id }}" {% if task.is_completed %}checked{% endif %} title="Отметить как выполненную">
                                         <button class="delete-task-btn" data-task-id="{{ task.id }}" title="Удалить задачу">✕</button>
                                     </div>
                                     <div class="task-content for-name">
@@ -586,6 +586,40 @@
                 }
             });
         });
+
+        // Отметка задачи как выполненной/невыполненной
+        document.querySelectorAll('.complete-task-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', async function() {
+                const taskId = this.getAttribute('data-task-id');
+                const isChecked = this.checked;
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
+                await fetch('/api/toggle_task_completion/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: taskId, is_completed: isChecked })
+                });
+                // Обновляем интерфейс: добавляем/убираем класс completed у всех элементов с этим task-id
+                document.querySelectorAll('[data-task-id="' + taskId + '"]').forEach(el => {
+                    if (isChecked) {
+                        el.classList.add('completed');
+                    } else {
+                        el.classList.remove('completed');
+                    }
+                });
+            });
+        });
     </script>
+
+    <style>
+    .task-item.completed .task-title,
+    .task-item.completed .task-desc {
+        text-decoration: line-through;
+        opacity: 0.6;
+    }
+    </style>
 </body>
 </html>

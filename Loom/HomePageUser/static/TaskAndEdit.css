@@ -1018,6 +1018,13 @@
     color: rgba(88, 88, 92, 1);
 }
 
+.completed .task-title,
+.completed .task-description,
+.completed .task-desc {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
 @media (max-width: 520px) {
     .modal-overlay .modal {
         padding: 12px 2vw;

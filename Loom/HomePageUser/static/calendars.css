@@ -1259,28 +1259,6 @@ body.sidebar-active .sidebar-toggle {
 
 /* Для выполненной задачи ТОЛЬКО ДЛЯ ЛИЧНОГО КАЛЕНДАРЯ */
 
-.task-item:nth-child(3) .task-indicator,
-.task-item:nth-child(3) .start-time,
-.task-item:nth-child(3) .time-separator,
-.task-item:nth-child(3) .end-time,
-.task-item:nth-child(3) .task-title {
-    opacity: 0.5;
-}
-
-.task-item:nth-child(3) .task-title {
-    color: rgba(161, 161, 170, 1);
-    text-decoration: line-through;
-    position: relative;
-}
-
-/* Галочка для выполненного дела */
-.task-item:nth-child(3) .task-check {
-    opacity: 1 !important;
-    background-image: url('Calendars/check-done.svg') !important;
-    filter: none !important;
-}
-
-
 /* Кнопка добавления задачи */
 .add-task-button-container {
     width: 100%;

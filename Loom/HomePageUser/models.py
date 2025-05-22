@@ -18,6 +18,7 @@ class PersonalTask(models.Model):
     priority = models.CharField(max_length=10, blank=True, default='normal')  # low, normal, high
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_completed = models.BooleanField(default=False)  # выполнена ли задача
 
     def __str__(self):
         return f"{self.title} ({self.date} {self.start_time}-{self.end_time})"
