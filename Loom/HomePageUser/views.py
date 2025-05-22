@@ -108,21 +108,28 @@ def personal_calendar(request):
         except Exception:
             errors.append('Некорректное время')
             start_time = end_time = None
-        # Проверка пересечений с личными и семейными задачами (только по start_time)
-        if start_time and date:
+        # Проверка пересечений с личными и семейными задачами (полное пересечение по времени)
+        if start_time and end_time and date:
+            # Личные задачи
             personal_overlaps = PersonalTask.objects.filter(
                 user=request.user,
-                date=date,
-                start_time=start_time
+                date=date
+            ).exclude(
+                end_time__lte=start_time
+            ).exclude(
+                start_time__gte=end_time
             )
-            # Исправлено: family_overlaps ищет задачи для всей семьи, а не только где пользователь в participants
+            # Семейные задачи
             family_overlaps = FamilyTask.objects.filter(
                 family=profile.family,
-                date=date,
-                start_time=start_time
+                date=date
+            ).exclude(
+                end_time__lte=start_time
+            ).exclude(
+                start_time__gte=end_time
             )
             if personal_overlaps.exists() or family_overlaps.exists():
-                errors.append('На это время уже есть задача в календаре!')
+                errors.append('Время задачи пересекается с другой задачей в календаре!')
         if errors:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': False, 'errors': errors})
