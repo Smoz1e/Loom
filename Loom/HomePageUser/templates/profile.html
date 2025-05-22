@@ -14,7 +14,7 @@
             <div class="nav-links">
                 <a href="{% url 'personal_calendar' %}" class="nav-link">Личный календарь</a>
                 <a href="{% url 'family_calendar' %}" class="nav-link">Семейный календарь</a>
-                <a href="shared-calendar.html" class="nav-link">Общий календарь</a>
+                <a href="{% url 'shared_calendar' %}" class="nav-link">Общий календарь</a>
             </div>
             
             <div class="notification-icon"></div>
@@ -547,6 +547,9 @@
                 }
             });
         });
+
+        // Получаем is_admin из Django и передаем в JS
+        const IS_ADMIN = {{ is_admin|yesno:'true,false' }};
     </script>
 </body>
 </html>
