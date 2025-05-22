@@ -72,7 +72,7 @@
                             {% with day_tasks=tasks_by_date|get_item:day %}
                                 {% for task in day_tasks %}
                                     {% if task.start_time.hour == hour %}
-                                        <div class="task-container-cases {{ task.category|category_to_color_class }}">
+                                        <div class="task-container-cases {{ task.category|category_to_color_class }}" data-task-id="{{ task.id }}">
                                             <div class="task-color-strip {{ task.category|category_to_color_class }}"></div>
                                             <div class="main-contents-cases">
                                                 <div class="task-calendar-time">{{ task.start_time|time:'H:i' }}-{{ task.end_time|time:'H:i' }}</div>
@@ -169,15 +169,13 @@
                         {% for task in today_tasks %}
                         <div class="task-item">
                             <div class="task-time-container">
-                                {# Вспомогательный фильтр для цвета кружка #}
                                 {% with color_class=task.category|category_to_color_class %}
                                 <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
                                 {% endwith %}
                                 <div class="time-range">
                                     <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
-                                    <span class="time-separator">–</span>
-                                    <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
                                 </div>
+                                <button class="delete-task-btn" data-task-id="{{ task.id }}" title="Удалить задачу">✕</button>
                             </div>
                             <div class="task-content for-name">
                                 <span class="task-title">{{ task.title }}</span>
@@ -199,15 +197,13 @@
                                 {% for task in day_tasks %}
                                 <div class="task-item">
                                     <div class="task-time-container">
-                                        {# Вспомогательный фильтр для цвета кружка #}
                                         {% with color_class=task.category|category_to_color_class %}
                                         <span class="task-indicator indicator-{{ color_class|cut:'-task' }}"></span>
                                         {% endwith %}
                                         <div class="time-range">
                                             <span class="start-time">{{ task.start_time|time:'H:i' }}</span>
-                                            <span class="time-separator">–</span>
-                                            <span class="end-time">{{ task.end_time|time:'H:i' }}</span>
                                         </div>
+                                        <button class="delete-task-btn" data-task-id="{{ task.id }}" title="Удалить задачу">✕</button>
                                     </div>
                                     <div class="task-content for-name">
                                         <span class="task-title">{{ task.title }}</span>
@@ -562,6 +558,34 @@
             alert(data.errors.join('\n'));
           }
         }
+
+        // Удаление задачи через AJAX
+        document.querySelectorAll('.delete-task-btn').forEach(btn => {
+            btn.addEventListener('click', async function(e) {
+                e.stopPropagation();
+                const taskId = this.getAttribute('data-task-id');
+                if (!confirm('Удалить задачу?')) return;
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
+                const response = await fetch('/api/delete_personal_task/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: taskId })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    // Удаляем задачу из sidebar
+                    this.closest('.task-item').remove();
+                    // Удаляем задачу из основной сетки календаря
+                    document.querySelectorAll('.task-container-cases[data-task-id="' + taskId + '"]').forEach(el => el.remove());
+                } else {
+                    alert(data.error || 'Ошибка удаления');
+                }
+            });
+        });
     </script>
 </body>
 </html>
