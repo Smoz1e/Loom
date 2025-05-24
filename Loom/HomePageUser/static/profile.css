@@ -676,6 +676,8 @@ body.profile-page {
     height: 19.24px;
     background-image: url('ProfileUser/log out.svg');
     background-size: contain;
+    background-repeat: no-repeat;
+    align-items: center;
 }
 
 /* Иконка колокольчика */
@@ -1122,13 +1124,22 @@ body.profile-page {
         z-index: 2;
     }
     .nav-link {
-        flex: 1 1 90px;
+        flex: 1 1 48%;
         min-width: 90px;
         max-width: 48%;
         text-align: center;
         white-space: nowrap;
         margin-bottom: 4px;
         font-size: 13px;
+        box-sizing: border-box;
+    }
+    .nav-link:last-child {
+        flex-basis: 100%;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: center;
     }
     .user-profile {
         margin-top: 0;
