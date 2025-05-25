@@ -319,3 +319,61 @@ body {
         display: none; /* Скрыть стрелки */
     }
 }
+
+/* --- Мобильная адаптация --- */
+@media (max-width: 600px) {
+    body {
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+    }
+    .auth-panel-login {
+        width: 100vw;
+        min-width: 0;
+        max-width: 100vw;
+        height: auto;
+        padding: 24px 8vw;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        border-radius: 12px;
+        gap: 20px;
+    }
+    .auth-panel-login h1 {
+        font-size: 22px;
+    }
+    .auth-form-login {
+        gap: 12px;
+    }
+    .input-group1-login input,
+    .input-group2-login input {
+        width: 100%;
+        min-width: 0;
+        font-size: 15px;
+        padding: 10px 12px;
+        height: 38px;
+    }
+    .auth-button-login {
+        width: 100%;
+        font-size: 15px;
+        padding: 12px;
+    }
+    .auth-link-login {
+        font-size: 15px;
+    }
+    .corner-image {
+        width: 60px !important;
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+    .background-image {
+        border-radius: 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .auth-panel-login {
+        padding: 12px 2vw;
+    }
+    .corner-image {
+        display: none;
+    }
+}

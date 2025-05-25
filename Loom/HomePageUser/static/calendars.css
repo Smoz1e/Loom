@@ -1332,3 +1332,22 @@ body.sidebar-active .sidebar-toggle {
 .category-dot.priority-low {
   background: #3b82f6;
 }
+
+/* Добавление горизонтального скроллинга для мобильных устройств */
+@media (max-width: 768px) {
+    .main-calendar-container {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Для плавного скроллинга на iOS */
+    }
+
+    .week-days-container,
+    .time-row-container {
+        flex-shrink: 0;
+        min-width: 100%; /* Устанавливаем минимальную ширину для каждого дня */
+    }
+
+    .calendar-cell {
+        min-width: 100px; /* Минимальная ширина ячейки */
+    }
+}
