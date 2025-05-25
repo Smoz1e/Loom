@@ -1003,10 +1003,11 @@ body.profile-page {
         width: 80px;
         height: 28px;
         font-size: 11px;
-        padding: 4px;
+        /* padding: 4px; */
+        margin-bottom: 40px;
     }
     .notification-icon {
-        margin-top: 0;
+        margin-top: -60px;
         margin-right: 0;
         position: static;
         display: inline-block;
@@ -1118,7 +1119,7 @@ body.profile-page {
         width: 100%;
         justify-content: center;
         align-items: center;
-        margin-bottom: 0;
+        margin-top: 20px;
         display: flex;
         flex: 1 1 auto;
         z-index: 2;
@@ -1126,7 +1127,7 @@ body.profile-page {
     .nav-link {
         flex: 1 1 48%;
         min-width: 90px;
-        max-width: 48%;
+        max-width: 40%;
         text-align: center;
         white-space: nowrap;
         margin-bottom: 4px;
@@ -1135,7 +1136,7 @@ body.profile-page {
     }
     .nav-link:last-child {
         flex-basis: 100%;
-        max-width: 100%;
+        max-width: 0%;
         margin-left: auto;
         margin-right: auto;
         display: flex;

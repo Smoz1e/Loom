@@ -11,20 +11,27 @@
 <body class="profile-page">
     <header class="header">
         <nav class="main-nav">
-            <div class="nav-links">
-                <a href="{% url 'personal_calendar' %}" class="nav-link">Личный календарь</a>
-                <a href="{% url 'family_calendar' %}" class="nav-link">Семейный календарь</a>
-                <a href="{% url 'shared_calendar' %}" class="nav-link">Общий календарь</a>
-            </div>
-            
-            <div class="notification-icon"></div>
-            
             <div class="user-profile">
                 <button class="logout-btn" onclick="location.href='{% url 'login' %}'">
                     <span class="logout-text">Выйти</span>
                     <span class="logout-icon"></span>
                 </button>
             </div>
+            <div class="notification-icon"></div>
+            <div class="nav-links">
+                <a href="{% url 'personal_calendar' %}" class="nav-link">Личный календарь</a>
+                <a href="{% url 'family_calendar' %}" class="nav-link">Семейный календарь</a>
+                <a href="{% url 'shared_calendar' %}" class="nav-link">Общий календарь</a>
+            </div>
+            
+            {% comment %} <div class="notification-icon"></div> {% endcomment %}
+            
+            {% comment %} <div class="user-profile">
+                <button class="logout-btn" onclick="location.href='{% url 'login' %}'">
+                    <span class="logout-text">Выйти</span>
+                    <span class="logout-icon"></span>
+                </button>
+            </div> {% endcomment %}
         </nav>
     </header>
 
