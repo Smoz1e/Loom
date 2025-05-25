@@ -1351,3 +1351,45 @@ body.sidebar-active .sidebar-toggle {
         min-width: 100px; /* Минимальная ширина ячейки */
     }
 }
+
+/* Убираем вертикальный скроллинг и ограничиваем высоту для мобильных устройств */
+@media (max-width: 768px) {
+    body.calendar-page {
+        overflow: hidden; /* Полностью отключаем скроллинг */
+    }
+
+    .main-container {
+        height: calc(100vh - 100px); /* Уменьшаем высоту, чтобы убрать пустоту */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-calendar-container {
+        flex: 1;
+        overflow-x: auto; /* Только горизонтальный скроллинг */
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Добавляем вертикальный скроллинг до конца календаря, исключая пустое пространство */
+@media (max-width: 768px) {
+    body.calendar-page {
+        overflow-y: auto; /* Включаем вертикальный скроллинг */
+    }
+
+    .main-container {
+        height: auto; /* Высота контейнера подстраивается под содержимое */
+        max-height: 100vh; /* Ограничиваем высоту экрана */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-calendar-container {
+        flex: 1;
+        overflow-x: auto; /* Горизонтальный скроллинг для календаря */
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Устанавливаем масштабирование для мобильных устройств */
+
