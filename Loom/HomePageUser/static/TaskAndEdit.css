@@ -1044,3 +1044,42 @@
         gap: 8px;
     }
 }
+
+/* Адаптация модального окна для создания заданий на мобильных устройствах */
+@media (max-width: 768px) {
+    .modal-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px; /* Добавляем отступы для удобства */
+    }
+
+    .modal {
+        width: 100%; /* Растягиваем модальное окно на всю ширину экрана */
+        max-width: 400px; /* Ограничиваем максимальную ширину */
+        margin: 0 auto; /* Центрируем модальное окно */
+        border-radius: 10px; /* Добавляем скругленные углы */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень для выделения */
+    }
+
+    .modal-header {
+        font-size: 1.2rem; /* Увеличиваем размер шрифта заголовка */
+        text-align: center; /* Центрируем текст заголовка */
+    }
+
+    .modal-body {
+        max-height: 60vh; /* Ограничиваем высоту тела модального окна */
+        overflow-y: auto; /* Добавляем прокрутку, если содержимое превышает высоту */
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: space-between; /* Размещаем кнопки по краям */
+        padding: 10px;
+    }
+
+    .modal-btn {
+        flex: 1;
+        margin: 0 5px; /* Добавляем отступы между кнопками */
+    }
+}
