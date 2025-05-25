@@ -98,13 +98,15 @@ body.profile-page {
 
 /* Разделитель под блоками */
 .section-line {
-    width: 1227px;
+    width: auto;
+    max-width: 3200px;
     height: 1px;
     background: rgba(208, 208, 208, 1);
     border: none;
     margin: 50px auto;
     position: absolute;
     left: 107px;
+    right: 107px;
 }
 
 
@@ -136,7 +138,7 @@ body.profile-page {
 /* Стили для секции профиля */
 .profile-section {
     width: 100%;
-    max-width: 1200px;
+    max-width: 3200px;
     margin: 0 auto;
     padding: 30px;
 }
@@ -366,9 +368,10 @@ body.profile-page {
 
 /* Секция семьи */
 .family-section {
-    width: 1040px;
-    margin: 40px auto;
-    padding: 0;
+    width: 100%;
+    max-width: 3200px;
+    margin: 0 auto;
+    padding: 30px;
 }
 .family-info {
     margin: 114px auto 0px; 
@@ -1217,6 +1220,105 @@ body.profile-page {
     }
     .user-photo-container {
         margin-bottom: 8px;
+    }
+}
+
+/* Кнопка-стрелка для сворачивания имени и фамилии */
+.name-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0 0 8px 0;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+}
+.name-toggle-btn .arrow {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: solid rgba(92,60,26,0.7);
+    border-width: 0 4px 4px 0;
+    padding: 4px;
+    transform: rotate(45deg);
+    transition: transform 0.3s;
+    margin: 0 auto;
+}
+.name-toggle-btn.collapsed .arrow {
+    transform: rotate(-135deg);
+}
+@media (max-width: 600px) {
+    .name-toggle-btn {
+        display: flex;
+    }
+}
+
+/* Кнопка-стрелка для сворачивания блока контактов */
+.contact-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0 0 8px 0;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+}
+.contact-toggle-btn .arrow {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: solid rgba(92,60,26,0.7);
+    border-width: 0 4px 4px 0;
+    padding: 4px;
+    transform: rotate(45deg);
+    transition: transform 0.3s;
+    margin: 0 auto;
+}
+.contact-toggle-btn.collapsed .arrow {
+    transform: rotate(-135deg);
+}
+@media (max-width: 600px) {
+    .contact-toggle-btn {
+        display: flex;
+    }
+}
+
+/* Кнопка-стрелка для сворачивания блока Семья */
+.family-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0 0 8px 10px; /* Добавлен отступ слева, как у .name-toggle-btn */
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+}
+.family-toggle-btn .arrow {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: solid rgba(92,60,26,0.7);
+    border-width: 0 4px 4px 0;
+    padding: 4px;
+    transform: rotate(45deg);
+    transition: transform 0.3s;
+    margin: 0 auto;
+}
+.family-toggle-btn.collapsed .arrow {
+    transform: rotate(-135deg);
+}
+@media (max-width: 600px) {
+    .family-toggle-btn {
+        display: flex;
     }
 }
 

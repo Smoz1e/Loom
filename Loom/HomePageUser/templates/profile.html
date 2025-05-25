@@ -110,14 +110,18 @@
 
         <section id="family" class="family-section">
             <div class="family-info">
-                <form id="create-family-form" action="{% url 'create_family' %}" method="POST" style="display: flex; align-items: center; gap: 16px;">
-                    {% csrf_token %}
-                    <div class="family-role">
-                        <label class="field-label">Семья</label>
-                        <input type="text" class="info-input family" name="family_name" placeholder="Введите название семьи" value="{% if profile.family %}{{ profile.family.name }}{% endif %}" required>
-                    </div>
-                    <button type="submit" class="primary-btn" style="margin-top: 32px;">Создать семью</button>
-                </form>
+                
+                <div class="family-role">
+                    <form id="create-family-form" action="{% url 'create_family' %}" method="POST" style="align-items: center; gap: 16px;">
+                        {% csrf_token %}
+                        <div class="family-role">
+                            <label class="field-label">Семья</label>
+                            <input type="text" class="info-input family" name="family_name" placeholder="Введите название семьи" value="{% if profile.family %}{{ profile.family.name }}{% endif %}" required>
+                        </div>
+                        <button type="submit" class="primary-btn">Создать семью</button>
+                    </form>
+                </div>
+
                 <div class="family-role">
                     <label class="field-label">Код семьи</label>
                     <input type="text" id="family-code" class="info-input family" value="{% if profile.family %}{{ profile.family.code }}{% endif %}" readonly placeholder="Сначала создайте семью">
@@ -130,15 +134,15 @@
                     <input type="text" class="info-input role" value="{{ profile.role }}" readonly>
                 </div>
             </div>
-            <div class="family-role">
-                <button type="button" class="copy-code-btn">Посмотреть участников семьи</button>
-            </div>
-            <div class="family-role" style="margin-top: 24px;">
+            <div class="family-info" style="margin-top: 24px;">
                 <form id="join-family-form" action="{% url 'join_family' %}" method="POST" style="display: flex; align-items: center; gap: 12px;">
                     {% csrf_token %}
                     <input type="text" class="info-input family" name="join_family_code" placeholder="Вставьте код семьи" required style="width: 220px;">
                     <button type="submit" class="primary-btn">Присоединиться к семье</button>
                 </form>
+            </div>
+            <div class="family-info">
+                <button type="button" class="copy-code-btn">Посмотреть участников семьи</button>
             </div>
             {% comment %} <button type="button" class="save-info-btn">Сохранить информацию</button> {% endcomment %}
 
@@ -370,6 +374,7 @@
         </div>
     </footer> -->
 
+    <script src="{% static 'profile-toggle.js' %}"></script>
     <script>
         document.getElementById('avatar-upload').addEventListener('change', function () {
             document.getElementById('avatar-form').submit();
