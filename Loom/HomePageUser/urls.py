@@ -18,4 +18,5 @@ urlpatterns = [
     path("api/delete_personal_task/", api_delete_personal_task.api_delete_personal_task, name="api_delete_personal_task"),
     path("api/mark_personal_task_completed/", api_mark_personal_task_completed.api_mark_personal_task_completed, name="api_mark_personal_task_completed"),
     path("api/toggle_task_completion/", api_mark_personal_task_completed.api_mark_personal_task_completed, name="toggle_task_completion"),
+    path("profile/leave-family/", views.leave_family, name="leave_family"),
 ]

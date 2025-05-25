@@ -357,3 +357,19 @@ def family_members_ajax(request):
         for m in members
     ]
     return JsonResponse({'success': True, 'members': members_data})
+
+@login_required
+@require_POST
+def leave_family(request):
+    profile = Profile.objects.get(user=request.user)
+    if not profile.family:
+        return JsonResponse({'success': False, 'error': 'Вы не состоите в семье'})
+    family = profile.family  # Сохраняем ссылку до отвязки
+    # Удаляем пользователя из FamilyMember и отвязываем семью
+    FamilyMember.objects.filter(family=family, profile=profile).delete()
+    profile.family = None
+    profile.save()
+    # Если после выхода не осталось участников, удаляем семью
+    if not FamilyMember.objects.filter(family=family).exists():
+        family.delete()
+    return JsonResponse({'success': True})

@@ -586,6 +586,29 @@
 
         // Получаем is_admin из Django и передаем в JS
         const IS_ADMIN = {{ is_admin|yesno:'true,false' }};
+
+        // Кнопка "Покинуть семью"
+        const leaveFamilyBtn = document.querySelector('.danger-btn');
+        if (leaveFamilyBtn && leaveFamilyBtn.textContent.includes('Покинуть семью')) {
+            leaveFamilyBtn.addEventListener('click', async function() {
+                if (!confirm('Вы уверены, что хотите покинуть семью?')) return;
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
+                const response = await fetch("{% url 'leave_family' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Вы вышли из семьи');
+                    window.location.reload();
+                } else {
+                    alert(data.error || 'Ошибка выхода из семьи');
+                }
+            });
+        }
     </script>
 </body>
 </html>
