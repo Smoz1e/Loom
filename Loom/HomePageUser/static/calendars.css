@@ -51,7 +51,7 @@ body.calendar-page {
     background-position: center;
     background-repeat: repeat;
     background-blend-mode: multiply;
-    overflow-x: hidden; /* Без горизонтального скролла */
+    overflow-x: auto; /* Без горизонтального скролла */
 }
 
 /* ---------- Навигация ---------- */
@@ -781,7 +781,7 @@ body.calendar-page {
 
 /* Основные изменения для правильного сдвига контента */
 body.calendar-page {
-    overflow-x: hidden; 
+    overflow-x: auto; 
     position: relative;
 }
 
@@ -1091,7 +1091,7 @@ body.sidebar-active .sidebar-toggle {
     width: 268px;
     height: calc(100% - 300px);
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     flex-grow: 1;
     padding: 0 10px;
 }
@@ -1354,9 +1354,9 @@ body.sidebar-active .sidebar-toggle {
 
 /* Убираем вертикальный скроллинг и ограничиваем высоту для мобильных устройств */
 @media (max-width: 768px) {
-    body.calendar-page {
-        overflow: hidden; /* Полностью отключаем скроллинг */
-    }
+    /* body.calendar-page {
+        overflow: hidden; /* Полностью отключаем скроллинг 
+    } */
 
     .main-container {
         height: calc(100vh - 100px); /* Уменьшаем высоту, чтобы убрать пустоту */
