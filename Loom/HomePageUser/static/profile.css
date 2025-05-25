@@ -5,35 +5,35 @@
 }
 
 @font-face {
-    src: url('../Fonts/Unbounded/static/Unbounded-Regular.ttf');
+    src: url('Fonts/Unbounded/static/Unbounded-Regular.ttf');
     font-family: "Unbounded";
 }
 
 @font-face {
-    src: url('../Fonts/Montserrat/static/Montserrat-Medium.ttf');
+    src: url('Fonts/Montserrat/static/Montserrat-Medium.ttf');
     font-family: "Montserrat";
     font-weight: 500;
 }
 
 @font-face {
-    src: url('../Fonts/Montserrat/static/Montserrat-Bold.ttf');
+    src: url('Fonts/Montserrat/static/Montserrat-Bold.ttf');
     font-family: "Montserrat";
     font-weight: 600;
 }
 
 @font-face {
-    src: url('../Fonts/Montserrat/static/Montserrat-Regular.ttf');
+    src: url('Fonts/Montserrat/static/Montserrat-Regular.ttf');
     font-family: "Montserrat";
     font-weight: 400;
 }
 
 @font-face {
-    src: url('../Fonts/Lato/Lato-Regular.ttf');
+    src: url('Fonts/Lato/Lato-Regular.ttf');
     font-family: "Lato";
 }
 
 @font-face {
-    src: url('../Fonts/Poppins/Poppins-Regular.ttf');
+    src: url('Fonts/Poppins/Poppins-Regular.ttf');
     font-family: "Poppins";
 }
 

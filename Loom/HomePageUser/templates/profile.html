@@ -473,6 +473,31 @@
                         `;
                         userList.appendChild(li);
                     });
+                    // Навешиваем обработчик на кнопки удаления (только если IS_ADMIN)
+                    if (IS_ADMIN) {
+                        userList.querySelectorAll('.remove-btn').forEach(btn => {
+                            btn.addEventListener('click', async function() {
+                                if (!confirm('Исключить этого пользователя из семьи?')) return;
+                                const userId = this.getAttribute('data-id');
+                                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
+                                const response = await fetch("{% url 'remove_family_member' %}", {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRFToken': csrftoken,
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({user_id: userId})
+                                });
+                                const data = await response.json();
+                                if (data.success) {
+                                    this.closest('li').remove();
+                                } else {
+                                    alert(data.error || 'Ошибка удаления');
+                                }
+                            });
+                        });
+                    }
                 }
             });
         }
