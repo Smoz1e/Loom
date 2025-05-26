@@ -125,6 +125,10 @@ body.calendar-page {
     background-image: url('Calendars/shared-calendar.svg');
 }
 
+.icon-AI {
+    background-image: url('IMG/AIicon.png');
+}
+
 .calendar-link.active {
     background: #047857;
     color: white;
