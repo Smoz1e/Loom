@@ -36,6 +36,12 @@
                 <div class="input-group4-register">
                     <label for="phone">Номер телефона</label>
                     <input type="tel" id="phone" name="phone" placeholder="Введите номер" required>
+                    <button type="button" id="send-sms-btn">Отправить код</button>
+                </div>
+
+                <div class="input-group6-register">
+                    <label for="sms_code">Код из SMS</label>
+                    <input type="text" id="sms_code" name="sms_code" placeholder="Введите код из SMS" required>
                 </div>
 
                 <div class="input-group5-register">
@@ -58,5 +64,23 @@
     </div>
 
     <img src="{% static 'Design/Register/Arrow1.svg' %}" class="corner-image bottom-left" alt="Arrow">
+
+    <script>
+        document.getElementById('send-sms-btn').onclick = function() {
+            const phone = document.getElementById('phone').value;
+            fetch('{% url "send_sms_code" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({phone: phone})
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            });
+        };
+    </script>
 </body>
 </html>
