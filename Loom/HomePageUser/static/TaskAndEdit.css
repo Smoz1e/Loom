@@ -143,7 +143,7 @@
 }
 
 .modal-overlay .modal-card.time-container {
-    width: 518px;
+    width: auto;
     height: 223px;
     border-radius: 12px;
     border: 0.5px solid rgba(197, 197, 197, 0.5);
@@ -155,13 +155,13 @@
 }
 
 .modal-overlay .time-divider {
-    width: 518px;
+    width: auto;
     margin: 0;
     border: 0.5px solid rgba(197, 197, 197, 0.5);
 }
 
 .modal-overlay .time-header {
-    width: 518px;
+    width: auto;
     height: 39px;
     display: flex;
     justify-content: space-between;
@@ -262,7 +262,7 @@
 }
 
 .modal-overlay .time-range-container {
-    width: 486px;
+    width: auto;
     height: 58px;
     display: flex;
     gap: 12px;
@@ -911,6 +911,7 @@
 
 .modal-overlay .date-input:not(:placeholder-shown),
 .modal-overlay .time-input:not(:placeholder-shown) {
+    width: auto;
     border: 0.5px solid rgba(60, 60, 88, 1);
 }
 
@@ -1026,14 +1027,21 @@
 }
 
 @media (max-width: 520px) {
+    .modal-overlay {
+        align-items: flex-start;
+        padding: 0;
+    }
     .modal-overlay .modal {
-        padding: 10px 2vw;
-        width: 98vw;
+        width: 100vw;
         min-width: unset;
         max-width: 100vw;
         min-height: unset;
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        padding: 8px 2vw;
+        margin: 0;
+        overflow-y: auto;
+        max-height: 98vh;
     }
     .modal-overlay .modal h2,
     .modal-overlay .event-title,
@@ -1056,6 +1064,7 @@
         font-size: 15px;
     }
     .modal-overlay .modal-card.time-container {
+        width: auto;
         height: auto;
         min-height: unset;
     }
@@ -1074,10 +1083,18 @@
         max-width: 100vw !important;
         box-sizing: border-box;
     }
-    .modal-overlay .category-list {
+    .modal-overlay .category-list,
+    .modal-overlay .timezone-options {
         width: 100% !important;
         max-width: 100vw !important;
         box-sizing: border-box;
+        left: 0 !important;
+    }
+    .modal-overlay .category-list {
+        max-height: 180px;
+    }
+    .modal-overlay .timezone-options {
+        max-height: 120px;
     }
     .modal-overlay .repeat-days-container,
     .modal-overlay .repeat-options-container {
@@ -1097,11 +1114,16 @@
     .modal-overlay .repeat-day,
     .modal-overlay .repeat-option {
         width: 48% !important;
-        min-width: 110px;
+        min-width: 90px;
         max-width: 100%;
         margin-bottom: 4px;
         box-sizing: border-box;
-        font-size: 14px;
+        font-size: 13px !important;
+        padding: 4px 4px !important;
+    }
+    .modal-overlay .repeat-on-label {
+        font-size: 13px !important;
+        min-width: 18px;
     }
     .modal-overlay .privacy-notification,
     .modal-overlay .participant-notification {
@@ -1111,43 +1133,88 @@
         min-width: unset;
         max-width: 100vw;
     }
+    .modal-overlay .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+        width: 100% !important;
+        align-items: stretch;
+    }
+    .modal-overlay .modal-btn.save,
+    .modal-overlay .modal-btn.cancel {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100vw !important;
+        margin: 0;
+        font-size: 16px;
+        height: 40px;
+    }
+    .modal-overlay .close-btn {
+        right: 10px;
+        top: 10px;
+    }
 }
 
-/* Адаптация модального окна для создания заданий на мобильных устройствах */
 @media (max-width: 768px) {
     .modal-overlay {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        padding: 10px; /* Добавляем отступы для удобства */
+        padding: 0;
     }
-
-    .modal {
-        width: 100%; /* Растягиваем модальное окно на всю ширину экрана */
-        max-width: 400px; /* Ограничиваем максимальную ширину */
-        margin: 0 auto; /* Центрируем модальное окно */
-        border-radius: 10px; /* Добавляем скругленные углы */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень для выделения */
+    .modal-overlay .modal {
+        width: 100vw;
+        max-width: 100vw;
+        min-width: unset;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        padding: 8px 2vw;
+        margin: 0;
+        overflow-y: auto;
+        max-height: 98vh;
     }
-
-    .modal-header {
-        font-size: 1.2rem; /* Увеличиваем размер шрифта заголовка */
-        text-align: center; /* Центрируем текст заголовка */
+    .modal-overlay .modal h2,
+    .modal-overlay .event-title,
+    .modal-overlay .modal-card,
+    .modal-overlay .category-toggle,
+    .modal-overlay .participants-header,
+    .modal-overlay .private-section,
+    .modal-overlay .repeat-section,
+    .modal-overlay .modal-actions {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100vw !important;
+        box-sizing: border-box;
     }
-
-    .modal-body {
-        max-height: 60vh; /* Ограничиваем высоту тела модального окна */
-        overflow-y: auto; /* Добавляем прокрутку, если содержимое превышает высоту */
+    .modal-overlay .category-list,
+    .modal-overlay .timezone-options {
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box;
+        left: 0 !important;
     }
-
-    .modal-footer {
-        display: flex;
-        justify-content: space-between; /* Размещаем кнопки по краям */
-        padding: 10px;
+    .modal-overlay .category-list {
+        max-height: 180px;
     }
-
-    .modal-btn {
-        flex: 1;
-        margin: 0 5px; /* Добавляем отступы между кнопками */
+    .modal-overlay .timezone-options {
+        max-height: 120px;
+    }
+    .modal-overlay .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+        width: 100% !important;
+        align-items: stretch;
+    }
+    .modal-overlay .modal-btn.save,
+    .modal-overlay .modal-btn.cancel {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100vw !important;
+        margin: 0;
+        font-size: 16px;
+        height: 40px;
+    }
+    .modal-overlay .close-btn {
+        right: 10px;
+        top: 10px;
     }
 }
