@@ -609,6 +609,38 @@
                 }
             });
         }
+
+        // --- HTTP POLLING FOR NOTIFICATIONS ---
+function fetchNotifications() {
+    fetch('/api/notifications/', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const notifList = document.getElementById('notifList');
+        notifList.innerHTML = '';
+        if (data.notifications.length === 0) {
+            notifList.innerHTML = '<li class="notif-item">Нет новых уведомлений</li>';
+        } else {
+            data.notifications.forEach(notif => {
+                let taskInfo = '';
+                if (notif.task) {
+                    taskInfo = `<div class="notif-task-info">Задача: <b>${notif.task.title}</b> (${notif.task.date} ${notif.task.start_time})</div>`;
+                }
+                notifList.innerHTML += `
+                    <li class="notif-item">
+                        <div class="notif-icon">&#9432;</div>
+                        <div class="notif-content">
+                            <div class="notif-content-mini">${notif.message}${taskInfo}</div>
+                            <div class="notif-time">${notif.created_at}</div>
+                        </div>
+                    </li>
+                `;
+            });
+        }
+    });
+}
+setInterval(fetchNotifications, 15000); // каждые 15 секунд
     </script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class PersonalTask(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='personal_tasks')
@@ -22,3 +24,24 @@ class PersonalTask(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.date} {self.start_time}-{self.end_time})"
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    # Можно добавить ссылку на задачу, если нужно:
+    task = models.ForeignKey(PersonalTask, on_delete=models.CASCADE, null=True, blank=True, related_name='notifications')
+
+    def __str__(self):
+        return f"Notification for {self.user.username}: {self.message[:30]}"
+
+@receiver(post_save, sender=PersonalTask)
+def create_notification_for_task(sender, instance, created, **kwargs):
+    if created:
+        Notification.objects.create(
+            user=instance.user,
+            message=f'Напоминание: задача "{instance.title}" будет в {instance.start_time.strftime("%H:%M")}',
+            task=instance,
+            is_read=False
+        )
