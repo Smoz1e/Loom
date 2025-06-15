@@ -631,7 +631,13 @@ function fetchNotifications() {
                     <li class="notif-item">
                         <div class="notif-icon">&#9432;</div>
                         <div class="notif-content">
-                            <div class="notif-content-mini">${notif.message}${taskInfo}</div>
+                            <div class="notif-content-mini">
+                                <div class="notif-header">
+                                    <span class="notif-type">Напоминание</span>
+                                    <button class="notif-close" onclick="this.closest('li').remove()">&times;</button>
+                                </div>
+                                <div class="notif-text">${notif.message}${taskInfo}</div>
+                            </div>
                             <div class="notif-time">${notif.created_at}</div>
                         </div>
                     </li>

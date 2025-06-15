@@ -6,7 +6,7 @@ from pytz import timezone as pytz_timezone
 
 @login_required
 def get_notifications(request):
-    ekb_tz = pytz_timezone('Asia/Yekaterinburg')  # исправлено название
+    ekb_tz = pytz_timezone('Asia/Yekaterinburg')
     now = timezone.now().astimezone(ekb_tz)
     notifications = Notification.objects.filter(
         user=request.user,
