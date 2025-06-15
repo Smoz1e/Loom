@@ -2,10 +2,12 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Notification
+from pytz import timezone as pytz_timezone
 
 @login_required
 def get_notifications(request):
-    now = timezone.localtime()
+    ekb_tz = pytz_timezone('Asia/Yekaterinburg')  # исправлено название
+    now = timezone.now().astimezone(ekb_tz)
     notifications = Notification.objects.filter(
         user=request.user,
         is_read=False,
@@ -17,7 +19,7 @@ def get_notifications(request):
         notif_data = {
             'id': notif.id,
             'message': notif.message,
-            'created_at': notif.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'created_at': notif.created_at.astimezone(ekb_tz).strftime('%Y-%m-%d %H:%M:%S'),
             'is_read': notif.is_read,
         }
         if notif.task:
