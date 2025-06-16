@@ -7,6 +7,7 @@ from django.http import JsonResponse
 import random
 import json
 from .sms_utils import send_sms
+import re
 
 
 def send_sms_code(request):
@@ -32,13 +33,23 @@ def Register(request):
         role = request.POST.get("role")
         sms_code = request.POST.get("sms_code")
 
+        # Проверка длины пароля
+        if len(password) < 8:
+            messages.error(request, "Пароль должен содержать не менее 8 символов!")
+            return redirect("register")
+
+        # Проверка формата телефона
+        if not phone or not phone.isdigit() or not phone.startswith('7') or len(phone) != 11:
+            messages.error(request, "Номер телефона должен начинаться с 7 и содержать 11 цифр!")
+            return redirect("register")
+
         if password != confirm_password:
             messages.error(request, "Пароли не совпадают!")
             return redirect("register")
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Имя пользователя уже занято!")
-            return redirect("register")
+        # if User.objects.filter(username=username).exists():
+        #     messages.error(request, "Имя пользователя уже занято!")
+        #     return redirect("register")
 
         if Profile.objects.filter(phone=phone).exists():
             messages.error(request, "Номер телефона уже зарегистрирован!")
@@ -49,6 +60,11 @@ def Register(request):
         session_phone = request.session.get('sms_phone')
         if not session_code or not session_phone or phone != session_phone or sms_code != session_code:
             messages.error(request, "Неверный или просроченный код подтверждения!")
+            return redirect("register")
+
+        # Проверка на латиницу (только латинские буквы, без кириллицы)
+        if not re.search(r'[a-zA-Z]', password) or re.search(r'[а-яА-ЯёЁ]', password):
+            messages.error(request, "Пароль должен содержать только латинские буквы и не содержать кириллицу!")
             return redirect("register")
 
         user = User.objects.create_user(username=username, password=password)

@@ -6,6 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" href="{% static 'register.css'%}">
+    <style>
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        .messages li {
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: background 0.3s;
+        }
+        .messages li.error {
+            background: #ffeaea;
+            color: #d32f2f;
+            border: 1px solid #f8bcbc;
+        }
+        .messages li.success {
+            background: #eaffea;
+            color: #388e3c;
+            border: 1px solid #b8e6b8;
+        }
+        .messages li.info {
+            background: #eaf4ff;
+            color: #1976d2;
+            border: 1px solid #bcdcf8;
+        }
+        .criteria-list {
+            margin: 8px 0 0 0;
+            padding-left: 18px;
+            font-size: 0.97em;
+        }
+        .criteria-list li {
+            color: #d32f2f;
+            transition: color 0.2s;
+        }
+        .criteria-list li.valid {
+            color: #388e3c;
+        }
+    </style>
 </head>
 <body>
     <img src="{% static 'Design/Register/Arrow2.svg' %}" class="corner-image top-right" alt="Arrow">
@@ -16,6 +59,14 @@
         <div class="auth-panel-register">
             <h1>Регистрация</h1>
 
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
             <form class="auth-form-register" method="POST">
                 {% csrf_token %}
                 <div class="input-group1-register">
@@ -25,7 +76,12 @@
 
                 <div class="input-group2-register">
                     <label for="password">Пароль</label>
-                    <input type="password" id="password" name="password" placeholder="Введите свой пароль" required>
+                    <input type="password" id="password" name="password" placeholder="Введите свой пароль" required onfocus="showPasswordCriteria()" onblur="hidePasswordCriteria()" oninput="validatePasswordCriteria()">
+                    <ul id="password-criteria" class="criteria-list" style="display:none;">
+                        <li id="crit-length">Не менее 8 символов</li>
+                        <li id="crit-latin">Только латинские буквы (без кириллицы)</li>
+                        <li id="crit-letter">Хотя бы одна латинская буква</li>
+                    </ul>
                 </div>
 
                 <div class="input-group3-register">
@@ -34,8 +90,13 @@
                 </div>
 
                 <div class="input-group4-register">
-                    <label for="phone">Номер телефона который привязан к телеграмм</label>
-                    <input type="tel" id="phone" name="phone" placeholder="79........." required>
+                    <label for="phone">Номер телефона привязаный к телеграмм</label>
+                    <input type="tel" id="phone" name="phone" placeholder="79920020497" required onfocus="showPhoneCriteria()" onblur="hidePhoneCriteria()" oninput="validatePhoneCriteria()">
+                    <ul id="phone-criteria" class="criteria-list" style="display:none;">
+                        <li id="crit-phone-7">Первая цифра — 7</li>
+                        <li id="crit-phone-len">Всего 11 цифр</li>
+                        <li id="crit-phone-digits">Только цифры</li>
+                    </ul>
                     <button type="button" id="send-sms-btn">Отправить код</button>
                 </div>
 
@@ -81,6 +142,38 @@
                 alert(data.message);
             });
         };
+
+        function showPasswordCriteria() {
+            document.getElementById('password-criteria').style.display = 'block';
+            validatePasswordCriteria();
+        }
+        function hidePasswordCriteria() {
+            document.getElementById('password-criteria').style.display = 'none';
+        }
+        function validatePasswordCriteria() {
+            const val = document.getElementById('password').value;
+            // Длина
+            document.getElementById('crit-length').classList.toggle('valid', val.length >= 8);
+            // Только латиница
+            const onlyLatin = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~ ]*$/.test(val) && !/[а-яА-ЯёЁ]/.test(val);
+            document.getElementById('crit-latin').classList.toggle('valid', onlyLatin);
+            // Есть хотя бы одна латинская буква
+            document.getElementById('crit-letter').classList.toggle('valid', /[a-zA-Z]/.test(val));
+        }
+
+        function showPhoneCriteria() {
+            document.getElementById('phone-criteria').style.display = 'block';
+            validatePhoneCriteria();
+        }
+        function hidePhoneCriteria() {
+            document.getElementById('phone-criteria').style.display = 'none';
+        }
+        function validatePhoneCriteria() {
+            const val = document.getElementById('phone').value;
+            document.getElementById('crit-phone-7').classList.toggle('valid', val.startsWith('7'));
+            document.getElementById('crit-phone-len').classList.toggle('valid', val.length === 11);
+            document.getElementById('crit-phone-digits').classList.toggle('valid', /^\d+$/.test(val));
+        }
     </script>
 </body>
 </html>
