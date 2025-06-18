@@ -14,7 +14,12 @@ class NotificationInline(admin.TabularInline):
 class UserAdmin(BaseUserAdmin):
     inlines = [PersonalTaskInline, NotificationInline]
 
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'type', 'message', 'created_at', 'is_read', 'family_task_id')
+    list_filter = ('is_read', 'type', 'family_task_id', 'user')
+    search_fields = ('message',)
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(PersonalTask)
-admin.site.register(Notification)
+admin.site.register(Notification, NotificationAdmin)

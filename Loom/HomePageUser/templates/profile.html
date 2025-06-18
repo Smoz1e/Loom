@@ -626,6 +626,8 @@ function fetchNotifications() {
                 let taskInfo = '';
                 if (notif.task) {
                     taskInfo = `<div class="notif-task-info">Задача: <b>${notif.task.title}</b> (${notif.task.date} ${notif.task.start_time})</div>`;
+                } else if (notif.family_task) {
+                    taskInfo = `<div class="notif-task-info">Семейная задача: <b>${notif.family_task.title}</b> (${notif.family_task.date} ${notif.family_task.start_time})</div>`;
                 }
                 notifList.innerHTML += `
                     <li class="notif-item">

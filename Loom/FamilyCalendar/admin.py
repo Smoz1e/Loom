@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import FamilyTask
 
-# Register your models here.
+class FamilyTaskAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'start_time', 'family')
+
+admin.site.register(FamilyTask, FamilyTaskAdmin)

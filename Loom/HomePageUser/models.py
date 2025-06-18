@@ -30,8 +30,14 @@ class Notification(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
-    # Можно добавить ссылку на задачу, если нужно:
-    task = models.ForeignKey(PersonalTask, on_delete=models.CASCADE, null=True, blank=True, related_name='notifications')
+    task = models.ForeignKey('PersonalTask', on_delete=models.CASCADE, null=True, blank=True, related_name='notifications')
+    family_task = models.ForeignKey('FamilyCalendar.FamilyTask', on_delete=models.CASCADE, null=True, blank=True, related_name='notifications')
+
+    TYPE_CHOICES = [
+        ('personal', 'Личное'),
+        ('family', 'Семейное'),
+    ]
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='personal')
 
     def __str__(self):
         return f"Notification for {self.user.username}: {self.message[:30]}"
@@ -43,5 +49,6 @@ def create_notification_for_task(sender, instance, created, **kwargs):
             user=instance.user,
             message=f'Напоминание: задача "{instance.title}" будет в {instance.start_time.strftime("%H:%M")}',
             task=instance,
-            is_read=False
+            is_read=False,
+            type='personal'
         )
