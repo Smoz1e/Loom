@@ -12,24 +12,16 @@ def get_notifications(request):
         is_read=False
     ).order_by('-created_at')[:20]
     ekb_tz = pytz_timezone('Asia/Yekaterinburg')
-    now = timezone.now().astimezone(ekb_tz)
-    filtered = []
-    for notif in notifications:
-        # Для персональных задач
-        if notif.task and notif.task.date <= now.date() and notif.task.start_time <= now.time():
-            filtered.append(notif)
-        # Для семейных задач
-        elif notif.family_task:
-            ft = notif.family_task
-            if ft.date <= now.date() and ft.start_time <= now.time():
-                filtered.append(notif)
+    # Убираем фильтрацию по времени, чтобы показывать все уведомления
     data = []
-    for notif in filtered:
+    for notif in notifications:
         notif_data = {
             'id': notif.id,
             'message': notif.message,
             'created_at': notif.created_at.astimezone(ekb_tz).strftime('%Y-%m-%d %H:%M:%S'),
             'is_read': notif.is_read,
+            'accepted': notif.accepted,
+            'type': notif.type,
         }
         if notif.task:
             notif_data['task'] = {

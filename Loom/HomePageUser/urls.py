@@ -5,6 +5,7 @@ from RegAndAuth.views import *
 from . import api_delete_personal_task
 from . import api_mark_personal_task_completed
 from .api_notifications import get_notifications
+from .api_respond_family_notification import api_respond_family_notification
 
 urlpatterns = [
     path("profile/", views.HomePageUser, name="profile"),
@@ -21,4 +22,5 @@ urlpatterns = [
     path("api/toggle_task_completion/", api_mark_personal_task_completed.api_mark_personal_task_completed, name="toggle_task_completion"),
     path("profile/leave-family/", views.leave_family, name="leave_family"),
     path('api/notifications/', get_notifications, name='api_notifications'),
+    path('api/respond_family_notification/', api_respond_family_notification, name='api_respond_family_notification'),
 ]

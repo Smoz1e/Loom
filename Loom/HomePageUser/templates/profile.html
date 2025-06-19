@@ -624,10 +624,21 @@ function fetchNotifications() {
         } else {
             data.notifications.forEach(notif => {
                 let taskInfo = '';
+                let actionBtns = '';
                 if (notif.task) {
-                    taskInfo = `<div class="notif-task-info">Задача: <b>${notif.task.title}</b> (${notif.task.date} ${notif.task.start_time})</div>`;
+                    taskInfo = `<div class=\"notif-task-info\">Задача: <b>${notif.task.title}</b> (${notif.task.date} ${notif.task.start_time})</div>`;
                 } else if (notif.family_task) {
-                    taskInfo = `<div class="notif-task-info">Семейная задача: <b>${notif.family_task.title}</b> (${notif.family_task.date} ${notif.family_task.start_time})</div>`;
+                    taskInfo = `<div class=\"notif-task-info\">Семейная задача: <b>${notif.family_task.title}</b> (${notif.family_task.date} ${notif.family_task.start_time})</div>`;
+                    if (notif.type === 'family' && (notif.accepted === null || notif.accepted === undefined)) {
+                        actionBtns = `<div class=\"notif-actions\">
+                            <button class=\"notif-btn accept\" onclick=\"respondFamilyNotif(${notif.id}, true, this)\">Принять</button>
+                            <button class=\"notif-btn decline\" onclick=\"respondFamilyNotif(${notif.id}, false, this)\">Отклонить</button>
+                        </div>`;
+                    } else if (notif.type === 'family' && notif.accepted === true) {
+                        actionBtns = `<div class='notif-status accepted'>Вы приняли задачу</div>`;
+                    } else if (notif.type === 'family' && notif.accepted === false) {
+                        actionBtns = `<div class='notif-status declined'>Вы отклонили задачу</div>`;
+                    }
                 }
                 notifList.innerHTML += `
                     <li class="notif-item">
@@ -639,12 +650,34 @@ function fetchNotifications() {
                                     <button class="notif-close" onclick="this.closest('li').remove()">&times;</button>
                                 </div>
                                 <div class="notif-text">${notif.message}${taskInfo}</div>
+                                ${actionBtns}
                             </div>
-                            <div class="notif-time">${notif.created_at}</div>
                         </div>
                     </li>
                 `;
             });
+        }
+    });
+}
+
+function respondFamilyNotif(notifId, accepted, btn) {
+    btn.disabled = true;
+    fetch('/api/respond_family_notification/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': (document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1])
+        },
+        body: JSON.stringify({id: notifId, accepted: accepted})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            fetchNotifications();
+        } else {
+            alert(data.error || 'Ошибка');
+            btn.disabled = false;
         }
     });
 }

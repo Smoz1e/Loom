@@ -843,6 +843,106 @@ body.profile-page {
     }
 }
 
+.notif-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+    align-self: stretch;
+}
+
+.notif-item {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 18px 22px 18px 22px;
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    min-width: 320px;
+    max-width: 480px;
+    position: relative;
+    z-index: 1;
+}
+
+.notif-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.notif-content-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.notif-text {
+    margin-bottom: 14px;
+    word-break: break-word;
+    width: 100%;
+}
+
+.notif-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+    align-self: stretch;
+    position: relative;
+    z-index: 2;
+}
+
+.notif-btn {
+    padding: 7px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #4f8cff;
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 0;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 1em;
+    z-index: 2;
+}
+
+.notif-btn.decline {
+    background: #e74c3c;
+}
+
+.notif-btn.accept {
+    background: #27ae60;
+}
+
+.notif-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.notif-status {
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.notif-status.accepted {
+    color: #27ae60;
+}
+
+.notif-status.declined {
+    color: #e74c3c;
+}
+
 /* ================== АДАПТИВНОСТЬ: ТОЛЬКО HEADER И АВАТАР ================== */
 @media (max-width: 900px) {
     .header {

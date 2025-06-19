@@ -38,6 +38,7 @@ class Notification(models.Model):
         ('family', 'Семейное'),
     ]
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='personal')
+    accepted = models.BooleanField(null=True, blank=True, default=None)  # None - не отвечал, True - принял, False - отклонил
 
     def __str__(self):
         return f"Notification for {self.user.username}: {self.message[:30]}"
