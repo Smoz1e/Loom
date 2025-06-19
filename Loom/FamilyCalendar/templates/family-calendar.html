@@ -96,6 +96,14 @@
                 <button class="sidebar-close-button" id="sidebarClose"></button>
                 <!-- Контейнер месяца и навигации -->
                 <div class="month-navigation">
+                    <div class="month-year">
+                        <span class="month">{{ month_name }}</span>
+                        <span class="year">{{ year }}</span>
+                    </div>
+                    <div class="month-buttons">
+                        <a href="?month={{ prev_month }}&year={{ prev_year }}{% if current_date %}&date={{ current_date|date:'Y-m-d' }}{% endif %}" class="month-button prev-month"></a>
+                        <a href="?month={{ next_month }}&year={{ next_year }}{% if current_date %}&date={{ current_date|date:'Y-m-d' }}{% endif %}" class="month-button next-month"></a>
+                    </div>
                 </div>
                 <!-- Мини-календарь -->
                 <div class="mini-calendar">
