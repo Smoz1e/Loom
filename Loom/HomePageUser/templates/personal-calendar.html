@@ -328,25 +328,7 @@
                     </div>
                   </div>
 
-                  <div class="modal-card participants-section">
-                    <div class="participants-header">
-                      <button class="add-participant-btn" id="addParticipantBtn" type="button">
-                        <span class="participants-icon"></span>
-                        <span class="participants-label" id="participantsLabel">Добавить участников</span>
-                      </button>
-                    </div>
-                    <div class="participants-list" id="participantsList"></div>
-                  </div>
-
-                  <div class="private-section">
-                    <div class="private-container">
-                      <span class="private-icon"></span>
-                      <span class="private-label">Сделать событие приватным</span>
-                      <button class="private-checkbox" id="privateCheckbox"></button>
-                    </div>
-                  </div>
-
-                  <div class="repeat-section">
+                  <div class="modal-card repeat-section">
                     <div class="repeat-header">
                       <div class="repeat-icon-container">
                         <span class="repeat-icon"></span>
@@ -518,16 +500,12 @@
           const end_time = modal.querySelector('#endTime').value.trim();
           const category = document.getElementById('categoryLabel').textContent.trim() === 'Выбрать тему' ? '' : document.getElementById('categoryLabel').textContent.trim();
           const timezone = document.getElementById('timezoneSelected').textContent.trim() === 'Часовой пояс' ? '' : document.getElementById('timezoneSelected').textContent.trim();
-          const is_private = document.getElementById('privateCheckbox').classList.contains('checked');
           let repeat_type = '';
           let repeat_days = '';
           const selectedRepeat = document.querySelector('.repeat-option.selected');
           if (selectedRepeat) repeat_type = selectedRepeat.textContent.trim();
           const selectedDays = Array.from(document.querySelectorAll('.repeat-day.selected')).map(d => d.textContent.trim());
           if (selectedDays.length) repeat_days = selectedDays.join(',');
-          let participants = '';
-          const partList = document.querySelectorAll('.participants-list .participant-chip');
-          if (partList.length) participants = Array.from(partList).map(p => p.textContent.trim()).join(',');
           const priority = modal.querySelector('input[name="priority"]:checked')?.value || 'normal';
 
           const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1];
@@ -539,10 +517,8 @@
           formData.append('end_time', end_time);
           formData.append('category', category);
           formData.append('timezone', timezone);
-          formData.append('is_private', is_private);
           formData.append('repeat_type', repeat_type);
           formData.append('repeat_days', repeat_days);
-          formData.append('participants', participants);
           formData.append('priority', priority);
 
           const response = await fetch(window.location.href, {
