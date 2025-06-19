@@ -47,5 +47,16 @@ def api_respond_family_notification(request):
                     is_read=False,
                     type='reminder'
                 )
+    # --- Новое: уведомление создателю задачи о принятии ---
+    if notif.family_task and notif.family_task.created_by and accepted_bool:
+        creator = notif.family_task.created_by
+        if creator != request.user:
+            Notification.objects.create(
+                user=creator,
+                message=f'{request.user.get_full_name() or request.user.username} принял(а) семейную задачу "{notif.family_task.title}"',
+                family_task=notif.family_task,
+                is_read=False,
+                type='info'  # Новый тип для информационных уведомлений
+            )
 
     return JsonResponse({'success': True, 'accepted': notif.accepted})
