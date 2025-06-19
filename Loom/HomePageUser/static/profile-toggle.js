@@ -122,4 +122,125 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+
+    // Функции для отображения, скрытия поля комментария и отправки комментария на сервер при отклонении задачи
+    function showCommentInput(button) {
+        const notifItem = button.closest('.notif-item');
+        const commentContainer = notifItem.querySelector('.comment-input-container');
+        commentContainer.style.display = 'block';
+    }
+
+    function hideCommentInput(button) {
+        const commentContainer = button.closest('.comment-input-container');
+        commentContainer.style.display = 'none';
+    }
+
+    function toggleComments(button) {
+        const commentList = button.nextElementSibling;
+        if (commentList.style.display === 'none' || !commentList.style.display) {
+            commentList.style.display = 'block';
+            button.textContent = 'Скрыть комментарии';
+        } else {
+            commentList.style.display = 'none';
+            button.textContent = 'Показать комментарии';
+        }
+    }
+
+    function submitDeclineWithComment(button) {
+        const notifItem = button.closest('.notif-item');
+        const commentInput = notifItem.querySelector('.comment-input');
+        const comment = commentInput.value.trim();
+
+        if (!comment) {
+            alert('Пожалуйста, введите комментарий перед отправкой.');
+            return;
+        }
+
+        // Пример отправки данных на сервер через fetch
+        fetch('/api/respond-family-notification/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({
+                action: 'decline',
+                comment: comment,
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                const commentList = notifItem.querySelector('.comment-list');
+                const newComment = document.createElement('li');
+                newComment.textContent = comment;
+                commentList.appendChild(newComment);
+                commentInput.value = '';
+                alert('Комментарий успешно добавлен.');
+            } else {
+                alert('Ошибка при отправке комментария.');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Ошибка при отправке комментария.');
+        });
+    }
+
+    function getCSRFToken() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        return csrfToken;
+    }
+
+    let currentNotifId = null;
+
+    function showCommentModal(notifId) {
+        currentNotifId = notifId;
+        const modal = document.getElementById('commentModal');
+        modal.style.display = 'block';
+    }
+
+    function hideCommentModal() {
+        currentNotifId = null;
+        const modal = document.getElementById('commentModal');
+        modal.style.display = 'none';
+    }
+
+    document.getElementById('submitCommentBtn').addEventListener('click', function () {
+        const comment = document.getElementById('commentInput').value.trim();
+        if (!comment) {
+            alert('Пожалуйста, введите комментарий.');
+            return;
+        }
+
+        fetch('/api/respond_family_notification/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({
+                id: currentNotifId,
+                accepted: false,
+                comment: comment,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    alert('Комментарий успешно отправлен.');
+                    hideCommentModal();
+                    fetchNotifications();
+                } else {
+                    alert(data.error || 'Ошибка при отправке комментария.');
+                }
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке комментария.');
+            });
+    });
+
+    document.getElementById('cancelCommentBtn').addEventListener('click', function () {
+        hideCommentModal();
+    });
 });

@@ -12,6 +12,7 @@ from .api_respond_family_notification import api_respond_family_notification
 import calendar
 import random
 import string
+from .models import Notification
 
 RU_MONTHS = {
     1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь',
@@ -28,7 +29,15 @@ def HomePageUser(request):
             is_admin = FamilyMember.objects.get(family=profile.family, profile=profile).is_admin
         except FamilyMember.DoesNotExist:
             is_admin = False
-    return render(request, 'profile.html', {'profile': profile, 'is_admin': is_admin})
+
+    # Получение всех уведомлений пользователя
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+
+    return render(request, 'profile.html', {
+        'profile': profile,
+        'is_admin': is_admin,
+        'notifications': notifications
+    })
 
 @login_required
 def upload_avatar(request):

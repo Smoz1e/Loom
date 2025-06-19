@@ -39,9 +39,15 @@ class Notification(models.Model):
     ]
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='personal')
     accepted = models.BooleanField(null=True, blank=True, default=None)  # None - не отвечал, True - принял, False - отклонил
+    comment = models.TextField(blank=True, null=True)  # Поле для комментария при отклонении
 
     def __str__(self):
         return f"Notification for {self.user.username}: {self.message[:30]}"
+
+    @property
+    def comments(self):
+        # Возвращает список комментариев, если они есть
+        return [self.comment] if self.comment else []
 
 @receiver(post_save, sender=PersonalTask)
 def create_notification_for_task(sender, instance, created, **kwargs):

@@ -13,33 +13,39 @@ def api_respond_family_notification(request):
         data = json.loads(request.body)
         notif_id = int(data.get('id'))
         accepted = data.get('accepted')
+        comment = data.get('comment', None)  # Получаем комментарий, если он есть
+
         if accepted not in [True, False, 'true', 'false', 1, 0, '1', '0']:
             return JsonResponse({'success': False, 'error': 'Некорректный ответ'})
+
         accepted_bool = True if accepted in [True, 'true', 1, '1'] else False
+
     except Exception:
         return JsonResponse({'success': False, 'error': 'Некорректные данные запроса'})
+
     try:
         notif = Notification.objects.get(id=notif_id, user=request.user, type='family')
     except Notification.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Уведомление не найдено'})
+
     notif.accepted = accepted_bool
-    notif.save(update_fields=['accepted'])
-    # Если пользователь принял задачу, создаём напоминание сразу, но помечаем его как is_read=True, если время ещё не наступило
+    if not accepted_bool and comment:
+        notif.message += f' Причина отклонения: {comment}'  # Добавляем комментарий к уведомлению
+    notif.save(update_fields=['accepted', 'message'])
+
+    # Если пользователь принял задачу, создаём напоминание
     if accepted_bool and notif.family_task:
+        now = datetime.now().date(), datetime.now().time()
         task_date = notif.family_task.date
         task_time = notif.family_task.start_time
-        now_date = datetime.now().date()
-        now_time = datetime.now().time()
-        already_exists = Notification.objects.filter(user=request.user, family_task=notif.family_task, type='reminder').exists()
-        if not already_exists:
-            is_read = False
-            if (task_date > now_date) or (task_date == now_date and task_time > now_time):
-                is_read = True  # Скрытое напоминание, появится когда наступит время
-            Notification.objects.create(
-                user=request.user,
-                message=f'Напоминание: семейная задача "{notif.family_task.title}" будет в {notif.family_task.start_time.strftime("%H:%M")}',
-                family_task=notif.family_task,
-                is_read=is_read,
-                type='reminder'
-            )
+        if (task_date < datetime.now().date()) or (task_date == datetime.now().date() and task_time <= datetime.now().time()):
+            if not Notification.objects.filter(user=request.user, family_task=notif.family_task, type='reminder').exists():
+                Notification.objects.create(
+                    user=request.user,
+                    message=f'Напоминание: семейная задача "{notif.family_task.title}" будет в {notif.family_task.start_time.strftime("%H:%M")}',
+                    family_task=notif.family_task,
+                    is_read=False,
+                    type='reminder'
+                )
+
     return JsonResponse({'success': True, 'accepted': notif.accepted})

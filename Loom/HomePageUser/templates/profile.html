@@ -191,7 +191,16 @@
         </div>
     </div>
 
-
+    <div id="commentModal" class="modal">
+        <div class="modal-content">
+            <h2>Введите причину отклонения</h2>
+            <textarea id="commentInput" placeholder="Введите комментарий..."></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn" id="submitCommentBtn">Отправить</button>
+                <button class="modal-btn" id="cancelCommentBtn">Отменить</button>
+            </div>
+        </div>
+    </div>
 
     <div id="notifModal" class="modal-notifications">
     <div class="modal-content-notifications">
@@ -211,7 +220,14 @@
                     </div>
                     <div class="notif-actions">
                         <button class="notif-btn accept">Принять</button>
-                        <button class="notif-btn decline">Отклонить</button>
+                        <button class="notif-btn decline" onclick="showCommentInput(this)">Отклонить</button>
+                    </div>
+                    <div class="comment-input-container" style="display: none;">
+                        <textarea class="comment-input" placeholder="Введите комментарий..."></textarea>
+                        <div class="comment-actions">
+                            <button class="comment-btn send" onclick="submitDeclineWithComment(this)">Отправить</button>
+                            <button class="comment-btn cancel" onclick="hideCommentInput(this)">Отменить</button>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -625,23 +641,28 @@ function fetchNotifications() {
             data.notifications.forEach(notif => {
                 let taskInfo = '';
                 let actionBtns = '';
+                let commentBlock = '';
                 if (notif.task) {
                     taskInfo = `<div class=\"notif-task-info\">Задача: <b>${notif.task.title}</b> (${notif.task.date} ${notif.task.start_time})</div>`;
                 } else if (notif.family_task) {
                     taskInfo = `<div class=\"notif-task-info\">Семейная задача: <b>${notif.family_task.title}</b> (${notif.family_task.date} ${notif.family_task.start_time})</div>`;
                     if (notif.type === 'family' && (notif.accepted === null || notif.accepted === undefined)) {
-                        actionBtns = `<div class=\"notif-actions\">
-                            <button class=\"notif-btn accept\" onclick=\"respondFamilyNotif(${notif.id}, true, this)\">Принять</button>
-                            <button class=\"notif-btn decline\" onclick=\"respondFamilyNotif(${notif.id}, false, this)\">Отклонить</button>
-                        </div>`;
+                        actionBtns = `<div class=\"notif-actions\">\n                            <button class=\"notif-btn accept\" onclick=\"respondFamilyNotif(${notif.id}, true, this)\">Принять</button>\n                            <button class=\"notif-btn decline\" onclick=\"respondFamilyNotif(${notif.id}, false, this)\">Отклонить</button>\n                        </div>`;
                     } else if (notif.type === 'family' && notif.accepted === true) {
                         actionBtns = `<div class='notif-status accepted'>Вы приняли задачу</div>`;
                     } else if (notif.type === 'family' && notif.accepted === false) {
                         actionBtns = `<div class='notif-status declined'>Вы отклонили задачу</div>`;
+                        if (notif.decline_comment && notif.declined_by_name) {
+                            commentBlock = `<li class='notif-comment-block' style='list-style:none;margin:0;padding:0;'>
+                                <div class='notif-comment' style='margin:8px 0 0 48px;padding:8px 12px;background:#f8d7da;border-radius:6px;color:#721c24;max-width:90%;'>
+                                    <b>${notif.declined_by_name}:</b> ${notif.decline_comment}
+                                </div>
+                            </li>`;
+                        }
                     }
                 }
                 notifList.innerHTML += `
-                    <li class="notif-item">
+                    <li class="notif-item" style="margin-bottom:0;">
                         <div class="notif-icon">&#9432;</div>
                         <div class="notif-content">
                             <div class="notif-content-mini">
@@ -654,6 +675,7 @@ function fetchNotifications() {
                             </div>
                         </div>
                     </li>
+                    ${commentBlock}
                 `;
             });
         }
@@ -661,25 +683,52 @@ function fetchNotifications() {
 }
 
 function respondFamilyNotif(notifId, accepted, btn) {
-    btn.disabled = true;
-    fetch('/api/respond_family_notification/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': (document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1])
-        },
-        body: JSON.stringify({id: notifId, accepted: accepted})
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            fetchNotifications();
-        } else {
-            alert(data.error || 'Ошибка');
-            btn.disabled = false;
+    if (!accepted) {
+        const comment = prompt('Введите причину отклонения задачи:');
+        if (!comment) {
+            alert('Причина отклонения обязательна!');
+            return;
         }
-    });
+        btn.disabled = true;
+        fetch('/api/respond_family_notification/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': (document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1])
+            },
+            body: JSON.stringify({id: notifId, accepted: accepted, comment: comment})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                fetchNotifications();
+            } else {
+                alert(data.error || 'Ошибка');
+                btn.disabled = false;
+            }
+        });
+    } else {
+        btn.disabled = true;
+        fetch('/api/respond_family_notification/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': (document.querySelector('[name=csrfmiddlewaretoken]')?.value || (document.cookie.match(/csrftoken=([^;]+)/)||[])[1])
+            },
+            body: JSON.stringify({id: notifId, accepted: accepted})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                fetchNotifications();
+            } else {
+                alert(data.error || 'Ошибка');
+                btn.disabled = false;
+            }
+        });
+    }
 }
 setInterval(fetchNotifications, 15000); // каждые 15 секунд
     </script>
